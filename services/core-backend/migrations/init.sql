@@ -92,9 +92,9 @@ CREATE INDEX IF NOT EXISTS idx_answers_session_id ON answers(session_id);
 -- Default passwords: password123 (bcrypt hash: $2a$10$7R6v74u8U1KxL95yD0wJneX942K2f5K5uN9o0vIeJ7m1wP4vO6Xm2)
 -- Using a standard bcrypt hash for 'password123': $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
 INSERT INTO users (email, password_hash, full_name, role) VALUES
-('admin@cefr.uz', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Tizim Administratori', 'admin'),
-('examiner@cefr.uz', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Ali Qodirov (Senior Examiner)', 'examiner'),
-('student@cefr.uz', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Jasur Rustamov (Student)', 'student')
+('admin@cefr.uz', '$2a$10$bER7FK3.9KsIeNPNE6evCOBHP5oLSkHtNscMhMHRLcT1PgjeiwORK', 'Tizim Administratori', 'admin'),
+('examiner@cefr.uz', '$2a$10$bER7FK3.9KsIeNPNE6evCOBHP5oLSkHtNscMhMHRLcT1PgjeiwORK', 'Ali Qodirov (Senior Examiner)', 'examiner'),
+('student@cefr.uz', '$2a$10$bER7FK3.9KsIeNPNE6evCOBHP5oLSkHtNscMhMHRLcT1PgjeiwORK', 'Jasur Rustamov (Student)', 'student')
 ON CONFLICT (email) DO NOTHING;
 
 -- Seed Sample Complete CEFR Mock Test

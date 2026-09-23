@@ -58,15 +58,11 @@ func main() {
 	}
 	defer db.Close()
 
-	// Synchronize PostgreSQL SERIAL sequences to avoid duplicate key errors
-	_, seqErr := db.Exec(`
-		SELECT setval(pg_get_serial_sequence('tests', 'id'), COALESCE((SELECT MAX(id) FROM tests), 0) + 1, false);
-		SELECT setval(pg_get_serial_sequence('sections', 'id'), COALESCE((SELECT MAX(id) FROM sections), 0) + 1, false);
-		SELECT setval(pg_get_serial_sequence('questions', 'id'), COALESCE((SELECT MAX(id) FROM questions), 0) + 1, false);
-		SELECT setval(pg_get_serial_sequence('users', 'id'), COALESCE((SELECT MAX(id) FROM users), 0) + 1, false);
-	`)
-	if seqErr != nil {
-		log.Printf("Note on sequence sync: %v", seqErr)
+	// Automatically migrate schema & ensure demo users/tests exist
+	if err := repository.AutoMigrateAndSeed(db); err != nil {
+		log.Printf("AutoMigrateAndSeed warning: %v", err)
+	} else {
+		log.Println("Database schema & demo accounts successfully initialized.")
 	}
 
 	// Connect to Redis (optional/resilient fallback)

@@ -19,11 +19,8 @@ import {
   CheckCircle,
   Play,
   Pause,
-  RotateCcw,
   Mic,
   Square,
-  Volume2,
-  FileText,
   Send,
   AlertTriangle,
   ChevronLeft,
@@ -36,11 +33,14 @@ import {
 export default function TestTakingPage() {
   const params = useParams();
   const router = useRouter();
-  const sessionId = Number(params.id);
+  const rawId = params?.id;
+  const sessionId = rawId ? Number(rawId) : NaN;
 
+  const [mounted, setMounted] = useState(false);
   const [session, setSession] = useState<TestSession | null>(null);
   const [test, setTest] = useState<Test | null>(null);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
   // Answers state mapped by questionId -> { text: string, audioUrl: string }
@@ -68,16 +68,27 @@ export default function TestTakingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    loadTestSession();
+    setMounted(true);
+    if (!isNaN(sessionId) && sessionId > 0) {
+      loadTestSession(sessionId);
+    } else {
+      setErrorMessage('Yaroqsiz test sessiya identifikatori.');
+      setLoading(false);
+    }
   }, [sessionId]);
 
   // Load session and test data
-  const loadTestSession = async () => {
+  const loadTestSession = async (sId: number) => {
     setLoading(true);
+    setErrorMessage('');
     try {
-      const sess = await apiGetSession(sessionId);
+      const sess = await apiGetSession(sId);
+      if (!sess || !sess.id) {
+        throw new Error('Sessiya topilmadi');
+      }
+
       if (sess.status !== 'in_progress') {
-        router.push(`/student/results/${sessionId}`);
+        router.push(`/student/results/${sId}`);
         return;
       }
       setSession(sess);
@@ -87,24 +98,29 @@ export default function TestTakingPage() {
 
       // Prepopulate existing answers
       const map: Record<number, { text: string; audioUrl: string }> = {};
-      if (sess.answers) {
+      if (Array.isArray(sess.answers)) {
         sess.answers.forEach((ans) => {
-          map[ans.question_id] = {
-            text: ans.user_answer_text || '',
-            audioUrl: ans.audio_file_url || '',
-          };
+          if (ans && ans.question_id) {
+            map[ans.question_id] = {
+              text: ans.user_answer_text || '',
+              audioUrl: ans.audio_file_url || '',
+            };
+          }
         });
       }
       setAnswersMap(map);
 
-      // Calculate remaining seconds
-      const expiresAt = new Date(sess.expires_at).getTime();
-      const now = new Date().getTime();
-      const diffSecs = Math.max(0, Math.floor((expiresAt - now) / 1000));
+      // Calculate remaining seconds safely
+      let diffSecs = 7200;
+      if (sess.expires_at) {
+        const expiresAt = new Date(sess.expires_at).getTime();
+        if (!isNaN(expiresAt)) {
+          diffSecs = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+        }
+      }
       setSecondsRemaining(diffSecs);
     } catch (err: any) {
-      alert('Sessiyani yuklashda xatolik: ' + err.message);
-      router.push('/student');
+      setErrorMessage(err.message || 'Sessiyani yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);
     }
@@ -112,7 +128,7 @@ export default function TestTakingPage() {
 
   // Timer countdown
   useEffect(() => {
-    if (secondsRemaining <= 0) return;
+    if (!mounted || secondsRemaining <= 0) return;
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => {
         if (prev <= 1) {
@@ -124,26 +140,27 @@ export default function TestTakingPage() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [secondsRemaining]);
+  }, [mounted, secondsRemaining]);
 
   const handleAutoSubmit = async () => {
-    alert('Vaqtingiz tugadi! Test avtomatik tarzda topshirilmoqda.');
     await submitTest();
   };
 
   const submitTest = async () => {
+    if (isNaN(sessionId)) return;
     setSubmitting(true);
     try {
       await apiSubmitSession(sessionId);
       router.push(`/student/results/${sessionId}`);
     } catch (e: any) {
-      alert('Testni topshirishda xatolik: ' + e.message);
+      alert('Testni topshirishda xatolik: ' + (e.message || 'Server xatosi'));
       setSubmitting(false);
     }
   };
 
   // Autosave handler
   const handleSaveAnswer = async (questionId: number, text: string, audioUrl: string = '') => {
+    if (isNaN(sessionId)) return;
     setAnswersMap((prev) => ({
       ...prev,
       [questionId]: { text, audioUrl: audioUrl || prev[questionId]?.audioUrl || '' },
@@ -172,18 +189,20 @@ export default function TestTakingPage() {
         audioRef.current.pause();
         setIsPlayingAudio(false);
       } else {
-        audioRef.current.play().then(() => {
-          setIsPlayingAudio(true);
-          setAudioPlaysLeft((prev) => ({
-            ...prev,
-            [sectionId]: remaining - 1,
-          }));
-        }).catch((err) => {
-          console.warn('Audio play error:', err);
-          // In case of synthetic sample audio demo fallback
-          setIsPlayingAudio(true);
-          setAudioPlaysLeft((prev) => ({ ...prev, [sectionId]: remaining - 1 }));
-        });
+        audioRef.current
+          .play()
+          .then(() => {
+            setIsPlayingAudio(true);
+            setAudioPlaysLeft((prev) => ({
+              ...prev,
+              [sectionId]: remaining - 1,
+            }));
+          })
+          .catch((err) => {
+            console.warn('Audio play error:', err);
+            setIsPlayingAudio(true);
+            setAudioPlaysLeft((prev) => ({ ...prev, [sectionId]: remaining - 1 }));
+          });
       }
     }
   };
@@ -215,7 +234,7 @@ export default function TestTakingPage() {
       setRecordingQuestionId(questionId);
       setRecordingSeconds(0);
     } catch (err: any) {
-      alert('Mikrofonga ulanishda xatolik: ' + err.message + '. Brauzerda mikrofonga ruxsat bering.');
+      alert('Mikrofonga ulanishda xatolik: ' + (err.message || 'Ruxsat berilmadi'));
     }
   };
 
@@ -263,6 +282,7 @@ export default function TestTakingPage() {
 
   // Format seconds to HH:MM:SS
   const formatTimer = (seconds: number) => {
+    if (isNaN(seconds) || seconds < 0) return '00:00';
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
@@ -270,11 +290,25 @@ export default function TestTakingPage() {
   };
 
   // Word counter helper for writing
-  const countWords = (text: string) => {
-    return text.trim() ? text.trim().split(/\s+/).length : 0;
+  const countWords = (text?: string) => {
+    if (!text) return 0;
+    const trimmed = text.trim();
+    return trimmed ? trimmed.split(/\s+/).length : 0;
   };
 
-  if (loading || !test) {
+  // Safe Options getter
+  const getOptions = (options: any): string[] => {
+    if (Array.isArray(options)) return options;
+    if (typeof options === 'string') {
+      try {
+        const parsed = JSON.parse(options);
+        if (Array.isArray(parsed)) return parsed;
+      } catch {}
+    }
+    return [];
+  };
+
+  if (!mounted || loading) {
     return (
       <div className="py-24 text-center">
         <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -283,8 +317,26 @@ export default function TestTakingPage() {
     );
   }
 
-  const sections = test.sections || [];
-  const currentSection = sections[currentSectionIndex];
+  if (errorMessage || !test) {
+    return (
+      <div className="max-w-md mx-auto my-16 p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-4 shadow-sm">
+        <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+        <h3 className="text-base font-bold text-slate-900">Xatolik yuz berdi</h3>
+        <p className="text-xs text-slate-600">{errorMessage || 'Test ma’lumotlarini yuklab bo‘lmadi.'}</p>
+        <button
+          onClick={() => router.push('/student')}
+          className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors"
+        >
+          Testlar ro‘yxatiga qaytish
+        </button>
+      </div>
+    );
+  }
+
+  const sections = Array.isArray(test.sections) ? test.sections : [];
+  const currentSection = sections[currentSectionIndex] || null;
 
   return (
     <div className="space-y-6 pb-20">
@@ -333,7 +385,7 @@ export default function TestTakingPage() {
 
             return (
               <button
-                key={sec.id}
+                key={sec.id || idx}
                 onClick={() => setCurrentSectionIndex(idx)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
                   isSelected
@@ -350,7 +402,7 @@ export default function TestTakingPage() {
       </div>
 
       {/* Main Section Content Area */}
-      {currentSection && (
+      {currentSection ? (
         <div className="space-y-6">
           {/* Section Instructions Card */}
           <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-4 sm:p-5">
@@ -427,44 +479,47 @@ export default function TestTakingPage() {
 
               {/* Questions for Listening */}
               <div className="space-y-4">
-                {currentSection.questions?.map((q, qIdx) => (
-                  <div key={q.id} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                        {q.points} ball
-                      </span>
-                    </div>
+                {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
+                  const options = getOptions(q.options);
+                  return (
+                    <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                          {q.points} ball
+                        </span>
+                      </div>
 
-                    <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
+                      <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
 
-                    <div className="space-y-2">
-                      {q.options?.map((opt, optIdx) => {
-                        const isChecked = answersMap[q.id]?.text === opt;
-                        return (
-                          <label
-                            key={optIdx}
-                            onClick={() => handleSaveAnswer(q.id, opt)}
-                            className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
-                              isChecked
-                                ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
-                                : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name={`question_${q.id}`}
-                              checked={isChecked}
-                              onChange={() => {}}
-                              className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                            />
-                            <span>{opt}</span>
-                          </label>
-                        );
-                      })}
+                      <div className="space-y-2">
+                        {options.map((opt, optIdx) => {
+                          const isChecked = answersMap[q.id]?.text === opt;
+                          return (
+                            <label
+                              key={optIdx}
+                              onClick={() => handleSaveAnswer(q.id, opt)}
+                              className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
+                                isChecked
+                                  ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
+                                  : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`question_${q.id}`}
+                                checked={isChecked}
+                                onChange={() => {}}
+                                className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                              />
+                              <span>{opt}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -489,44 +544,47 @@ export default function TestTakingPage() {
 
               {/* Right Column: Questions */}
               <div className="space-y-4">
-                {currentSection.questions?.map((q, qIdx) => (
-                  <div key={q.id} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                        {q.points} ball
-                      </span>
-                    </div>
+                {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
+                  const options = getOptions(q.options);
+                  return (
+                    <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                          {q.points} ball
+                        </span>
+                      </div>
 
-                    <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
+                      <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
 
-                    <div className="space-y-2">
-                      {q.options?.map((opt, optIdx) => {
-                        const isChecked = answersMap[q.id]?.text === opt;
-                        return (
-                          <label
-                            key={optIdx}
-                            onClick={() => handleSaveAnswer(q.id, opt)}
-                            className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
-                              isChecked
-                                ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
-                                : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name={`question_${q.id}`}
-                              checked={isChecked}
-                              onChange={() => {}}
-                              className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                            />
-                            <span>{opt}</span>
-                          </label>
-                        );
-                      })}
+                      <div className="space-y-2">
+                        {options.map((opt, optIdx) => {
+                          const isChecked = answersMap[q.id]?.text === opt;
+                          return (
+                            <label
+                              key={optIdx}
+                              onClick={() => handleSaveAnswer(q.id, opt)}
+                              className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
+                                isChecked
+                                  ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
+                                  : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name={`question_${q.id}`}
+                                checked={isChecked}
+                                onChange={() => {}}
+                                className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                              />
+                              <span>{opt}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -534,14 +592,14 @@ export default function TestTakingPage() {
           {/* 3. WRITING SECTION */}
           {currentSection.type === 'writing' && (
             <div className="space-y-6">
-              {currentSection.questions?.map((q, qIdx) => {
+              {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
                 const currentText = answersMap[q.id]?.text || '';
                 const wordCount = countWords(currentText);
                 const targetWords = qIdx === 0 ? 150 : 250;
                 const isTargetReached = wordCount >= targetWords;
 
                 return (
-                  <div key={q.id} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                  <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
                         Writing Topshirig‘i #{qIdx + 1}
@@ -584,13 +642,13 @@ export default function TestTakingPage() {
           {/* 4. SPEAKING SECTION */}
           {currentSection.type === 'speaking' && (
             <div className="space-y-6">
-              {currentSection.questions?.map((q, qIdx) => {
+              {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
                 const isRecordingThis = recordingQuestionId === q.id;
                 const existingRecording = recordedAudios[q.id];
                 const savedAudioUrl = answersMap[q.id]?.audioUrl;
 
                 return (
-                  <div key={q.id} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                  <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
                         Speaking Part #{qIdx + 1}
@@ -708,6 +766,10 @@ export default function TestTakingPage() {
               </button>
             )}
           </div>
+        </div>
+      ) : (
+        <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500">
+          Ushbu testda bo‘limlar mavjud emas.
         </div>
       )}
 

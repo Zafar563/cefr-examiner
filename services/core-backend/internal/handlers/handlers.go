@@ -281,7 +281,7 @@ func (h *Handler) CreateTest(c *gin.Context) {
 
 	test, err := h.repo.CreateTest(req.Title, req.Description, req.Level, req.DurationMinutes)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create test"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create test: " + err.Error()})
 		return
 	}
 
@@ -310,7 +310,7 @@ func (h *Handler) CreateSection(c *gin.Context) {
 
 	sec, err := h.repo.CreateSection(testID, req.Type, req.Title, req.Instructions, req.AudioURL, req.PassageText, req.OrderIndex)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create section"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create section: " + err.Error()})
 		return
 	}
 

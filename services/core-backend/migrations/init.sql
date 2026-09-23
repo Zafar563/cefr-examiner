@@ -133,3 +133,9 @@ INSERT INTO questions (section_id, question_type, question_text, options, correc
 INSERT INTO questions (section_id, question_type, question_text, options, correct_answer, points, order_index) VALUES
 (4, 'speaking_prompt', 'Part 1 (Personal Introduction): Describe your hometown or city. What do you like most about living there, and what changes would you like to see in the future? (Speak for 1-2 minutes).', '[]'::jsonb, '', 15, 1),
 (4, 'speaking_prompt', 'Part 2 (In-depth discussion): Talk about a challenging goal you achieved in your life. Explain what the goal was, what obstacles you overcame, and what lessons you learned. (Speak for 2 minutes).', '[]'::jsonb, '', 15, 2);
+
+-- Synchronize sequences for auto-incrementing SERIAL columns
+SELECT setval(pg_get_serial_sequence('tests', 'id'), COALESCE((SELECT MAX(id) FROM tests), 1));
+SELECT setval(pg_get_serial_sequence('sections', 'id'), COALESCE((SELECT MAX(id) FROM sections), 1));
+SELECT setval(pg_get_serial_sequence('questions', 'id'), COALESCE((SELECT MAX(id) FROM questions), 1));
+SELECT setval(pg_get_serial_sequence('users', 'id'), COALESCE((SELECT MAX(id) FROM users), 1));

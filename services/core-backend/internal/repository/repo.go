@@ -64,7 +64,7 @@ func (r *Repository) GetActiveTests() ([]models.Test, error) {
 	}
 	defer rows.Close()
 
-	var tests []models.Test
+	tests := make([]models.Test, 0)
 	for rows.Next() {
 		var t models.Test
 		if err := rows.Scan(&t.ID, &t.Title, &t.Description, &t.Level, &t.DurationMinutes, &t.IsActive, &t.CreatedAt); err != nil {
@@ -356,7 +356,7 @@ func (r *Repository) GetPendingSubmissions() ([]models.TestSession, error) {
 	}
 	defer rows.Close()
 
-	var sessions []models.TestSession
+	sessions := make([]models.TestSession, 0)
 	for rows.Next() {
 		var s models.TestSession
 		if err := rows.Scan(
@@ -399,7 +399,7 @@ func (r *Repository) GetStudentResults(userID int) ([]models.TestSession, error)
 	}
 	defer rows.Close()
 
-	var sessions []models.TestSession
+	sessions := make([]models.TestSession, 0)
 	for rows.Next() {
 		var s models.TestSession
 		if err := rows.Scan(&s.ID, &s.UserID, &s.TestID, &s.TestTitle, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.SubmittedAt, &s.CurrentSectionIndex); err != nil {

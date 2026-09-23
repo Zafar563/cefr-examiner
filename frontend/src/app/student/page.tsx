@@ -4,23 +4,25 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { apiGetTests, apiGetStudentHistory, apiStartSession, getCurrentStoredUser, Test, TestSession } from '@/lib/api';
-import { Clock, Award, CheckCircle2, ChevronRight, PlayCircle, FileText, AlertCircle } from 'lucide-react';
+import { Clock, Award, ChevronRight, PlayCircle, FileText } from 'lucide-react';
 
 export default function StudentDashboard() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [tests, setTests] = useState<Test[]>([]);
   const [history, setHistory] = useState<TestSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [startingTestId, setStartingTestId] = useState<number | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     const user = getCurrentStoredUser();
     if (!user) {
       router.push('/login');
       return;
     }
     loadData();
-  }, []);
+  }, [router]);
 
   const loadData = async () => {
     setLoading(true);
@@ -29,10 +31,12 @@ export default function StudentDashboard() {
         apiGetTests().catch(() => []),
         apiGetStudentHistory().catch(() => []),
       ]);
-      setTests(availableTests);
-      setHistory(sessionHistory);
+      setTests(Array.isArray(availableTests) ? availableTests : []);
+      setHistory(Array.isArray(sessionHistory) ? sessionHistory : []);
     } catch (e) {
-      console.error(e);
+      console.error('Data load error:', e);
+      setTests([]);
+      setHistory([]);
     } finally {
       setLoading(false);
     }
@@ -49,7 +53,17 @@ export default function StudentDashboard() {
     }
   };
 
-  if (loading) {
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'Yaqinda';
+    try {
+      const d = new Date(dateStr);
+      return isNaN(d.getTime()) ? 'Yaqinda' : d.toLocaleDateString('uz-UZ') + ' ' + d.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return 'Yaqinda';
+    }
+  };
+
+  if (!mounted || loading) {
     return (
       <div className="py-20 text-center">
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -57,6 +71,9 @@ export default function StudentDashboard() {
       </div>
     );
   }
+
+  const safeTests = Array.isArray(tests) ? tests : [];
+  const safeHistory = Array.isArray(history) ? history : [];
 
   return (
     <div className="space-y-10 py-4">
@@ -81,16 +98,16 @@ export default function StudentDashboard() {
             <PlayCircle className="w-5 h-5 text-emerald-600" />
             Mavjud Imtihonlar
           </h2>
-          <span className="text-xs text-slate-500 font-medium">{tests.length} ta test faol</span>
+          <span className="text-xs text-slate-500 font-medium">{safeTests.length} ta test faol</span>
         </div>
 
-        {tests.length === 0 ? (
+        {safeTests.length === 0 ? (
           <div className="p-8 text-center bg-white rounded-2xl border border-dashed border-slate-300 text-slate-500">
             Hozircha faol testlar mavjud emas. Admin panel orqali test qo‘shishingiz mumkin.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {tests.map((test) => (
+            {safeTests.map((test) => (
               <div
                 key={test.id}
                 className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
@@ -142,7 +159,7 @@ export default function StudentDashboard() {
           Testlar Tarixi va Natijalarim
         </h2>
 
-        {history.length === 0 ? (
+        {safeHistory.length === 0 ? (
           <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500 text-sm">
             Siz hali birorta ham test topshirmagansiz. Yuqoridagi testlardan birini boshlang!
           </div>
@@ -161,13 +178,13 @@ export default function StudentDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {history.map((s) => (
+                  {safeHistory.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="py-4 px-4 font-semibold text-slate-800">
                         {s.test_title || `CEFR Mock #${s.test_id}`}
                       </td>
                       <td className="py-4 px-4 text-slate-500 text-xs">
-                        {new Date(s.started_at).toLocaleString('uz-UZ')}
+                        {formatDate(s.started_at)}
                       </td>
                       <td className="py-4 px-4">
                         {s.status === 'in_progress' ? (

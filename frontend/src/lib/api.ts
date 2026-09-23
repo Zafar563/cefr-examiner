@@ -188,8 +188,14 @@ export const apiGetMe = async (): Promise<User> => {
 
 // Tests API
 export const apiGetTests = async (): Promise<Test[]> => {
-  const res = await fetch(`${CORE_API_URL}/api/v1/tests`);
-  return res.json();
+  try {
+    const res = await fetch(`${CORE_API_URL}/api/v1/tests`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
 };
 
 export const apiGetTestDetails = async (id: number): Promise<Test> => {
@@ -225,12 +231,22 @@ export const apiSubmitSession = async (sessionId: number): Promise<TestSession> 
 };
 
 export const apiGetStudentHistory = async (): Promise<TestSession[]> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/student/history`);
+  try {
+    const data = await fetchWithAuth(`${CORE_API_URL}/api/v1/student/history`);
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
 };
 
 // Examiner API
 export const apiGetExaminerSubmissions = async (): Promise<TestSession[]> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/examiner/submissions`);
+  try {
+    const data = await fetchWithAuth(`${CORE_API_URL}/api/v1/examiner/submissions`);
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
 };
 
 export const apiGradeAnswer = async (answerId: number, score: number, feedback: string) => {

@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cefr_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cefr_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cefr_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-cefr_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./services/core-backend/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cefr_user} -d ${POSTGRES_DB:-cefr_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: cefr_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  core-backend:
+    build:
+      context: ./services/core-backend
+      dockerfile: Dockerfile
+    container_name: cefr_core_backend
+    restart: always
+    ports:
+      - "${PORT_CORE_BACKEND:-8080}:8080"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER:-cefr_user}:${POSTGRES_PASSWORD:-cefr_secret_password}@postgres:5432/${POSTGRES_DB:-cefr_db}?sslmode=disable
+      - REDIS_ADDR=redis:6379
+      - JWT_SECRET=${JWT_SECRET:-super_secret_cefr_jwt_key_2026_production_change_in_real_deploy}
+      - MEDIA_SERVICE_URL=http://media-service:8000
+      - PORT=8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - shared_media:/app/storage/uploads
+
+  media-service:
+    build:
+      context: ./services/media-service
+      dockerfile: Dockerfile
+    container_name: cefr_media_service
+    restart: always
+    ports:
+      - "${PORT_MEDIA_SERVICE:-8000}:8000"
+    environment:
+      - STORAGE_DIR=/app/storage/uploads
+      - PORT=8000
+    volumes:
+      - shared_media:/app/storage/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cefr_frontend
+    restart: always
+    ports:
+      - "${PORT_FRONTEND:-3000}:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NEXT_PUBLIC_MEDIA_URL=http://localhost:8000
+    depends_on:
+      - core-backend
+      - media-service
+
+volumes:
+  postgres_data:
+  redis_data:
+  shared_media:

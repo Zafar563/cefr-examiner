@@ -1,0 +1,40 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+services/core-backend/server
+services/core-backend/api.exe
+
+# Node & Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.npm
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+services/media-service/.venv/
+services/media-service/venv/
+services/media-service/env/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Storage uploads (keep placeholder)
+storage/uploads/*
+!storage/uploads/.gitkeep
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

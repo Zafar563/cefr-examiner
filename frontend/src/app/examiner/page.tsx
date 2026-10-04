@@ -209,23 +209,28 @@ export default function ExaminerPage() {
 
                         {/* Grading Inputs */}
                         <div className="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                          <div>
-                            <label className="block text-xs font-bold text-slate-700 mb-1">
-                              Qo‘yiladigan Ball (maks 15):
-                            </label>
-                            <input
-                              type="number"
-                              min="0"
-                              max="15"
-                              step="0.5"
-                              value={gradingScores[ans.id] ?? ''}
-                              onChange={(e) =>
-                                setGradingScores({ ...gradingScores, [ans.id]: parseFloat(e.target.value) || 0 })
-                              }
-                              placeholder="0-15"
-                              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
-                            />
-                          </div>
+                          {(() => {
+                            const maxScore = isWriting ? (ans.question_text?.includes('TASK 2') ? 25 : 15) : 15;
+                            return (
+                              <div>
+                                <label className="block text-xs font-bold text-slate-700 mb-1">
+                                  Qo‘yiladigan Ball (maks {maxScore}):
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max={maxScore}
+                                  step="0.5"
+                                  value={gradingScores[ans.id] ?? ''}
+                                  onChange={(e) =>
+                                    setGradingScores({ ...gradingScores, [ans.id]: parseFloat(e.target.value) || 0 })
+                                  }
+                                  placeholder={`0-${maxScore}`}
+                                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
+                                />
+                              </div>
+                            );
+                          })()}
 
                           <div className="sm:col-span-2">
                             <label className="block text-xs font-bold text-slate-700 mb-1">

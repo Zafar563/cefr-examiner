@@ -1,0 +1,730 @@
+{
+  "id": 202,
+  "title": "Cambridge IELTS 20 Academic Reading Test 2",
+  "description": "Rasmiy Cambridge IELTS 20 to'plamidan olingan to'liq 3 ta qism (Passage 1: Manatees, Passage 2: Procrastination, Passage 3: Invasion of the Robot Umpires) va 40 ta savoldan iborat akademik Reading imtihoni.",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 60,
+  "sections": [
+    {
+      "type": "reading",
+      "title": "Reading Passage 1: Manatees",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 1-6                                                                                                                                                                                                    \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the notes below.</p>\n<p>Choose <strong>ONE WORD AND/OR A NUMBER</strong> from the passage for each answer.</p>\n<p><strong>Appearance</strong></p>\n<p>- look similar to dugongs, but with a differently shaped <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">1</strong><input type=\"text\" data-qnum=\"1\" name=\"question_1\" class=\"ielts-inline-input\" placeholder=\"[1] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></p>\n<p><strong>Movement</strong></p>\n<p>- have fewer neck bones than most mammals</p>\n<p>- need to use their <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">2</strong><input type=\"text\" data-qnum=\"2\" name=\"question_2\" class=\"ielts-inline-input\" placeholder=\"[2] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> to help to turn their bodies around in order</p>\n<p>to look sideways</p>\n<p>- sense vibrations in the water by means of <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">3</strong><input type=\"text\" data-qnum=\"3\" name=\"question_3\" class=\"ielts-inline-input\" placeholder=\"[3] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> on their skin</p>\n<p><strong>Feeding</strong></p>\n<p>- eat mainly aquatic vegetation, such as <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">4</strong><input type=\"text\" data-qnum=\"4\" name=\"question_4\" class=\"ielts-inline-input\" placeholder=\"[4] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></p>\n<p>- grasp and pull up plants with their <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">5</strong><input type=\"text\" data-qnum=\"5\" name=\"question_5\" class=\"ielts-inline-input\" placeholder=\"[5] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></p>\n<p><strong>Breathing</strong></p>\n<p>- come to the surface for air every 2-4 minutes when awake and every 15-20 while</p>\n<p>sleeping</p>\n<p>- may regulate the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">6</strong><input type=\"text\" data-qnum=\"6\" name=\"question_6\" class=\"ielts-inline-input\" placeholder=\"[6] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> of their bodies by using muscles of diaphragm to store air internally</p>\n</div>                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 7-13                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Do the following statements agree with the information given in Reading Passage?</p>\n<p>in boxes<b> </b>on your answer sheet, write</p>\n<p><strong>TRUE</strong>  if the statement agrees with the information</p>\n<p><strong>FALSE</strong>  if the statement contradicts the information</p>\n<p><strong>NOT GIVEN</strong>  if there is no information on this</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"7\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">7</strong><span class=\"ielts-q-title\"><span>West Indian manatees can be found in a variety of different aquatic habitats.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"8\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">8</strong><span class=\"ielts-q-title\"><span>The Florida manatee lives in warmer waters than the Antillean manatee.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"9\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">9</strong><span class=\"ielts-q-title\"><span>The African manatee’s range is limited to coastal waters between the West African countries of Mauritania and Angola.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"9\" name=\"question_9\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"9\" name=\"question_9\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"9\" name=\"question_9\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"10\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">10</strong><span class=\"ielts-q-title\"><span>The extent of the loss of Amazonian manatees in the mid-twentieth century was only revealed many years later.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"10\" name=\"question_10\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"10\" name=\"question_10\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"10\" name=\"question_10\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"11\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">11</strong><span class=\"ielts-q-title\"><span>It is predicted that West Indian manatee populations will fall in the coming decades.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"12\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">12</strong><span class=\"ielts-q-title\"><span>The risk to manatees from entanglement and plastic consumption increased significantly in the period 2009-2020.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"13\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">13</strong><span class=\"ielts-q-title\"><span>There is some legislation in place which aims to reduce the likelihood of boat strikes on manatees in Florida.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div></div>\n                                                                                                                                    </div>\n                                        </div></div>",
+      "passage_text": "Manatees\nManatees, also known as sea cows, are aquatic mammals that belong to a group of animals called Sirenia. This group also contains dugongs. Dugongs and manatees look quite alike - they are similar in size, colour and shape, and both have flexible flippers for forelimbs. However, the manatee has a broad, rounded tail, whereas the dugongs is fluked, like that of a whale. There are three species of manatees: the West Indian manatee (Trichechus manatus), the African manatee (Trichechus senegalensis) and the Amazonian manatee (Trichechus inunguis).\nUnlike most mammals, manatees have only six bones in their neck – most others, including humans and giraffes, have seven. This short neck allows a manatee to move its head up and down, but not side to side. To see something on its left or its right, a manatee must turn its entire body, steering with its flippers. Manatees have pectoral flippers but no back limbs, only a tail for propulsion. They do have pelvic bones, however – a leftover from their evolution from a four-legged to a fully aquatic animal. Manatees share some visual similarities to elephants. Like elephants, manatees have thick, wrinkled skin. They also have some hairs covering their bodies which help them sense vibrations in the water around them.\nSeagrasses and other marine plants make up most of a manatee’s diet. Manatees spend about eight hours each day grazing and uprooting plants. They eat up to 15% of their weight in food each day. African manatees are omnivorous – studies have shown that molluscs and fish make up a small part of their diets. West Indian and Amazonian manatees are both herbivores.\nManatees’ teeth are all molars - flat, rounded teeth for grinding food. Due to manatees’ abrasive aquatic plant diet, these teeth get worn down and they eventually fall out, so they continually grow new teeth that get pushed forward to replace the ones they lose. Instead of having incisors to grasp their food, manatees have lips which function like a pair of hands to help tear food away from the seafloor.\nManatees are fully aquatic, but as mammals, they need to come up to the surface to breathe. When awake, they typically surface every two to four minutes, but they can hold their breath for much longer. Adult manatees sleep underwater for 10-12 hours a day, but they come up for air every 15-20 minutes. Active manatees need to breathe more frequently. It’s thought that manatees use their muscular diaphragm and breathing to adjust their buoyancy. They may use diaphragm contractions to compress and store gas in folds in their large intestine to help them float.\nThe West Indian manatee reaches about 3.5 metros long and weighs on average around 500 kilo grammes. It moves between fresh water and salt water, taking advantage of coastal mangroves and coral reefs, rivers, lakes and inland lagoons. There are two subspecies of West Indian manatee: the Antillean manatee is found in waters from the Bahamas to Brazil, whereas the Florida manatee is found in US waters, although some individuals have been recorded in the Bahamas. In winter, the Florida manatee is typically restricted to Florida. When the ambient water temperature drops below 20°C, it takes refuge in naturally and artificially warmed water, such as at the warm-water outfalls from powerplants.\nThe African manatee is also about 3.5 metros long and found in the sea along the west coast of Africa, from Mauritania down to Angola. The species also makes use of rivers, with the mammals seen in landlocked countries such as Mali and Niger. The Amazonian manatee is the smallest species, though it is still a big animal. It grows to about 2.5 metros long and 350 kilo grammes. Amazonian manatees favour calm, shallow waters that are above 23°C This species is found in fresh water in the Amazon Basin in Brazil, as well as in Colombia, Ecuador and Peru.\nAll three manatee species are endangered or at a heightened risk of extinction. The African manatee and Amazonian manatee are both listed as Vulnerable by the International Union for Conservation of Nature (IUCN). It is estimated that 140,000 Amazonian manatees were killed between 1935 and 1954 for their meat, fat and skin, with the latter used to make leather. In more recent years, African manatee decline has been tied to incidental capture in fishing nets and hunting. Manatee hunting is now illegal in every country the African species is found in.\nThe two subspecies of West Indian manatee are listed as Endangered by the IUCN. Both are also expected to undergo a decline of 20% over the next 40 years. A review of almost 1,800 cases of entanglement in fishing nets and of plastic consumption among marine mammals in US waters from 2009 to 2020 found that at least 700 cases involved manatees. The chief cause of death in Florida manatees is boat strikes. However, laws in certain parts of Florida now limit boat speeds during winter, allowing slow-moving manatees more time to respond.",
+      "order_index": 1,
+      "questions": [
+        {
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "Movement - have fewer neck bones than most mammals - need to use their",
+          "options": [],
+          "correct_answer": "Tail",
+          "points": 1
+        },
+        {
+          "question_number": 2,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "to help to turn their bodies around in order to look sideways - sense vibrations in the water by means of",
+          "options": [],
+          "correct_answer": "Flippers",
+          "points": 1
+        },
+        {
+          "question_number": 3,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "on their skin Feeding - eat mainly aquatic vegetation, such as",
+          "options": [],
+          "correct_answer": "Hairs",
+          "points": 1
+        },
+        {
+          "question_number": 4,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "- grasp and pull up plants with their",
+          "options": [],
+          "correct_answer": "Seagrasses",
+          "points": 1
+        },
+        {
+          "question_number": 5,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "Breathing - come to the surface for air every 2-4 minutes when awake and every 15-20 while sleeping - may regulate the",
+          "options": [],
+          "correct_answer": "Lips",
+          "points": 1
+        },
+        {
+          "question_number": 6,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "of their bodies by using muscles of diaphragm to store air internally",
+          "options": [],
+          "correct_answer": "Buoyancy",
+          "points": 1
+        },
+        {
+          "question_number": 7,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "West Indian manatees can be found in a variety of different aquatic habitats.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 8,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "The Florida manatee lives in warmer waters than the Antillean manatee.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 9,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "The African manatee’s range is limited to coastal waters between the West African countries of Mauritania and Angola.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "FALSE",
+          "points": 1
+        },
+        {
+          "question_number": 10,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "The extent of the loss of Amazonian manatees in the mid-twentieth century was only revealed many years later.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 11,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "It is predicted that West Indian manatee populations will fall in the coming decades.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 12,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "The risk to manatees from entanglement and plastic consumption increased significantly in the period 2009-2020.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 13,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "There is some legislation in place which aims to reduce the likelihood of boat strikes on manatees in Florida.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "type": "reading",
+      "title": "Reading Passage 2: Procrastination",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 14-16                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Reading Passage has six paragraphs,</p>\n<p>Which paragraph contains the following information?</p>\n<p>Write the correct letter, <strong>A-F,</strong> in boxes on your answer sheet.</p>\n<p><strong>NB</strong> You may use any letter more than once.</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                                <table class=\"ielts-reading-matching-table\"><thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead><tbody><tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-14\" class=\"ielts-q-badge\">14</strong> <span>mention of false assumptions about why people procrastinate</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"F\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-15\" class=\"ielts-q-badge\">15</strong> <span>reference to the realisation that others also procrastinate</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"F\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-16\" class=\"ielts-q-badge\">16</strong> <span>neurological evidence of a link between procrastination and emotion</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"F\"></td></tr></tbody></table>                                                                                                                                                                                        </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 17-22                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the summary below.</p>\n<p>Choose <strong>ONE WORD ONLY </strong>from the passage for each answer.</p>\n<p>Write your answers in boxes on your answer sheet.</p>\n<p><strong>What makes us procrastinate?</strong></p>\n<p>Many people think that procrastination is the result of <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">17</strong><input type=\"text\" data-qnum=\"17\" name=\"question_17\" class=\"ielts-inline-input\" placeholder=\"[17] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></p>\n<p>Others believe it to be the result of an inability to organise time efficiently.</p>\n<p>But scientific studies suggest that procrastination is actually due to poor mood management. The tasks we are most likely to put off are those that could damage our self-esteem or cause us to feel <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">18</strong><input type=\"text\" data-qnum=\"18\" name=\"question_18\" class=\"ielts-inline-input\" placeholder=\"[18] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>. when we think about them. Research comparing chronic procrastinators with other people even found differences in the brain regions associated with regulating emotions and identifying <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">19</strong><input type=\"text\" data-qnum=\"19\" name=\"question_19\" class=\"ielts-inline-input\" placeholder=\"[19] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>.</p>\n<p>Emotionally loaded and difficult tasks often cause us to procrastinate.</p>\n<p>Getting ready to take <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">20</strong><input type=\"text\" data-qnum=\"20\" name=\"question_20\" class=\"ielts-inline-input\" placeholder=\"[20] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> might be a typical example of one such task.</p>\n<p>People who are likely to procrastinate tend to be either <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">21</strong><input type=\"text\" data-qnum=\"21\" name=\"question_21\" class=\"ielts-inline-input\" placeholder=\"[21] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> or those with low self-esteem.</p>\n<p>Procrastination is only a short-term measure for managing emotions. It’s often followed by a feeling of <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">22</strong><input type=\"text\" data-qnum=\"22\" name=\"question_22\" class=\"ielts-inline-input\" placeholder=\"[22] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>, which worsens our mood and leads to more procrastination.</p>\n</div>                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 23-24                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Choose <strong>TWO</strong> letters<strong>, A-E</strong></p>\n<p>Write the correct letters in boxes on your answer sheet.</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-standalone-q ielts-multi-q\" data-multi-qnums=\"23,24\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">23</strong> <strong class=\"ielts-q-badge\">24</strong><span class=\"ielts-q-title\"><span>Which  comparisons between employees who often procrastinate and those who do not are mentioned in the text?</span></div><div class=\"ielts-checkbox-group\"><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> Their salaries are lower.</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> The quality of their work is inferior.</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> They don’t keep their jobs for as long.</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> They don’t enjoy their working lives as much.</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" value=\"E\"><span class=\"ielts-radio-text\"><strong>E</strong> They have poorer relationships with colleagues.</span></label></div></div></div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 25-26                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Choose <strong>TWO</strong> letters,<strong> A-E</strong></p>\n<p>Write the correct letters in boxes on your answer sheet.</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-standalone-q ielts-multi-q\" data-multi-qnums=\"25,26\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">25</strong> <strong class=\"ielts-q-badge\">26</strong><span class=\"ielts-q-title\"><span>Which  recommendations for getting out of a cycle of procrastination does the writer give?</span></div><div class=\"ielts-checkbox-group\"><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"25,26\" data-limit=\"2\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> not judging ourselves harshly</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"25,26\" data-limit=\"2\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> setting ourselves manageable aims</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"25,26\" data-limit=\"2\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> rewarding ourselves for tasks achieved</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"25,26\" data-limit=\"2\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> prioritising tasks according to their importance</span></label><label class=\"ielts-checkbox-btn\"><input type=\"checkbox\" data-multi-qnums=\"25,26\" data-limit=\"2\" value=\"E\"><span class=\"ielts-radio-text\"><strong>E</strong> avoiding things that stop us concentrating on our tasks</span></label></div></div></div>\n                                                                                                                                    </div>\n                                        </div></div>",
+      "passage_text": "Procrastination\nA psychologist explains why we put off important tasks and how we can break this habit\nA Procrastination is the habit of delaying a necessary task, usually by focusing on less urgent, more enjoyable, and easier activities instead. We all do it from time to time. We might be composing a message to a friend who we have to let down, or putting together an important report for college or work, we’re doing our best to avoid doing the job at hand, but deep down we know that we should just be getting on with it. Unfortunately, berating ourselves won’t stop us procrastinating again. In fact, it’s one of the worst things we can do. This matters because, as my research shows, procrastination doesn’t just waste time, but is actually linked to other problems, too.\nB Contrary to popular belief, procrastination is not due to laziness or poor time management. Scientific studies suggest procrastination is, in fact, caused by poor mood management. This makes sense if we consider that people are more likely to put off starting or completing tasks that they are really not keen to do. If just thinking about the task threatens our sense of self-worth or makes us anxious, we will be more likely to put it off. Research involving brain imaging has found that areas of the brain linked to detection of threats and emotion regulation are actually different in people who chronically procrastinate compared to those who don’t procrastinate frequently.\nC Tasks that are emotionally loaded or difficult, such as preparing for exams, are prime candidates for procrastination. People with low self-esteem are more likely to procrastinate. Another group of people who tend to procrastinate are perfectionists, who worry their work will be judged harshly by others. We know that if we don’t finish that report or complete those home repairs, then what we did can’t be evaluated. When we avoid such tasks, we also avoid the negative emotions associated with them. This is rewarding, and it conditions us to use procrastination to repair our mood. If we engage in more enjoyable tasks instead, we get another mood boost. In the long run, however, procrastination isn’t an effective way of managing emotions. The ‘mood repair’ we experience is temporary. Afterwards, people tend to be left with a sense of guilt that not only increases their negative mood, but also reinforces their tendency to procrastinate.\nD So why is this such a problem? When most people think of the costs of procrastination, they think of the toll on productivity. For example, studies have shown that procrastination negatively impacts on student performance. But putting off reading textbooks and writing essays may affect other areas of students’ lives. In one study of over 3,000 German students over a six-month period, those who reported procrastinating over their university work were also more likely to engage in study-related misconduct, such as cheating and plagiarism. But the behaviour that procrastination was most closely linked with was using fraudulent excuses to get deadline extensions. Other research shows that employees on average spend almost a quarter of their workday procrastinating, and again this is linked with negative outcomes. In fact, in one US survey of over 22,000 employees, participants who said they regularly procrastinated had less annual income and less employment stability. For every one-point increase on a measure of chronic procrastination, annual income decreased by US$15,000.\nE Procrastination also correlates with serious health and well-being problems. A tendency to procrastinate is linked to poor mental health, including higher levels of depression and anxiety. Across numerous studies, I’ve found people who regularly procrastinate report a greater number of health issues, such as headaches, flu and colds, and digestive issues. They also experience higher levels of stress and poor sleep quality. They are less likely to practise healthy behaviours, such as eating a healthy diet and regularly exercising, and use destructive coping strategies to manage their stress. In one study of over 700 people, I found people prone to procrastination had a 63% greater risk ofpoor heart health after accounting for other personality traits and demographics.\nF Finding better ways of managing our emotions is one route out of the vicious cycle of procrastination. An important first step is to manage our environment and how we view the task. There are a number of evidence-based strategies that can help us fend off distractions that can occupy our minds when we should be focusing on the thing we should be getting on with. For example, reminding ourselves about why the task is important and valuable can increase positive feelings towards it. Forgiving ourselves and feeling compassion when we procrastinate can help break the procrastination cycle. We should admit that we feel bad, but not be overly critical of ourselves. We should remind ourselves that we’re not the first person to procrastinate, nor the last. Doing this can take the edge off the negative feelings we have about ourselves when we procrastinate. This can all make it easier to get back on track.",
+      "order_index": 2,
+      "questions": [
+        {
+          "question_number": 14,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "mention of false assumptions about why people procrastinate",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 15,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "reference to the realisation that others also procrastinate",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          "correct_answer": "F",
+          "points": 1
+        },
+        {
+          "question_number": 16,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "neurological evidence of a link between procrastination and emotion",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 17,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "Others believe it to be the result of an inability to organise time efficiently. But scientific studies suggest that procrastination is actually due to poor mood management. The tasks we are most likely to put off are those that could damage our self-esteem or cause us to feel",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Laziness",
+          "points": 1
+        },
+        {
+          "question_number": 18,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": ". when we think about them. Research comparing chronic procrastinators with other people even found differences in the brain regions associated with regulating emotions and identifying",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Anxious",
+          "points": 1
+        },
+        {
+          "question_number": 19,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": ". Emotionally loaded and difficult tasks often cause us to procrastinate. Getting ready to take",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Threats",
+          "points": 1
+        },
+        {
+          "question_number": 20,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "might be a typical example of one such task. People who are likely to procrastinate tend to be either",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Exams",
+          "points": 1
+        },
+        {
+          "question_number": 21,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "or those with low self-esteem. Procrastination is only a short-term measure for managing emotions. It’s often followed by a feeling of",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Perfectionists",
+          "points": 1
+        },
+        {
+          "question_number": 22,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": ", which worsens our mood and leads to more procrastination.",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "Guilt",
+          "points": 1
+        },
+        {
+          "question_number": 23,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Question 23",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "A / C",
+          "points": 1
+        },
+        {
+          "question_number": 24,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Which TWO comparisons between employees who often procrastinate and those who do not are mentioned in the text?",
+          "options": [
+            "Their salaries are lower.",
+            "The quality of their work is inferior.",
+            "They don’t keep their jobs for as long.",
+            "They don’t enjoy their working lives as much.",
+            "They have poorer relationships with colleagues."
+          ],
+          "correct_answer": "A / C",
+          "points": 1
+        },
+        {
+          "question_number": 25,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Question 25",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "A / E",
+          "points": 1
+        },
+        {
+          "question_number": 26,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Which TWO recommendations for getting out of a cycle of procrastination does the writer give?",
+          "options": [
+            "not judging ourselves harshly",
+            "setting ourselves manageable aims",
+            "rewarding ourselves for tasks achieved",
+            "prioritising tasks according to their importance",
+            "avoiding things that stop us concentrating on our tasks"
+          ],
+          "correct_answer": "A / E",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "type": "reading",
+      "title": "Reading Passage 3: Invasion of the Robot Umpires",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 27-32                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Do the following statements agree with the claims of the writer in Reading Passage?</p>\n<p>In boxes on your answer sheet, write</p>\n<p><strong>YES</strong> if the statement agrees with the claims of the writer</p>\n<p><strong>NO</strong> if the statement contradicts the claims of the writer</p>\n<p><strong>NOT GIVEN</strong> if it is impossible to say what the writer thinks about this</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"27\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">27</strong><span class=\"ielts-q-title\"><span>When DeJesus first used ABS, he shared decision-making about strikes with it.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"28\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">28</strong><span class=\"ielts-q-title\"><span>MLB considered it necessary to amend the size of the strike zone when criticisms were received from players.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"29\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">29</strong><span class=\"ielts-q-title\"><span>MLB is keen to justify the money spent on improving the accuracy of ABS’s calculations.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"30\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">30</strong><span class=\"ielts-q-title\"><span>The hundred-mile-an-hour fastball led to a more exciting style of play.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"30\" name=\"question_30\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"30\" name=\"question_30\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"30\" name=\"question_30\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"31\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">31</strong><span class=\"ielts-q-title\"><span>The differing proposals for alterations to the baseball bat led to fierce debate on Sword’s team.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"31\" name=\"question_31\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"31\" name=\"question_31\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"31\" name=\"question_31\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"32\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">32</strong><span class=\"ielts-q-title\"><span>ABS makes changes to the shape of the strike zone feasible.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"32\" name=\"question_32\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"32\" name=\"question_32\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"32\" name=\"question_32\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div></div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 33-37                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the summary using the list ofphrases, <strong>A-H,</strong> below.</p>\n<p>Write the correct letter, <strong>A-H</strong>, in boxes on your answer sheet.</p>\n<p><strong>Calls by the umpire</strong></p>\n<p>Even after ABS was developed, MLB still wanted human umpires to shout out decisions as they had in their <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">33</strong><select data-qnum=\"33\" name=\"question_33\" class=\"ielts-inline-select\"><option value=\"\">[ 33 ] Tanlang...</option><option value=\"A. pitch boundary\">A. pitch boundary</option><option value=\"B. numerous disputes\">B. numerous disputes</option><option value=\"C. team tactics\">C. team tactics</option><option value=\"D. subjective assessment\">D. subjective assessment</option><option value=\"E. widespread approval\">E. widespread approval</option><option value=\"F. former roles\">F. former roles</option><option value=\"G. total silence\">G. total silence</option><option value=\"H. perceived area\">H. perceived area</option></select></span></span>. The umpire’s job had, at one time, required a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">34</strong><select data-qnum=\"34\" name=\"question_34\" class=\"ielts-inline-select\"><option value=\"\">[ 34 ] Tanlang...</option><option value=\"A. pitch boundary\">A. pitch boundary</option><option value=\"B. numerous disputes\">B. numerous disputes</option><option value=\"C. team tactics\">C. team tactics</option><option value=\"D. subjective assessment\">D. subjective assessment</option><option value=\"E. widespread approval\">E. widespread approval</option><option value=\"F. former roles\">F. former roles</option><option value=\"G. total silence\">G. total silence</option><option value=\"H. perceived area\">H. perceived area</option></select></span></span> about whether a ball was a strike. A ball is considered a strike when the batter does not hit it and it crosses through a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">35</strong><select data-qnum=\"35\" name=\"question_35\" class=\"ielts-inline-select\"><option value=\"\">[ 35 ] Tanlang...</option><option value=\"A. pitch boundary\">A. pitch boundary</option><option value=\"B. numerous disputes\">B. numerous disputes</option><option value=\"C. team tactics\">C. team tactics</option><option value=\"D. subjective assessment\">D. subjective assessment</option><option value=\"E. widespread approval\">E. widespread approval</option><option value=\"F. former roles\">F. former roles</option><option value=\"G. total silence\">G. total silence</option><option value=\"H. perceived area\">H. perceived area</option></select></span></span> extending approximately from the batter’s knee to his chest.</p>\n<p>In the past, <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">36</strong><select data-qnum=\"36\" name=\"question_36\" class=\"ielts-inline-select\"><option value=\"\">[ 36 ] Tanlang...</option><option value=\"A. pitch boundary\">A. pitch boundary</option><option value=\"B. numerous disputes\">B. numerous disputes</option><option value=\"C. team tactics\">C. team tactics</option><option value=\"D. subjective assessment\">D. subjective assessment</option><option value=\"E. widespread approval\">E. widespread approval</option><option value=\"F. former roles\">F. former roles</option><option value=\"G. total silence\">G. total silence</option><option value=\"H. perceived area\">H. perceived area</option></select></span></span> over strike calls were not uncommon, but today everyone accepts the complete ban on pushing or shoving the umpire. One difference, however, is that during the first game DeJesus used ABS, strike calls were met with <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">37</strong><select data-qnum=\"37\" name=\"question_37\" class=\"ielts-inline-select\"><option value=\"\">[ 37 ] Tanlang...</option><option value=\"A. pitch boundary\">A. pitch boundary</option><option value=\"B. numerous disputes\">B. numerous disputes</option><option value=\"C. team tactics\">C. team tactics</option><option value=\"D. subjective assessment\">D. subjective assessment</option><option value=\"E. widespread approval\">E. widespread approval</option><option value=\"F. former roles\">F. former roles</option><option value=\"G. total silence\">G. total silence</option><option value=\"H. perceived area\">H. perceived area</option></select></span></span></p>\n</div>                                                <div class=\"options-dnd-panel dnd-panel dnd-panel--inline\" data-dnd-group=\"1597045\">\n                                                    <p class=\"dnd-panel-instruction\">Drag and drop an option to fill in each blank.</p>\n                                                    <div class=\"dnd-cards-container\">\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"A\" data-text=\"A. pitch boundary\">\n                                                                <span class=\"dnd-label\">A.</span>\n                                                                <span class=\"dnd-text\">pitch boundary</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"B\" data-text=\"B. numerous disputes\">\n                                                                <span class=\"dnd-label\">B.</span>\n                                                                <span class=\"dnd-text\">numerous disputes</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"C\" data-text=\"C. team tactics\">\n                                                                <span class=\"dnd-label\">C.</span>\n                                                                <span class=\"dnd-text\">team tactics</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"D\" data-text=\"D. subjective assessment\">\n                                                                <span class=\"dnd-label\">D.</span>\n                                                                <span class=\"dnd-text\">subjective assessment</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"E\" data-text=\"E. widespread approval\">\n                                                                <span class=\"dnd-label\">E.</span>\n                                                                <span class=\"dnd-text\">widespread approval</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"F\" data-text=\"F. former roles\">\n                                                                <span class=\"dnd-label\">F.</span>\n                                                                <span class=\"dnd-text\">former roles</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"G\" data-text=\"G. total silence\">\n                                                                <span class=\"dnd-label\">G.</span>\n                                                                <span class=\"dnd-text\">total silence</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"H\" data-text=\"H. perceived area\">\n                                                                <span class=\"dnd-label\">H.</span>\n                                                                <span class=\"dnd-text\">perceived area</span>\n                                                            </div>\n                                                                                                            </div>\n                                                </div>\n                                                                                    </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 38-40                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Choose the correct letter, <strong>A, B, C or D.</strong></p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"38\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">38</strong><span class=\"ielts-q-title\"><span>What does the writer suggest about ABS in the fifth paragraph?</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> It is bound to make key decisions that are wrong.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> It may reduce some of the appeal of the game.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> It will lead to the disappearance of human umpires.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> lt may increase calls for the rules of baseball to be changed.</span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"39\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">39</strong><span class=\"ielts-q-title\"><span>Morgan Sword says that the introduction of ABS</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> was regarded as an experiment without a guaranteed outcome.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> was intended to keep up with developments in other sports.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> was a response to changing attitudes about the role of sport.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> was an attempt to ensure baseball retained a young audience.</span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"40\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">40</strong><span class=\"ielts-q-title\"><span>Why does the writer include the views of Not and Russo?</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> to show that attitudes to technology vary widely</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> to argue that people have unrealistic expectations of sport</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> to indicate that accuracy is not the same thing as enjoyment</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> to suggest that the number of baseball fans needs to increase</span></label></div></div></div>\n                                                                                                                                    </div>\n                                        </div>                                                                    </div></div>",
+      "passage_text": "Invasion of the Robot Umpires\nA few years ago, Fred DeJesus from Brooklyn, New York became the first umpire in a minor league baseball game to use something called the Automated Ball-Strike System (ABS), often referred to as the ‘rob-umpire’. Instead of making any judgments himself about a strike*, DeJesus had decisions fed to him through an earpiece, connected to a modified missile-tracking system. The contraption looked like a large black pizza box with one glowing green eye, it was mounted above the press stand.\nMajor League Baseball (MLB), who had commissioned the system, wanted human umpires to announce the calls, just as they would have done in the past. When the first pitch came in, a recorded voice told DeJesus it was a strike. Previously, calling a strike was a judgment call on the part of the umpire. Even if the batter does not hit the ball, a pitch that passes through the ‘strike zone’ (an imaginary zone about seventeen inches wide, stretching from the batter’s knees to the middle of his chest) is considered a strike. During that first game, when DeJesus announced calls, there was no heckling and no shouted disagreement. Nobody said a word.\nFor a hundred and fifty years or so, the strike zone has been the game’s animating force - countless arguments between a team’s manager and the umpire have taken place over its boundaries and whether a ball had crossed through it. The rules of play have evolved in various stages. Today, everyone knows that you may scream your disagreement in an umpire’s face, but you must never shout personal abuse at them or touch them. That’s a no-no. When the robe-umpires came, however, the arguments stopped.\nDuring the first robe-umpire season, players complained about some strange calls. In response, MLB decided to tweak the dimensions of the zone, and the following year the consensus was that ABS is profoundly consistent. MLB says the device is near-perfect, precise to within fractions of an inch. “It’ll reduce controversy in the game, and be good for the game,” says Rob Manfred, who is Commissioner for MLB. But the question is whether controversy is worth reducing, or whether it is the sign of a human hand.\nA human, at least, yells back. When I spoke with Frank Viola, a coach for a North Carolina team, he said that ABS works as designed, but that it was also unforgiving and pedantic, almost legalistic. “Manfred is a lawyer,” Viola noted. Some pitchers have complained that, compared with a humans, the robot’s strike zone seems too precise. Viola was once a major-league player himself. When he was pitching, he explained, umpires rewarded skill. “Throw it where you aimed, and it would be a strike, even if it was an inch or two outside. There was a dialogue between pitcher and umpire.”\nThe executive tasked with running the experiment for MLB is Morgan Sword, who’s in charge of baseball operations. According to Sword, ABS was part of a larger project to make baseball more exciting since executives are terrified of losing younger fans, as has been the case with horse racing and boxing. He explains how they began the process by asking fans what version of baseball they found most exciting. The results showed that everyone wanted more action: more hits, more defense, more baserunning. This type of baseball essentially hasn’t existed since the 1960s, when the hundred-mile-an-hour fastball, which is difficult to hit and control, entered the game. It flattened the game into strikeouts, walks, and home runs - a type of play lacking much action.\nSword’s team brainstormed potential fixes. Any rule that existed, they talked about changing - from changing the bats to changing the geometry of the field. But while all of these were ruled out as potential fixes, ABS was seen as a perfect vehicle for change. According to Sword, once you get the technology right, you can load any strike zone you want into the system. “It might be a triangle, or a blob, or something shaped like Texas. Over time, as baseball evolves, ABS can allow the zone to change with it.”\n“In the past twenty years, sports have moved away from judgment calls. Soccer has Video Assistant Referees (for offside decisions, for example). Tennis has Hawk-Eye (for line calls, for example). For almost a decade, baseball has used instant replay on the base paths. This is widely liked, even if the precision can sometimes cause problems. But these applications deal with something physical: bases, lines, goals. The boundaries of action are precise, delineated like the keys of a piano. This is not the case with ABS and the strike zone. Historically, a certain discretion has been appreciated.”\nI decided to email Alva Noe, a professor at Berkeley University and a baseball fan, for his opinion. “Hardly a day goes by that I don’t wake up and run through the reasons that this [robe-umpires] is such a terrible idea,” he replied. He later told me, “This is part of a movement to use algorithms to take the hard choices of living out of life.” Perhaps he’s right. We watch baseball to kill time, not to maximize it. Some players I have met take a dissenting stance toward the robots too, believing that accuracy is not the answer.\nAccording to Joe Russo, who plays for a New Jersey team, “With technology, people just want everything to be perfect. That’s not reality. I think perfect would be weird. Your teams are always winning, work is always just great, there’s always money in your pocket, your car never breaks down. What is there to talk about?”\n*strike: a strike is when the batter swings at a ball and misses or when the batter does not swing at a ball that passes through the strike zone.",
+      "order_index": 3,
+      "questions": [
+        {
+          "question_number": 27,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "When DeJesus first used ABS, he shared decision-making about strikes with it.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NO",
+          "points": 1
+        },
+        {
+          "question_number": 28,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "MLB considered it necessary to amend the size of the strike zone when criticisms were received from players.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "YES",
+          "points": 1
+        },
+        {
+          "question_number": 29,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "MLB is keen to justify the money spent on improving the accuracy of ABS’s calculations.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 30,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "The hundred-mile-an-hour fastball led to a more exciting style of play.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NO",
+          "points": 1
+        },
+        {
+          "question_number": 31,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "The differing proposals for alterations to the baseball bat led to fierce debate on Sword’s team.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 32,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "ABS makes changes to the shape of the strike zone feasible.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "YES",
+          "points": 1
+        },
+        {
+          "question_number": 33,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ . The umpire’s job had, at one time, required a",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "F",
+          "points": 1
+        },
+        {
+          "question_number": 34,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ about whether a ball was a strike. A ball is considered a strike when the batter does not hit it and it crosses through a",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "D",
+          "points": 1
+        },
+        {
+          "question_number": 35,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ extending approximately from the batter’s knee to his chest. In the past,",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "H",
+          "points": 1
+        },
+        {
+          "question_number": 36,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ over strike calls were not uncommon, but today everyone accepts the complete ban on pushing or shoving the umpire. One difference, however, is that during the first game DeJesus used ABS, strike calls were met with",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 37,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ Drag and drop an option to fill in each blank. A. pitch boundary B. numerous disputes C. team tactics D. subjective assessment E. widespread approval F. former roles G. total silence H. perceived area",
+          "options": [
+            "1",
+            "16",
+            "34",
+            "43a7ccb219",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "yes"
+          ],
+          "correct_answer": "G",
+          "points": 1
+        },
+        {
+          "question_number": 38,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "What does the writer suggest about ABS in the fifth paragraph?",
+          "options": [
+            "It is bound to make key decisions that are wrong.",
+            "It may reduce some of the appeal of the game.",
+            "It will lead to the disappearance of human umpires.",
+            "lt may increase calls for the rules of baseball to be changed."
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 39,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Morgan Sword says that the introduction of ABS",
+          "options": [
+            "was regarded as an experiment without a guaranteed outcome.",
+            "was intended to keep up with developments in other sports.",
+            "was a response to changing attitudes about the role of sport.",
+            "was an attempt to ensure baseball retained a young audience."
+          ],
+          "correct_answer": "D",
+          "points": 1
+        },
+        {
+          "question_number": 40,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Why does the writer include the views of Not and Russo?",
+          "options": [
+            "to show that attitudes to technology vary widely",
+            "to argue that people have unrealistic expectations of sport",
+            "to indicate that accuracy is not the same thing as enjoyment",
+            "to suggest that the number of baseball fans needs to increase"
+          ],
+          "correct_answer": "C",
+          "points": 1
+        }
+      ]
+    }
+  ]
+}

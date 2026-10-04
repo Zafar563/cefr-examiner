@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   apiGetSession,
@@ -29,6 +29,268 @@ import {
   BookOpen,
   Edit3,
 } from 'lucide-react';
+import ReadingPassageHighlighter, { clearSessionHighlights } from '@/components/ReadingPassageHighlighter';
+
+interface IeltsReadingSectionProps {
+  instructionsHtml: string;
+  qnumToQuestionId: Record<number, number>;
+  initialAnswers: Record<number, { text: string; audioUrl: string }>;
+  onSaveAnswer: (questionId: number, text: string) => void;
+  onAnswerUpdated?: (questionId: number, text: string) => void;
+  className?: string;
+}
+
+const IeltsReadingSection = React.memo(
+  React.forwardRef<HTMLDivElement, IeltsReadingSectionProps>(function IeltsReadingSection(
+    { instructionsHtml, qnumToQuestionId, initialAnswers, onSaveAnswer, onAnswerUpdated, className },
+    ref
+  ) {
+    const localRef = useRef<HTMLDivElement | null>(null);
+    const answersRef = useRef(initialAnswers);
+    answersRef.current = initialAnswers;
+
+    const qmapRef = useRef(qnumToQuestionId);
+    qmapRef.current = qnumToQuestionId;
+
+    const saveRef = useRef(onSaveAnswer);
+    saveRef.current = onSaveAnswer;
+
+    const updateRef = useRef(onAnswerUpdated);
+    updateRef.current = onAnswerUpdated;
+
+    const debounceTimersRef = useRef<Record<number, NodeJS.Timeout>>({});
+
+    const setRefs = (node: HTMLDivElement | null) => {
+      localRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }
+    };
+
+    // Pre-fill answers whenever instructionsHtml changes
+    useEffect(() => {
+      const container = localRef.current;
+      if (!container) return;
+
+      const qmap = qmapRef.current;
+      const answers = answersRef.current;
+
+      // 1. Text inputs
+      const textInputs = container.querySelectorAll<HTMLInputElement>('input[type="text"][data-qnum]');
+      textInputs.forEach((input) => {
+        const qnum = Number(input.getAttribute('data-qnum'));
+        const qId = qmap[qnum];
+        if (qId && answers[qId]) {
+          const val = answers[qId].text || '';
+          input.value = val;
+          if (val) input.classList.add('answered');
+          else input.classList.remove('answered');
+        }
+      });
+
+      // 2. Select dropdowns
+      const selects = container.querySelectorAll<HTMLSelectElement>('select[data-qnum]');
+      selects.forEach((select) => {
+        const qnum = Number(select.getAttribute('data-qnum'));
+        const qId = qmap[qnum];
+        if (qId && answers[qId]) {
+          const val = answers[qId].text || '';
+          select.value = val;
+          if (val) select.classList.add('answered');
+          else select.classList.remove('answered');
+        }
+      });
+
+      // 3. Radio inputs
+      const radios = container.querySelectorAll<HTMLInputElement>('input[type="radio"][data-qnum]');
+      radios.forEach((radio) => {
+        const qnum = Number(radio.getAttribute('data-qnum'));
+        const qId = qmap[qnum];
+        if (qId && answers[qId]) {
+          radio.checked = answers[qId].text === radio.value;
+        }
+      });
+
+      // 4. Checkboxes
+      const checkboxes = container.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-multi-qnums]');
+      checkboxes.forEach((cb) => {
+        const multiAttr = cb.getAttribute('data-multi-qnums') || '';
+        const qnums = multiAttr.split(',').map(Number);
+        const answersForGroup = qnums.map((qn) => {
+          const qId = qmap[qn];
+          return qId && answers[qId] ? answers[qId].text : '';
+        });
+        cb.checked = answersForGroup.includes(cb.value);
+      });
+    }, [instructionsHtml]);
+
+    // Attach native DOM event listeners
+    useEffect(() => {
+      const container = localRef.current;
+      if (!container) return;
+
+      const handleChange = (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (!target) return;
+        const qmap = qmapRef.current;
+
+        // Radio button change
+        if (target instanceof HTMLInputElement && target.type === 'radio') {
+          const qnum = Number(target.getAttribute('data-qnum'));
+          const qId = qmap[qnum];
+          if (qId) {
+            saveRef.current(qId, target.value);
+            updateRef.current?.(qId, target.value);
+          }
+        }
+
+        // Select dropdown change
+        if (target instanceof HTMLSelectElement) {
+          const qnum = Number(target.getAttribute('data-qnum'));
+          const qId = qmap[qnum];
+          if (qId) {
+            if (target.value) target.classList.add('answered');
+            else target.classList.remove('answered');
+            saveRef.current(qId, target.value);
+            updateRef.current?.(qId, target.value);
+          }
+        }
+
+        // Checkbox change
+        if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+          const multiAttr = target.getAttribute('data-multi-qnums');
+          if (multiAttr) {
+            const qnums = multiAttr.split(',').map(Number);
+            const limit = Number(target.getAttribute('data-limit')) || qnums.length;
+            const allCheckboxes = Array.from(
+              container.querySelectorAll<HTMLInputElement>(`input[type="checkbox"][data-multi-qnums="${multiAttr}"]`)
+            );
+            const checkedBoxes = allCheckboxes.filter((cb) => cb.checked);
+
+            if (checkedBoxes.length > limit) {
+              target.checked = false;
+              alert(`Siz maksimal ${limit} ta variant tanlashingiz mumkin.`);
+              return;
+            }
+
+            const selectedValues = checkedBoxes.map((cb) => cb.value);
+            qnums.forEach((qn, idx) => {
+              const qId = qmap[qn];
+              if (qId) {
+                const val = selectedValues[idx] || '';
+                saveRef.current(qId, val);
+                updateRef.current?.(qId, val);
+              }
+            });
+          }
+        }
+      };
+
+      // Click on radio button label or text
+      const handleClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (!target) return;
+        if (target.tagName === 'INPUT') return; // Handled by change listener
+
+        const radioLabel = target.closest<HTMLLabelElement>('.ielts-radio-btn');
+        if (radioLabel) {
+          const radio = radioLabel.querySelector<HTMLInputElement>('input[type="radio"]');
+          if (radio && !radio.checked) {
+            radio.checked = true;
+            const qnum = Number(radio.getAttribute('data-qnum'));
+            const qId = qmapRef.current[qnum];
+            if (qId) {
+              saveRef.current(qId, radio.value);
+              updateRef.current?.(qId, radio.value);
+            }
+          }
+        }
+      };
+
+      // Text input typing (updates answered style immediately and debounces saving)
+      const handleInput = (e: Event) => {
+        const target = e.target as HTMLElement;
+        if (target instanceof HTMLInputElement && target.type === 'text') {
+          const val = target.value;
+          if (val.trim()) target.classList.add('answered');
+          else target.classList.remove('answered');
+
+          const qnum = Number(target.getAttribute('data-qnum'));
+          const qId = qmapRef.current[qnum];
+          if (qId) {
+            updateRef.current?.(qId, val);
+            if (debounceTimersRef.current[qId]) {
+              clearTimeout(debounceTimersRef.current[qId]);
+            }
+            debounceTimersRef.current[qId] = setTimeout(() => {
+              saveRef.current(qId, val.trim());
+              delete debounceTimersRef.current[qId];
+            }, 600);
+          }
+        }
+      };
+
+      // Focus out (blur) saves immediately and cancels debounce
+      const handleFocusOut = (e: FocusEvent) => {
+        const target = e.target as HTMLElement;
+        if (target instanceof HTMLInputElement && target.type === 'text') {
+          const qnum = Number(target.getAttribute('data-qnum'));
+          const qId = qmapRef.current[qnum];
+          if (qId) {
+            if (debounceTimersRef.current[qId]) {
+              clearTimeout(debounceTimersRef.current[qId]);
+              delete debounceTimersRef.current[qId];
+            }
+            const val = target.value.trim();
+            saveRef.current(qId, val);
+            updateRef.current?.(qId, val);
+          }
+        }
+      };
+
+      // Enter key blurs and triggers focusout
+      const handleKeyDown = (e: KeyboardEvent) => {
+        const target = e.target as HTMLElement;
+        if (target instanceof HTMLInputElement && target.type === 'text') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            target.blur();
+          }
+        }
+      };
+
+      container.addEventListener('change', handleChange);
+      container.addEventListener('click', handleClick);
+      container.addEventListener('input', handleInput);
+      container.addEventListener('focusout', handleFocusOut);
+      container.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        Object.values(debounceTimersRef.current).forEach(clearTimeout);
+        debounceTimersRef.current = {};
+        container.removeEventListener('change', handleChange);
+        container.removeEventListener('click', handleClick);
+        container.removeEventListener('input', handleInput);
+        container.removeEventListener('focusout', handleFocusOut);
+        container.removeEventListener('keydown', handleKeyDown);
+      };
+    }, []);
+
+    return (
+      <div
+        ref={setRefs}
+        className={className || "bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-40 max-h-[70vh] overflow-y-auto"}
+        dangerouslySetInnerHTML={{ __html: instructionsHtml }}
+      />
+    );
+  }),
+  (prevProps, nextProps) => {
+    // Only re-render if the instructions HTML changed (e.g. section switched)
+    return prevProps.instructionsHtml === nextProps.instructionsHtml;
+  }
+);
 
 export default function TestTakingPage() {
   const params = useParams();
@@ -66,6 +328,61 @@ export default function TestTakingPage() {
   // Submitting modal
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // IELTS authentic reading container ref
+  const ieltsContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const sections = Array.isArray(test?.sections) ? test.sections : [];
+  const currentSection = sections[currentSectionIndex] || null;
+
+  // Map question number (1..40) to question ID for the current active section
+  const qnumToQuestionId = useMemo(() => {
+    const map: Record<number, number> = {};
+    if (currentSection && Array.isArray(currentSection.questions)) {
+      currentSection.questions.forEach((q) => {
+        map[q.order_index] = q.id;
+      });
+    }
+    return map;
+  }, [currentSection]);
+
+  // Handler for live answer changes to update UI state immediately
+  const handleLiveAnswerUpdate = (questionId: number, text: string) => {
+    setAnswersMap((prev) => ({
+      ...prev,
+      [questionId]: { text, audioUrl: prev[questionId]?.audioUrl || '' },
+    }));
+  };
+
+  const flushAnswers = () => {
+    if (!ieltsContainerRef.current) return;
+    const inputs = ieltsContainerRef.current.querySelectorAll<HTMLInputElement>('input[type="text"][data-qnum]');
+    inputs.forEach((input) => {
+      const qnum = Number(input.getAttribute('data-qnum'));
+      const qId = qnumToQuestionId[qnum];
+      if (qId && input.value.trim()) {
+        handleSaveAnswer(qId, input.value.trim());
+      }
+    });
+  };
+
+  const handleSectionChange = (idx: number) => {
+    flushAnswers();
+    setCurrentSectionIndex(idx);
+  };
+
+  const scrollToQuestion = (qnum: number) => {
+    if (!ieltsContainerRef.current) return;
+    const el = ieltsContainerRef.current.querySelector(
+      `[data-qnum="${qnum}"], [data-multi-qnums*="${qnum}"]`
+    );
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (el instanceof HTMLElement) {
+        el.focus();
+      }
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -118,6 +435,12 @@ export default function TestTakingPage() {
           diffSecs = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
         }
       }
+      if (diffSecs <= 0) {
+        clearSessionHighlights(sId);
+        alert('Ushbu test sessiyasining vaqti tugagan. Natijalar sahifasiga yo‘naltirilmoqdasiz.');
+        router.push(`/student/results/${sId}`);
+        return;
+      }
       setSecondsRemaining(diffSecs);
     } catch (err: any) {
       setErrorMessage(err.message || 'Sessiyani yuklashda xatolik yuz berdi');
@@ -143,14 +466,18 @@ export default function TestTakingPage() {
   }, [mounted, secondsRemaining]);
 
   const handleAutoSubmit = async () => {
+    alert('Vaqt tugadi! Testingiz avtomatik topshirilmoqda...');
+    flushAnswers();
     await submitTest();
   };
 
   const submitTest = async () => {
     if (isNaN(sessionId)) return;
+    flushAnswers();
     setSubmitting(true);
     try {
       await apiSubmitSession(sessionId);
+      clearSessionHighlights(sessionId);
       router.push(`/student/results/${sessionId}`);
     } catch (e: any) {
       alert('Testni topshirishda xatolik: ' + (e.message || 'Server xatosi'));
@@ -335,38 +662,38 @@ export default function TestTakingPage() {
     );
   }
 
-  const sections = Array.isArray(test.sections) ? test.sections : [];
-  const currentSection = sections[currentSectionIndex] || null;
-
   return (
     <div className="space-y-6 pb-20">
       {/* Top Test Header Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm sticky top-16 z-40">
+      <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-16 z-40 transition-all">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 line-clamp-1">
+            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white line-clamp-1">
               {test.title}
             </h1>
-            <p className="text-xs text-slate-500 font-medium">CEFR Multi-level Mock Examination</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              CEFR & IELTS Academic Standard Examination
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Live Timer */}
             <div
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl font-mono text-sm font-bold border ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm font-black border shadow-xs ${
                 secondsRemaining < 300
-                  ? 'bg-rose-50 text-rose-700 border-rose-200 animate-pulse'
-                  : 'bg-slate-100 text-slate-800 border-slate-200'
+                  ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800 animate-pulse ring-2 ring-rose-400/20'
+                  : 'bg-slate-900 dark:bg-slate-800 text-white border-slate-800 dark:border-slate-700'
               }`}
             >
-              <Clock className="w-4 h-4 text-slate-500" />
+              <Clock className={`w-4 h-4 ${secondsRemaining < 300 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-400'}`} />
               <span>{formatTimer(secondsRemaining)}</span>
             </div>
 
             {/* Submit Button */}
             <button
               onClick={() => setShowSubmitModal(true)}
-              className="py-1.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-sm flex items-center gap-1.5"
+              className="py-2 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.02] flex items-center gap-1.5"
             >
               <Send className="w-3.5 h-3.5" />
               Topshirish
@@ -375,7 +702,7 @@ export default function TestTakingPage() {
         </div>
 
         {/* Section Navigation Tabs */}
-        <div className="flex gap-2 overflow-x-auto pt-4 mt-3 border-t border-slate-100">
+        <div className="flex gap-2 overflow-x-auto pt-3 mt-3 border-t border-slate-200/70 dark:border-slate-800">
           {sections.map((sec, idx) => {
             const isSelected = idx === currentSectionIndex;
             let icon = <BookOpen className="w-4 h-4" />;
@@ -386,11 +713,11 @@ export default function TestTakingPage() {
             return (
               <button
                 key={sec.id || idx}
-                onClick={() => setCurrentSectionIndex(idx)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+                onClick={() => handleSectionChange(idx)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
                   isSelected
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                    ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-sm ring-1 ring-slate-800 dark:ring-emerald-500'
+                    : 'bg-white dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {icon}
@@ -405,28 +732,40 @@ export default function TestTakingPage() {
       {currentSection ? (
         <div className="space-y-6">
           {/* Section Instructions Card */}
-          <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-4 sm:p-5">
-            <h2 className="text-base font-bold text-emerald-950 flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-              {currentSection.title}
-            </h2>
-            <p className="text-xs sm:text-sm text-emerald-800 mt-1 leading-relaxed">
-              {currentSection.instructions}
-            </p>
+          <div className="bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-bold text-emerald-950 dark:text-emerald-200 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+                {currentSection.title}
+              </h2>
+              <p className="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 mt-1 leading-relaxed">
+                {currentSection.instructions?.includes('ielts-')
+                  ? currentSection.type === 'listening'
+                    ? 'Audio trekni tinglang va barcha topshiriqlarni bajaring. Barcha javoblaringiz avtomatik saqlanadi.'
+                    : 'Matnni diqqat bilan o‘qing va o‘ng tarafdagi barcha topshiriqlarni bajaring. Barcha javoblaringiz avtomatik saqlanadi.'
+                  : currentSection.instructions}
+              </p>
+            </div>
+            {currentSection.instructions?.includes('ielts-') && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 text-xs font-bold whitespace-nowrap self-start sm:self-auto">
+                {currentSection.type === 'listening' ? <Headphones className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
+                {currentSection.type === 'listening' ? 'IELTS Academic Listening' : 'IELTS Academic Reading'}
+              </span>
+            )}
           </div>
 
           {/* 1. LISTENING SECTION */}
           {currentSection.type === 'listening' && (
             <div className="space-y-6">
               {/* Audio Player Card with Limit (1-2 plays) */}
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                     <Headphones className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Listening Audio Treki</h3>
-                    <p className="text-xs text-slate-500">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Listening Audio Treki</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Imtihon qoidasi: Audioni maksimal 2 marta tinglash mumkin.
                     </p>
                   </div>
@@ -434,8 +773,8 @@ export default function TestTakingPage() {
 
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <span className="text-xs font-semibold text-slate-500 block">Qolgan imkoniyat:</span>
-                    <span className="text-sm font-bold text-blue-700">
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">Qolgan imkoniyat:</span>
+                    <span className="text-sm font-bold text-blue-700 dark:text-blue-400">
                       {audioPlaysLeft[currentSection.id] !== undefined
                         ? audioPlaysLeft[currentSection.id]
                         : 2}{' '}
@@ -478,114 +817,240 @@ export default function TestTakingPage() {
               </div>
 
               {/* Questions for Listening */}
-              <div className="space-y-4">
-                {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
-                  const options = getOptions(q.options);
-                  return (
-                    <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                          {q.points} ball
-                        </span>
-                      </div>
+              {currentSection.instructions?.includes('ielts-reading-container') || currentSection.instructions?.includes('ielts-listening-container') ? (
+                <div className="space-y-4">
+                  <IeltsReadingSection
+                    ref={ieltsContainerRef}
+                    instructionsHtml={currentSection.instructions}
+                    qnumToQuestionId={qnumToQuestionId}
+                    initialAnswers={answersMap}
+                    onSaveAnswer={handleSaveAnswer}
+                    onAnswerUpdated={handleLiveAnswerUpdate}
+                    className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
+                  />
 
-                      <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
-
-                      <div className="space-y-2">
-                        {options.map((opt, optIdx) => {
-                          const isChecked = answersMap[q.id]?.text === opt;
-                          return (
-                            <label
-                              key={optIdx}
-                              onClick={() => handleSaveAnswer(q.id, opt)}
-                              className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
-                                isChecked
-                                  ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
-                                  : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name={`question_${q.id}`}
-                                checked={isChecked}
-                                onChange={() => {}}
-                                className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                              />
-                              <span>{opt}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
+                  {/* Question Navigator Palette */}
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Ushbu bo‘lim savollari ({currentSection.questions?.length || 0} ta)
+                      </span>
+                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
+                        Bajarildi:{' '}
+                        {(currentSection.questions || []).filter((q) => Boolean(answersMap[q.id]?.text)).length} /{' '}
+                        {currentSection.questions?.length || 0}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+                      {(currentSection.questions || []).map((q) => {
+                        const isAnswered = Boolean(answersMap[q.id]?.text);
+                        return (
+                          <button
+                            key={q.id}
+                            type="button"
+                            onClick={() => scrollToQuestion(q.order_index)}
+                            title={`Savol #${q.order_index}`}
+                            className={`w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center border ${
+                              isAnswered
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-slate-700'
+                            }`}
+                          >
+                            {q.order_index}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
+                    const options = getOptions(q.options);
+                    return (
+                      <div key={q.id || qIdx} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-bold uppercase text-slate-400 dark:text-slate-500">Savol #{qIdx + 1}</span>
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                            {q.points} ball
+                          </span>
+                        </div>
+
+                        <h4 className="text-base font-semibold text-slate-900 dark:text-white mb-4">{q.question_text}</h4>
+
+                        {options.length > 0 ? (
+                          <div className="space-y-2">
+                            {options.map((opt, optIdx) => {
+                              const isChecked = answersMap[q.id]?.text === opt;
+                              return (
+                                <label
+                                  key={optIdx}
+                                  className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
+                                    isChecked
+                                      ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/40 font-semibold text-emerald-950 dark:text-emerald-300'
+                                      : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300'
+                                  }`}
+                                >
+                                  <input
+                                    type="radio"
+                                    name={`question_${q.id}`}
+                                    checked={isChecked}
+                                    onChange={() => handleSaveAnswer(q.id, opt)}
+                                    className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                                  />
+                                  <span>{opt}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Javobingizni yozing..."
+                              value={answersMap[q.id]?.text || ''}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setAnswersMap((prev) => ({
+                                  ...prev,
+                                  [q.id]: { text: val, audioUrl: '' },
+                                }));
+                              }}
+                              onBlur={(e) => handleSaveAnswer(q.id, e.target.value)}
+                              className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
           {/* 2. READING SECTION (SPLIT-SCREEN) */}
           {currentSection.type === 'reading' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-              {/* Left Column: Passage Text */}
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-40 max-h-[75vh] overflow-y-auto">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <BookOpen className="w-4 h-4 text-emerald-600" />
-                    Reading Passage (Matn)
-                  </h3>
-                  <span className="text-xs text-slate-400">Diqqat bilan o‘qing</span>
-                </div>
-
-                <div className="text-slate-800 text-sm leading-relaxed whitespace-pre-line space-y-4 font-normal">
-                  {currentSection.passage_text || 'Matn taqdim etilmagan.'}
-                </div>
-              </div>
+              {/* Left Column: Passage Text with Interactive Highlighter */}
+              <ReadingPassageHighlighter
+                passageText={currentSection.passage_text || ''}
+                sessionId={sessionId}
+                sectionId={currentSection.id}
+                className="lg:sticky lg:top-40 max-h-[75vh]"
+              />
 
               {/* Right Column: Questions */}
-              <div className="space-y-4">
-                {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
-                  const options = getOptions(q.options);
-                  return (
-                    <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
-                          {q.points} ball
-                        </span>
-                      </div>
+              {currentSection.instructions?.includes('ielts-reading-container') ? (
+                <div className="space-y-4">
+                  <IeltsReadingSection
+                    ref={ieltsContainerRef}
+                    instructionsHtml={currentSection.instructions}
+                    qnumToQuestionId={qnumToQuestionId}
+                    initialAnswers={answersMap}
+                    onSaveAnswer={handleSaveAnswer}
+                    onAnswerUpdated={handleLiveAnswerUpdate}
+                    className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
+                  />
 
-                      <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
-
-                      <div className="space-y-2">
-                        {options.map((opt, optIdx) => {
-                          const isChecked = answersMap[q.id]?.text === opt;
-                          return (
-                            <label
-                              key={optIdx}
-                              onClick={() => handleSaveAnswer(q.id, opt)}
-                              className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
-                                isChecked
-                                  ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
-                                  : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name={`question_${q.id}`}
-                                checked={isChecked}
-                                onChange={() => {}}
-                                className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                              />
-                              <span>{opt}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
+                  {/* Question Navigator Palette */}
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Ushbu bo‘lim savollari ({currentSection.questions?.length || 0} ta)
+                      </span>
+                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
+                        Bajarildi:{' '}
+                        {(currentSection.questions || []).filter((q) => Boolean(answersMap[q.id]?.text)).length} /{' '}
+                        {currentSection.questions?.length || 0}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      {(currentSection.questions || []).map((q) => {
+                        const isAns = Boolean(answersMap[q.id]?.text);
+                        return (
+                          <button
+                            key={q.id}
+                            type="button"
+                            onClick={() => scrollToQuestion(q.order_index)}
+                            className={`w-7 h-7 rounded-lg text-xs font-bold transition-all flex items-center justify-center ${
+                              isAns
+                                ? 'bg-emerald-600 text-white shadow-xs'
+                                : 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500 hover:bg-white dark:hover:bg-slate-700'
+                            }`}
+                            title={`Savol #${q.order_index}: ${isAns ? 'Javob berilgan' : 'Javob berilmagan'}`}
+                          >
+                            {q.order_index}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
+                    const options = getOptions(q.options);
+                    return (
+                      <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-bold uppercase text-slate-400">Savol #{qIdx + 1}</span>
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                            {q.points} ball
+                          </span>
+                        </div>
+
+                        <h4 className="text-base font-semibold text-slate-900 mb-4">{q.question_text}</h4>
+
+                        {options.length > 0 ? (
+                          <div className="space-y-2">
+                            {options.map((opt, optIdx) => {
+                              const isChecked = answersMap[q.id]?.text === opt;
+                              return (
+                                <label
+                                  key={optIdx}
+                                  className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
+                                    isChecked
+                                      ? 'border-emerald-600 bg-emerald-50/60 font-semibold text-emerald-950'
+                                      : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                                  }`}
+                                >
+                                  <input
+                                    type="radio"
+                                    name={`question_${q.id}`}
+                                    checked={isChecked}
+                                    onChange={() => handleSaveAnswer(q.id, opt)}
+                                    className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                                  />
+                                  <span>{opt}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Javobingizni yozing..."
+                              value={answersMap[q.id]?.text || ''}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setAnswersMap((prev) => ({
+                                  ...prev,
+                                  [q.id]: { text: val, audioUrl: '' },
+                                }));
+                              }}
+                              onBlur={(e) => handleSaveAnswer(q.id, e.target.value)}
+                              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -599,26 +1064,44 @@ export default function TestTakingPage() {
                 const isTargetReached = wordCount >= targetWords;
 
                 return (
-                  <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                  <div key={q.id || qIdx} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
+                      <span className="text-xs font-bold uppercase text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-md border border-amber-200 dark:border-amber-800">
                         Writing Topshirig‘i #{qIdx + 1}
                       </span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         Maks: {q.points} ball
                       </span>
                     </div>
 
-                    <p className="text-slate-800 text-sm font-semibold leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
-                      {q.question_text}
-                    </p>
+                    <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                      <div className="text-slate-800 dark:text-slate-200 text-sm font-semibold leading-relaxed whitespace-pre-wrap">
+                        {q.question_text}
+                      </div>
+                      {Array.isArray(q.options) && q.options.length > 0 && typeof q.options[0] === 'string' && (q.options[0].startsWith('/') || q.options[0].startsWith('http')) && (
+                        <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs inline-block max-w-full">
+                          <img
+                            src={q.options[0]}
+                            alt={`Writing Task ${qIdx + 1} Diagram`}
+                            className="max-h-[500px] w-auto max-w-full object-contain rounded-lg mx-auto"
+                            onError={(e) => {
+                              if (Array.isArray(q.options) && q.options[1] && e.currentTarget.src !== q.options[1]) {
+                                e.currentTarget.src = q.options[1];
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
 
                     <div>
                       <div className="flex items-center justify-between text-xs mb-2">
-                        <span className="text-slate-500 font-medium">Insho matnini bu yerga yozing:</span>
+                        <span className="text-slate-500 dark:text-slate-400 font-medium">Insho matnini bu yerga yozing:</span>
                         <div
                           className={`font-mono font-bold px-2 py-1 rounded-md text-xs ${
-                            isTargetReached ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                            isTargetReached
+                              ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300'
+                              : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300'
                           }`}
                         >
                           So‘zlar: {wordCount} / minimum {targetWords}
@@ -626,11 +1109,11 @@ export default function TestTakingPage() {
                       </div>
 
                       <textarea
-                        rows={10}
+                        rows={12}
                         value={currentText}
                         onChange={(e) => handleSaveAnswer(q.id, e.target.value)}
-                        placeholder="Insho yozishni boshlang..."
-                        className="w-full p-4 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed"
+                        placeholder={`Insho yozishni boshlang (kamida ${targetWords} so‘z)...`}
+                        className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       />
                     </div>
                   </div>
@@ -648,41 +1131,41 @@ export default function TestTakingPage() {
                 const savedAudioUrl = answersMap[q.id]?.audioUrl;
 
                 return (
-                  <div key={q.id || qIdx} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                  <div key={q.id || qIdx} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-200">
+                      <span className="text-xs font-bold uppercase text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/60 px-2.5 py-1 rounded-md border border-purple-200 dark:border-purple-800">
                         Speaking Part #{qIdx + 1}
                       </span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         Maks: {q.points} ball
                       </span>
                     </div>
 
-                    <p className="text-slate-900 text-sm font-bold leading-relaxed bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+                    <p className="text-slate-900 dark:text-purple-100 text-sm font-bold leading-relaxed bg-purple-50/50 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-100 dark:border-purple-900/50">
                       {q.question_text}
                     </p>
 
                     {/* Microphone Controls */}
-                    <div className="p-5 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="p-5 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
                             isRecordingThis
                               ? 'bg-rose-500 text-white animate-pulse'
-                              : 'bg-purple-100 text-purple-700'
+                              : 'bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300'
                           }`}
                         >
                           <Mic className="w-6 h-6" />
                         </div>
                         <div>
-                          <div className="text-sm font-bold text-slate-800">
+                          <div className="text-sm font-bold text-slate-800 dark:text-slate-200">
                             {isRecordingThis
                               ? 'Ovoz yozilmoqda...'
                               : savedAudioUrl
                               ? 'Javob muvaffaqiyatli saqlangan'
                               : 'Ovozingizni yozib oling'}
                           </div>
-                          <div className="text-xs text-slate-500 font-mono">
+                          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                             {isRecordingThis ? `Vaqt: ${recordingSeconds} soniya` : 'Tugmani bosib gapiring'}
                           </div>
                         </div>
@@ -709,10 +1192,10 @@ export default function TestTakingPage() {
 
                     {/* Recorded Audio Preview */}
                     {(existingRecording || savedAudioUrl) && (
-                      <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <div className="flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                          <span className="text-xs font-semibold text-emerald-900">
+                          <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                          <span className="text-xs font-semibold text-emerald-900 dark:text-emerald-200">
                             Yozilgan audio tayyor. Tinglab ko‘rishingiz mumkin:
                           </span>
                         </div>
@@ -741,18 +1224,18 @@ export default function TestTakingPage() {
           )}
 
           {/* Bottom Section Navigator */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-200">
+          <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
             <button
-              onClick={() => setCurrentSectionIndex((prev) => Math.max(0, prev - 1))}
+              onClick={() => handleSectionChange(Math.max(0, currentSectionIndex - 1))}
               disabled={currentSectionIndex === 0}
-              className="px-4 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 disabled:opacity-30 transition-all flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 transition-all flex items-center gap-1.5"
             >
               <ChevronLeft className="w-4 h-4" /> Oldingi bo‘lim
             </button>
 
             {currentSectionIndex < sections.length - 1 ? (
               <button
-                onClick={() => setCurrentSectionIndex((prev) => Math.min(sections.length - 1, prev + 1))}
+                onClick={() => handleSectionChange(Math.min(sections.length - 1, currentSectionIndex + 1))}
                 className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
               >
                 Keyingi bo‘lim <ChevronRight className="w-4 h-4" />
@@ -768,7 +1251,7 @@ export default function TestTakingPage() {
           </div>
         </div>
       ) : (
-        <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500">
+        <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
           Ushbu testda bo‘limlar mavjud emas.
         </div>
       )}
@@ -776,15 +1259,15 @@ export default function TestTakingPage() {
       {/* Submit Confirmation Modal */}
       {showSubmitModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100 dark:border-slate-800">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
 
-            <h3 className="text-lg font-bold text-center text-slate-900">
+            <h3 className="text-lg font-bold text-center text-slate-900 dark:text-white">
               Imtihonni topshirishni tasdiqlaysizmi?
             </h3>
-            <p className="text-xs text-slate-600 text-center leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-400 text-center leading-relaxed">
               Reading va Listening natijalari avtomatik hisoblanadi. Writing va Speaking javoblaringiz esa tekshirish uchun o‘qituvchiga yuboriladi.
             </p>
 
@@ -792,7 +1275,7 @@ export default function TestTakingPage() {
               <button
                 onClick={() => setShowSubmitModal(false)}
                 disabled={submitting}
-                className="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-all"
+                className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
               >
                 Qaytish
               </button>

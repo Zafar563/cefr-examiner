@@ -115,6 +115,8 @@ func main() {
 			authRequired.GET("/auth/me", h.Me)
 			authRequired.GET("/tests/:id", h.GetTestDetails)
 			authRequired.POST("/tests/:id/start", h.StartSession)
+			authRequired.POST("/mock/start", h.StartRandomMockSession)
+			authRequired.POST("/tests/random-mock/start", h.StartRandomMockSession)
 			authRequired.GET("/sessions/:id", h.GetSession)
 			authRequired.POST("/sessions/:id/answer", h.SaveAnswer)
 			authRequired.POST("/sessions/:id/submit", h.SubmitSession)

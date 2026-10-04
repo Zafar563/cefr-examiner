@@ -1,0 +1,207 @@
+{
+  "success": true,
+  "data": {
+    "answer_key": [
+      {
+        "answer": "Fish",
+        "explanation": "The food’s amazing. If you like fish, it’s probably the best restaurant in town for that. It’s always really fresh",
+        "number": 1
+      },
+      {
+        "answer": "Roof",
+        "explanation": "It’s got a great atmosphere and before dinner you can go up on the roof and have a drink",
+        "number": 2
+      },
+      {
+        "answer": "Spanish",
+        "explanation": "So is all the food they serve Spanish, then?",
+        "number": 3
+      },
+      {
+        "answer": "Vegetarian",
+        "explanation": "Not sure I say the selection of those would be quite limited",
+        "number": 4
+      },
+      {
+        "answer": "Audley",
+        "explanation": "A-U-D-L-E-Y. You must have heard of it. There’s been a lot about it in the press",
+        "number": 5
+      },
+      {
+        "answer": "Hotel",
+        "explanation": "MAN: It’s in that hotel near Baxter Bridge, on the top floor",
+        "number": 6
+      },
+      {
+        "answer": "Reviews",
+        "explanation": "Anyway, it’s had excellent reviews from all the newspapers",
+        "number": 7
+      },
+      {
+        "answer": "Local",
+        "explanation": "Yes. Everything at the restaurant has to be sourced within a short distance and absolutely nothing flown in from abroad.",
+        "number": 8
+      },
+      {
+        "answer": "30",
+        "explanation": "Well, you could go for the set lunch. That’s quite reasonable for a top-class restaurant. £30 a head",
+        "number": 9
+      },
+      {
+        "answer": "Average",
+        "explanation": "No, the reviews I’ve read didn’t mention that. I imagine they’d be average",
+        "number": 10
+      },
+      {
+        "answer": "A",
+        "explanation": "Things like baskets and pictures don’t survive in the earth in the same way that pots do",
+        "number": 11
+      },
+      {
+        "answer": "B",
+        "explanation": "Archaeologists can tell whether the pots were for, say, storage or cooking by examining the impressions on the clay, the scratches from tools, and the clay itself can reveal where the pots came from",
+        "number": 12
+      },
+      {
+        "answer": "C",
+        "explanation": "Like our ancestors, they hope that something they create will also last longer than they do, that their work, whether it is good or not, might say something about humanity many years after their death",
+        "number": 13
+      },
+      {
+        "answer": "A",
+        "explanation": "what I love most is the concentration you need to make a good pot. That focus takes you away from the stresses of everyday life",
+        "number": 14
+      },
+      {
+        "answer": "B",
+        "explanation": "Like nearly everyone who comes here, I’m sure this is the first time you will have tried the art",
+        "number": 15
+      },
+      {
+        "answer": "C",
+        "explanation": "Can I just say a word about what you’re wearing? As we said in our email please remove any watches necklaces etc and put them somewhere safe",
+        "number": 16
+      },
+      {
+        "answer": "A / E",
+        "explanation": "To make pottery that will last, you need a potter’s wheel, a kiln, which is basically a very hot oven where you fire the pottery\r\nSome people fire pottery in a fire pit outside but bear in mind",
+        "number": 17
+      },
+      {
+        "answer": "A / E",
+        "explanation": "To make pottery that will last, you need a potter’s wheel, a kiln, which is basically a very hot oven where you fire the pottery\r\nSome people fire pottery in a fire pit outside but bear in mind",
+        "number": 18
+      },
+      {
+        "answer": "C / E",
+        "explanation": "However, there are some basic tools that you will need to handle the clay on the wheel\r\nWe can provide these and I wouldn’t recommend spending money on them yet",
+        "number": 19
+      },
+      {
+        "answer": "C / E",
+        "explanation": "However, there are some basic tools that you will need to handle the clay on the wheel\r\nWe can provide these and I wouldn’t recommend spending money on them yet",
+        "number": 20
+      },
+      {
+        "answer": "C / E",
+        "explanation": "I’d say loneliness has a lot to do with the way cities are designed.\r\nA more plausible explanation is that people are having to move around for work and often end up living miles away from their family and friends",
+        "number": 21
+      },
+      {
+        "answer": "C / E",
+        "explanation": "I’d say loneliness has a lot to do with the way cities are designed.\r\nA more plausible explanation is that people are having to move around for work and often end up living miles away from their family and friends",
+        "number": 22
+      },
+      {
+        "answer": "A / C",
+        "explanation": "But there’s no doubt that loneliness contributes to a weakened immune system.\r\nWell, what about that one in Finland, which showed that loneliness increased the risk of cancer by about 10%? And those findings have been supported by other studies too",
+        "number": 23
+      },
+      {
+        "answer": "A / C",
+        "explanation": "But there’s no doubt that loneliness contributes to a weakened immune system.\r\nWell, what about that one in Finland, which showed that loneliness increased the risk of cancer by about 10%? And those findings have been supported by other studies too",
+        "number": 24
+      },
+      {
+        "answer": "A / B",
+        "explanation": "There are a few studies which support the theory, but not conclusively enough. More evidence is needed.\r\nAnd anyway, this theory’s not really useful when it comes to solving the problem of loneliness today.",
+        "number": 25
+      },
+      {
+        "answer": "A / B",
+        "explanation": "There are a few studies which support the theory, but not conclusively enough. More evidence is needed.\r\nAnd anyway, this theory’s not really useful when it comes to solving the problem of loneliness today.",
+        "number": 26
+      },
+      {
+        "answer": "A",
+        "explanation": "There’s no available diagnosis or effective treatment and that’s not likely to change",
+        "number": 27
+      },
+      {
+        "answer": "B",
+        "explanation": "Good idea. Everyone will be able to relate to that although a lot of students were probably too embarrassed to admit to it.",
+        "number": 28
+      },
+      {
+        "answer": "A",
+        "explanation": "but it must make people feel more connected with their community.",
+        "number": 29
+      },
+      {
+        "answer": "C",
+        "explanation": "It’s strange the way some people can’t stand being by themselves while others love it",
+        "number": 30
+      },
+      {
+        "answer": "Factories",
+        "explanation": "However, as cities grew to over a million inhabitants, the impact on the rivers became more serious. In addition, other types of pollution increased, as factories were built beside the river and discharged their waste materials into the water",
+        "number": 31
+      },
+      {
+        "answer": "Dead",
+        "explanation": "As recently as 1957, scientists at London’s Natural History Museum declared that the River Thames was dead in biological terms, as the water was too filthy to support any kind of life",
+        "number": 32
+      },
+      {
+        "answer": "Whale",
+        "explanation": "These days you can see seals swimming in the water, and recently people had to try to rescue a whale, which had got lost and swum up the river from the sea by mistake",
+        "number": 33
+      },
+      {
+        "answer": "Apartments",
+        "explanation": "Warehouses that were once used for storing goods are now being converted into expensive restaurants and also into apartments with river views",
+        "number": 34
+      },
+      {
+        "answer": "Park",
+        "explanation": "an architect has plans to revitalise the banks of the river and to make a park there which can provide facilities for sports as well as a natural environment for relaxing in",
+        "number": 35
+      },
+      {
+        "answer": "Art",
+        "explanation": "It’s been proposed that facilities could be provided for displaying projects related to various kinds of art that have been produced by local people, for example",
+        "number": 36
+      },
+      {
+        "answer": "Beaches",
+        "explanation": "In the city of Paris, During the summer months of July and August, all the traffic is banned from the roads by the sides of the river, and the banks are transformed into beaches",
+        "number": 37
+      },
+      {
+        "answer": "Ferry",
+        "explanation": "Already, more than two billion passengers use the ferry to travel in cities around the world, like Istanbul, San Francisco and New York, and these numbers are set to rise further",
+        "number": 38
+      },
+      {
+        "answer": "Bikes",
+        "explanation": "When the barge docks at the riverside the parcels could be taken the last few kilometres to their final destination on cargo bikes, electric ones of course",
+        "number": 39
+      },
+      {
+        "answer": "Drone",
+        "explanation": "this is already happening in the Dutch city of Amsterdam, and in future the final stage could even be carried out by drone, although at present this isn’t allowed",
+        "number": 40
+      }
+    ]
+  }
+}

@@ -1,0 +1,620 @@
+{
+  "id": 134,
+  "title": "Cambridge IELTS 13 Academic Reading Test 4",
+  "description": "Rasmiy Cambridge IELTS 13 to‘plamidan olingan to‘liq 3 ta qism (Cutty Sark: the fastest sailing ship of all time, SAVING THE SOIL, Book Review) va 40 ta savoldan iborat akademik Reading imtihoni.",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 60,
+  "sections": [
+    {
+      "type": "reading",
+      "title": "Reading Passage 1: Cutty Sark: the fastest sailing ship of all time",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 1-8                                                                                                                                                                                                    \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Do the following statements agree with the information given in the Reading Passage?</p>\n<p>In boxes on your answer sheet, write</p>\n<p><strong>TRUE</strong>               if the statement agrees with the information</p>\n<p><strong>FALSE</strong>              if the statement contradicts the information</p>\n<p><strong>NOT GIVEN</strong>    if there is no information on this</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"1\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">1</strong><span class=\"ielts-q-title\"><span>Clippers were originally intended to be used as passenger ships.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"1\" name=\"question_1\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"1\" name=\"question_1\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"1\" name=\"question_1\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"2\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">2</strong><span class=\"ielts-q-title\"><span><em>Cutty Sark</em> was given the name of a character in a poem.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"2\" name=\"question_2\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"2\" name=\"question_2\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"2\" name=\"question_2\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"3\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">3</strong><span class=\"ielts-q-title\"><span>The contract between John Willis and Scott & Linton favoured Willis.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"3\" name=\"question_3\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"3\" name=\"question_3\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"3\" name=\"question_3\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"4\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">4</strong><span class=\"ielts-q-title\"><span>John Willis wanted <em>Cutty Sark</em> to be the fastest tea clipper travelling between the UK and China.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"4\" name=\"question_4\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"4\" name=\"question_4\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"4\" name=\"question_4\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"5\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">5</strong><span class=\"ielts-q-title\"><span>Despite storm damage, <em>Cutty Sark</em> beat <em>Thermopylae </em>back to London.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"5\" name=\"question_5\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"5\" name=\"question_5\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"5\" name=\"question_5\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"6\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">6</strong><span class=\"ielts-q-title\"><span>The opening of the Suez Canal meant that steam ships could travel between Britain and China faster than clippers.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"6\" name=\"question_6\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"6\" name=\"question_6\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"6\" name=\"question_6\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"7\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">7</strong><span class=\"ielts-q-title\"><span>Steam ships sometimes used the ocean route to travel between London and China.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"7\" name=\"question_7\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"8\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">8</strong><span class=\"ielts-q-title\"><span>Captain Woodget put <em>Cutty Sark</em> at risk of hitting an iceberg.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"TRUE\"><span class=\"ielts-radio-text\"><strong>TRUE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"FALSE\"><span class=\"ielts-radio-text\"><strong>FALSE</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"8\" name=\"question_8\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div></div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 9-13                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the sentences below.</p>\n<p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>\n<p><em>Write your answers in boxes on your answer sheet.</em></p>\n<ul>\n<li>After 1880, <em>Cutty Sark</em> carried <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">9</strong><input type=\"text\" data-qnum=\"9\" name=\"question_9\" class=\"ielts-inline-input\" placeholder=\"[9] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> as its main cargo during its most successful time.</li>\n<li>As a captain and <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">10</strong><input type=\"text\" data-qnum=\"10\" name=\"question_10\" class=\"ielts-inline-input\" placeholder=\"[10] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>, Woodget was very skilled.</li>\n<li><em>Ferreira </em>went to Falmouth to repair damage that a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">11</strong><input type=\"text\" data-qnum=\"11\" name=\"question_11\" class=\"ielts-inline-input\" placeholder=\"[11] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> had caused.</li>\n<li>Between 1923 and 1954, <em>Cutty Sark</em> was used for <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">12</strong><input type=\"text\" data-qnum=\"12\" name=\"question_12\" class=\"ielts-inline-input\" placeholder=\"[12] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></li>\n<li><em>Cutty Sark</em> has twice been damaged by <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">13</strong><input type=\"text\" data-qnum=\"13\" name=\"question_13\" class=\"ielts-inline-input\" placeholder=\"[13] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> in the 21st century.</li>\n</ul>\n</div>                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                    </div>\n                                        </div></div>",
+      "passage_text": "Cutty Sark: the fastest sailing ship of all time\nThe nineteenth century was a period of great technological development in Britain, and for shipping the major changes were from wind to steam power, and from wood to iron and steel.\nThe fastest commercial sailing vessels of all time were clippers, three-masted ships built to transport goods around the world, although some also took passengers. From the 1840s until 1869, when the Suez Canal opened and steam propulsion was replacing sail, clippers dominated world trade. Although many were built, only one has survived more or less intact: Cutty Sark , now on display in Greenwich, southeast London.\nCutty Sark ’s unusual name comes from the poem Tam O’Shanter by the Scottish poet Robert Burns. Tam, a farmer, is chased by a witch called Nannie, who is wearing a ‘ cutty sark ’ – an old Scottish name for a short nightdress. The witch is depicted in Cutty Sark ’s figurehead – the carving of a woman typically at the front of old sailing ships. In legend, and in Burns’s poem, witches cannot cross water, so this was a rather strange choice of name for a ship.\nCutty Sark was built in Dumbarton, Scotland, in 1869, for a shipping company owned by John Willis. To carry out construction, Willis chose a new shipbuilding firm, Scott & Linton, and ensured that the contract with them put him in a very strong position. In the end, the firm was forced out of business, and the ship was finished by a competitor.\nWillis’s company was active in the tea trade between China and Britain, where speed could bring shipowners both profits and prestige, so Cutty Sark was designed to make the journey more quickly than any other ship. On her maiden voyage, in 1870, she set sail from London, carrying large amounts of goods to China. She returned laden with tea, making the journey back to London in four months. However, Cutty Sark never lived up to the high expectations of her owner, as a result of bad winds and various misfortunes. On one occasion, in 1872, the ship and a rival clipper, Thermopylae , left port in China on the same day. Crossing the Indian Ocean, Cutty Sark gained a lead of over 400 miles, but then her rudder was severely damaged in stormy seas, making her impossible to steer. The ship’s crew had the daunting task of repairing the rudder at sea, and only succeeded at the second attempt. Cutty Sark reached London a week after Thermopylae.\nSteam ships posed a growing threat to clippers, as their speed and cargo capacity increased. In addition, the opening of the Suez Canal in 1869, the same year that Cutty Sark was launched, had a serious impact. While steam ships could make use of the quick, direct route between the Mediterranean and the Red Sea, the canal was of no use to sailing ships, which needed the much stronger winds of the oceans, and so had to sail a far greater distance. Steam ships reduced the journey time between Britain and China by approximately two months.\nBy 1878, tea traders weren’t interested in Cutty Sark , and instead, she took on the much less prestigious work of carrying any cargo between any two ports in the world. In 1880, violence aboard the ship led ultimately to the replacement of the captain with an incompetent drunkard who stole the crew’s wages. He was suspended from service, and a new captain appointed. This marked a turnaround and the beginning of the most successful period in Cutty Sark ’s working life, transporting wool from Australia to Britain. One such journey took just under 12 weeks, beating every other ship sailing that year by around a month.\nThe ship’s next captain, Richard Woodget, was an excellent navigator, who got the best out of both his ship and his crew. As a sailing ship, Cutty Sark depended on the strong trade winds of the southern hemisphere, and Woodget took her further south than any previous captain, bringing her dangerously close to icebergs off the southern tip of South America. His gamble paid off, though, and the ship was the fastest vessel in the wool trade for ten years.\nAs competition from steam ships increased in the 1890s, and Cutty Sark approached the end of her life expectancy, she became less profitable. She was sold to a Portuguese firm, which renamed her Ferreira. For the next 25 years, she again carried miscellaneous cargoes around the world.\nBadly damaged in a gale in 1922, she was put into Falmouth harbor in southwest England, for repairs. Wilfred Dowman, a retired sea captain who owned a training vessel, recognised her and tried to buy her, but without success. She returned to Portugal and was sold to another Portuguese company. Dowman was determined, however, and offered a high price: this was accepted, and the ship returned to Falmouth the following year and had her original name restored.\nDowman used Cutty Sark as a training ship, and she continued in this role after his death. When she was no longer required, in 1954, she was transferred to dry dock at Greenwich to go on public display. The ship suffered from fire in 2007, and again, less seriously, in 2014, but now Cutty Sark attracts a quarter of a million visitors a year.",
+      "order_index": 1,
+      "questions": [
+        {
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "Clippers were originally intended to be used as passenger ships.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "FALSE",
+          "points": 1
+        },
+        {
+          "question_number": 2,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "Cutty Sark was given the name of a character in a poem.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "FALSE",
+          "points": 1
+        },
+        {
+          "question_number": 3,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "The contract between John Willis and Scott & Linton favoured Willis.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 4,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "John Willis wanted Cutty Sark to be the fastest tea clipper travelling between the UK and China.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 5,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "Despite storm damage, Cutty Sark beat Thermopylae back to London.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "FALSE",
+          "points": 1
+        },
+        {
+          "question_number": 6,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "The opening of the Suez Canal meant that steam ships could travel between Britain and China faster than clippers.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 7,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "Steam ships sometimes used the ocean route to travel between London and China.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 8,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Captain Woodget put Cutty Sark at risk of hitting an iceberg.",
+          "options": [
+            "TRUE",
+            "FALSE",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "TRUE",
+          "points": 1
+        },
+        {
+          "question_number": 9,
+          "section_part": 2,
+          "question_type": "text_input",
+          "question_text": "as its main cargo during its most successful time. As a captain and",
+          "options": [],
+          "correct_answer": "wool",
+          "points": 1
+        },
+        {
+          "question_number": 10,
+          "section_part": 2,
+          "question_type": "text_input",
+          "question_text": ", Woodget was very skilled. Ferreira went to Falmouth to repair damage that a",
+          "options": [],
+          "correct_answer": "navigator",
+          "points": 1
+        },
+        {
+          "question_number": 11,
+          "section_part": 2,
+          "question_type": "text_input",
+          "question_text": "had caused. Between 1923 and 1954, Cutty Sark was used for",
+          "options": [],
+          "correct_answer": "gale",
+          "points": 1
+        },
+        {
+          "question_number": 12,
+          "section_part": 2,
+          "question_type": "text_input",
+          "question_text": "Cutty Sark has twice been damaged by",
+          "options": [],
+          "correct_answer": "training",
+          "points": 1
+        },
+        {
+          "question_number": 13,
+          "section_part": 2,
+          "question_type": "text_input",
+          "question_text": "in the 21st century.",
+          "options": [],
+          "correct_answer": "fire",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "type": "reading",
+      "title": "Reading Passage 2: SAVING THE SOIL",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 14-17                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the summary below.</p>\n<p>Write <strong>ONE WORD ONLY</strong> from the passage for each answer.</p>\n<p><em>Write your answers in boxes on your answer sheet.</em></p>\n<p class=\"ielts-reading-passage-subhead\"><strong><strong>Why soil degradation could be a disaster for humans</strong></strong></p>\n<p>Healthy soil contains a large variety of bacteria and other microorganisms, as well as plant remains and <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">14</strong><input type=\"text\" data-qnum=\"14\" name=\"question_14\" class=\"ielts-inline-input\" placeholder=\"[14] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>. It provides us with food and also with antibiotics, and its function in storing <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">15</strong><input type=\"text\" data-qnum=\"15\" name=\"question_15\" class=\"ielts-inline-input\" placeholder=\"[15] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> has a significant effect on the climate. In addition, it prevents damage to property and infrastructure because it holds <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">16</strong><input type=\"text\" data-qnum=\"16\" name=\"question_16\" class=\"ielts-inline-input\" placeholder=\"[16] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>.</p>\n<p>If these microorganisms are lost, soil may lose its special properties. The main factor contributing to soil degradation is the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">17</strong><input type=\"text\" data-qnum=\"17\" name=\"question_17\" class=\"ielts-inline-input\" placeholder=\"[17] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> carried out by humans.</p>\n</div>                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\">\n                                                                                                    \n                                                                                                                                                                                                                                                                </div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 18-21                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Complete each sentence with the correct ending, <strong>A-F</strong>, below.</p>\n<p><em>Write the correct letter,<strong> A-F</strong>, in boxes on your answer sheet.</em></p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                                <div class=\"ielts-reading-question-item\"> • <span>Nutrients contained in the unused parts of harvested crops</span><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">18</strong><select data-qnum=\"18\" name=\"question_18\" class=\"ielts-inline-select\"><option value=\"\">[ 18 ] Tanlang...</option><option value=\"A. may improve the number and quality of plants growing there.\">A. may improve the number and quality of plants growing there.</option><option value=\"B. may contain data from up to nine countries.\">B. may contain data from up to nine countries.</option><option value=\"C. may not be put back into the soil.\">C. may not be put back into the soil.</option><option value=\"D. may help governments to be more aware of soil-related issues.\">D. may help governments to be more aware of soil-related issues.</option><option value=\"E. may cause damage to different aspects of the environment.\">E. may cause damage to different aspects of the environment.</option><option value=\"F. may be better for use at a global level.\">F. may be better for use at a global level.</option></select></span></div>\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\"> • <span>Synthetic fertilisers produced with Haber-Bosch process</span><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">19</strong><select data-qnum=\"19\" name=\"question_19\" class=\"ielts-inline-select\"><option value=\"\">[ 19 ] Tanlang...</option><option value=\"A. may improve the number and quality of plants growing there.\">A. may improve the number and quality of plants growing there.</option><option value=\"B. may contain data from up to nine countries.\">B. may contain data from up to nine countries.</option><option value=\"C. may not be put back into the soil.\">C. may not be put back into the soil.</option><option value=\"D. may help governments to be more aware of soil-related issues.\">D. may help governments to be more aware of soil-related issues.</option><option value=\"E. may cause damage to different aspects of the environment.\">E. may cause damage to different aspects of the environment.</option><option value=\"F. may be better for use at a global level.\">F. may be better for use at a global level.</option></select></span></div>\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\"> • <span>Addition of a mixture developed by Pius Floris to the soil</span><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">20</strong><select data-qnum=\"20\" name=\"question_20\" class=\"ielts-inline-select\"><option value=\"\">[ 20 ] Tanlang...</option><option value=\"A. may improve the number and quality of plants growing there.\">A. may improve the number and quality of plants growing there.</option><option value=\"B. may contain data from up to nine countries.\">B. may contain data from up to nine countries.</option><option value=\"C. may not be put back into the soil.\">C. may not be put back into the soil.</option><option value=\"D. may help governments to be more aware of soil-related issues.\">D. may help governments to be more aware of soil-related issues.</option><option value=\"E. may cause damage to different aspects of the environment.\">E. may cause damage to different aspects of the environment.</option><option value=\"F. may be better for use at a global level.\">F. may be better for use at a global level.</option></select></span></div>\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class=\"ielts-reading-question-item\"> • <span>The idea of zero net soil degradation</span><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">21</strong><select data-qnum=\"21\" name=\"question_21\" class=\"ielts-inline-select\"><option value=\"\">[ 21 ] Tanlang...</option><option value=\"A. may improve the number and quality of plants growing there.\">A. may improve the number and quality of plants growing there.</option><option value=\"B. may contain data from up to nine countries.\">B. may contain data from up to nine countries.</option><option value=\"C. may not be put back into the soil.\">C. may not be put back into the soil.</option><option value=\"D. may help governments to be more aware of soil-related issues.\">D. may help governments to be more aware of soil-related issues.</option><option value=\"E. may cause damage to different aspects of the environment.\">E. may cause damage to different aspects of the environment.</option><option value=\"F. may be better for use at a global level.\">F. may be better for use at a global level.</option></select></span></div>                                                                        <div class=\"options-dnd-panel dnd-panel\" data-dnd-group=\"9512\">\n                                                                            <div class=\"dnd-panel-instruction\">Drag and drop an option to fill in each blank.</div>\n                                                                            <div class=\"dnd-cards-container\">\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"A\" data-text=\"A. may improve the number and quality of plants growing there.\">\n                                                                                        <span class=\"dnd-label\">A.</span>\n                                                                                        <span class=\"dnd-text\">may improve the number and quality of plants growing there.</span>\n                                                                                    </div>\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"B\" data-text=\"B. may contain data from up to nine countries.\">\n                                                                                        <span class=\"dnd-label\">B.</span>\n                                                                                        <span class=\"dnd-text\">may contain data from up to nine countries.</span>\n                                                                                    </div>\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"C\" data-text=\"C. may not be put back into the soil.\">\n                                                                                        <span class=\"dnd-label\">C.</span>\n                                                                                        <span class=\"dnd-text\">may not be put back into the soil.</span>\n                                                                                    </div>\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"D\" data-text=\"D. may help governments to be more aware of soil-related issues.\">\n                                                                                        <span class=\"dnd-label\">D.</span>\n                                                                                        <span class=\"dnd-text\">may help governments to be more aware of soil-related issues.</span>\n                                                                                    </div>\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"E\" data-text=\"E. may cause damage to different aspects of the environment.\">\n                                                                                        <span class=\"dnd-label\">E.</span>\n                                                                                        <span class=\"dnd-text\">may cause damage to different aspects of the environment.</span>\n                                                                                    </div>\n                                                                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"F\" data-text=\"F. may be better for use at a global level.\">\n                                                                                        <span class=\"dnd-label\">F.</span>\n                                                                                        <span class=\"dnd-text\">may be better for use at a global level.</span>\n                                                                                    </div>\n                                                                                                                                                            </div>\n                                                                        </div>\n                                                                    \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 22-26                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>The Reading Passage has seven paragraphs, <strong>A-G</strong>.</p>\n<p>Which section contains the following information?</p>\n<p><em>Write the correct letter, <strong>A-G</strong>, in boxes on your answer sheet.</em></p>\n<p><strong>NB</strong>  <em>You may use any letter more than once.</em></p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                                <table class=\"ielts-reading-matching-table\"><thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr></thead><tbody><tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-22\" class=\"ielts-q-badge\">22</strong> <span>a reference to one person’s motivation for a soil-improvement project</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"F\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"22\" name=\"question_22\" value=\"G\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-23\" class=\"ielts-q-badge\">23</strong> <span>an explanation of how soil stayed healthy before the development of farming</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"F\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"23\" name=\"question_23\" value=\"G\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-24\" class=\"ielts-q-badge\">24</strong> <span>examples of different ways of collecting information on soil degradation</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"F\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"24\" name=\"question_24\" value=\"G\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-25\" class=\"ielts-q-badge\">25</strong> <span>a suggestion for a way of keeping some types of soil safe in the near future</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"F\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"25\" name=\"question_25\" value=\"G\"></td></tr>                                                                                                                                                                                                                                                                                                    <tr class=\"ielts-reading-question-item\"><td class=\"ielts-reading-matching-question-cell\"><strong id=\"ielts-reading-question-number-26\" class=\"ielts-q-badge\">26</strong> <span>a reason why it is difficult to provide an overview of soil degradation</span></td>\n                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"A\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"B\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"C\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"D\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"E\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"F\"></td>                                                                                                            <td class=\"ielts-reading-matching-option-cell\"><input type=\"radio\" data-qnum=\"26\" name=\"question_26\" value=\"G\"></td></tr></tbody></table>                                                                                                                                                                                        </div>\n                                        </div></div>",
+      "passage_text": "SAVING THE SOIL\nMore than a third of the Earth’s top layer is at risk. Is there hope for our planet’s most precious resource?\nA\nMore than a third of the world’s soil is endangered, according to a recent UN report. If we don’t slow the decline, all farmable soil could be gone in 60 years. Since soil grows 95% of our food, and sustains human life in other more surprising ways, that is a huge problem.\nB\nPeter Groffman, from the Cary Institute of Ecosystem Studies in New York, points out that soil scientists have been warning about the degradation of the world’s soil for decades. At the same time, our understanding of its importance to humans has grown. A single gram of healthy soil might contain 100 million bacteria, as well as other microorganisms such as viruses and fungi, living amid decomposing plants and various minerals.\nThat means soils do not just grow our food, but are the source of nearly all our existing antibiotics, and could be our best hope in the fight against antibiotic-resistant bacteria. Soil is also an ally against climate change: as microorganisms within soil digest dead animals and plants, they lock in their carbon content, holding three times the amount of carbon as does the entire atmosphere. Soils also store water, preventing flood damage: in the UK, damage to buildings, roads and bridges from floods caused by soil degradation costs £233 million every year.\nC\nIf the soil loses its ability to perform these functions, the human race could be in big trouble. The danger is not that the soil will disappear completely, but that the microorganisms that give it its special properties will be lost. And once this has happened, it may take the soil thousands of years to recover.\nAgriculture is by far the biggest problem. In the wild, when plants grow they remove nutrients from the soil, but then when the plants die and decay these nutrients are returned directly to the soil. Humans tend not to return unused parts of harvested crops directly to the soil to enrich it, meaning that the soil gradually becomes less fertile. In the past we developed strategies to get around the problem, such as regularly varying the types of crops grown, or leaving fields uncultivated for a season.\nD\nBut these practices became inconvenient as populations grew and agriculture had to be run on more commercial lines. A solution came in the early 20 th century with the Haber-Bosch process for manufacturing ammonium nitrate. Farmers have been putting this synthetic fertiliser on their fields ever since.\nBut over the past few decades, it has become clear this wasn’t such a bright idea. Chemical fertilisers can release polluting nitrous oxide into the atmosphere and excess is often washed away with the rain, releasing nitrogen into rivers. More recently, we have found that indiscriminate use of fertilisers hurts the soil itself, turning it acidic and salty, and degrading the soil they are supposed to nourish.\nE\nOne of the people looking for a solution to this problem is Pius Floris, who started out running a tree-care business in the Netherlands, and now advises some of the world’s top soil scientists. He came to realise that the best way to ensure his trees flourished was to take care of the soil, and has developed a cocktail of beneficial bacteria, fungi and humus* to do this. Researchers at the University of Valladolid in Spain recently used this cocktail on soils destroyed by years of fertiliser overuse. When they applied Floris’s mix to the desert-like test plots, a good crop of plants emerged that were not just healthy at the surface, but had roots strong enough to pierce dirt as hard as rock. The few plants that grew in the control plots, fed with traditional fertilisers, were small and weak\nF\nHowever, measures like this are not enough to solve the global soil degradation problem. To assess our options on a global scale we first need an accurate picture of what types of soil are out there, and the problems they face. That’s not easy. For one thing, there is no agreed international system for classifying soil. In an attempt to unify the different approaches, the UN has created the Global Soil Map project. Researchers from nine countries are working together to create a map linked to a database that can be fed measurements from field surveys, drone surveys, satellite imagery, lab analyses and so on to provide real-time data on the state of the soil. Within the next four years, they aim to have mapped soils worldwide to a depth of 100 metres, with the results freely accessible to all.\nG\nBut this is only a first step. We need ways of presenting the problem that bring it home to governments and the wider public, says Pamela Chasek at the International Institute for Sustainable Development, in Winnipeg, Canada. ‘Most scientists don’t speak language that policy-makers can understand, and vice versa.’ Chasek and her colleagues have proposed a goal of ‘zero net land degradation’. Like the idea of carbon neutrality, it is an easily understood target that can help shape expectations and encourage action.\nFor soils on the brink, that may be too late. Several researchers are agitating for the immediate creation of protected zones for endangered soils. One difficulty here is defining what these areas should conserve: areas where the greatest soil diversity is present? Or areas of unspoilt soils that could act as a future benchmark of quality?\nWhatever we do, if we want our soils to survive, we need to take action now.",
+      "order_index": 2,
+      "questions": [
+        {
+          "question_number": 14,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": ". It provides us with food and also with antibiotics, and its function in storing",
+          "options": [],
+          "correct_answer": "minerals",
+          "points": 1
+        },
+        {
+          "question_number": 15,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "has a significant effect on the climate. In addition, it prevents damage to property and infrastructure because it holds",
+          "options": [],
+          "correct_answer": "carbon",
+          "points": 1
+        },
+        {
+          "question_number": 16,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": ". If these microorganisms are lost, soil may lose its special properties. The main factor contributing to soil degradation is the",
+          "options": [],
+          "correct_answer": "water",
+          "points": 1
+        },
+        {
+          "question_number": 17,
+          "section_part": 1,
+          "question_type": "text_input",
+          "question_text": "carried out by humans.",
+          "options": [],
+          "correct_answer": "agriculture",
+          "points": 1
+        },
+        {
+          "question_number": 18,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ • Synthetic fertilisers produced with Haber-Bosch process",
+          "options": [
+            "A. may improve the number and quality of plants growing there.",
+            "B. may contain data from up to nine countries.",
+            "C. may not be put back into the soil.",
+            "D. may help governments to be more aware of soil-related issues.",
+            "E. may cause damage to different aspects of the environment.",
+            "F. may be better for use at a global level."
+          ],
+          "correct_answer": "C",
+          "points": 1
+        },
+        {
+          "question_number": 19,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ • Addition of a mixture developed by Pius Floris to the soil",
+          "options": [
+            "A. may improve the number and quality of plants growing there.",
+            "B. may contain data from up to nine countries.",
+            "C. may not be put back into the soil.",
+            "D. may help governments to be more aware of soil-related issues.",
+            "E. may cause damage to different aspects of the environment.",
+            "F. may be better for use at a global level."
+          ],
+          "correct_answer": "E",
+          "points": 1
+        },
+        {
+          "question_number": 20,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ • The idea of zero net soil degradation",
+          "options": [
+            "A. may improve the number and quality of plants growing there.",
+            "B. may contain data from up to nine countries.",
+            "C. may not be put back into the soil.",
+            "D. may help governments to be more aware of soil-related issues.",
+            "E. may cause damage to different aspects of the environment.",
+            "F. may be better for use at a global level."
+          ],
+          "correct_answer": "A",
+          "points": 1
+        },
+        {
+          "question_number": 21,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ Drag and drop an option to fill in each blank. A. may improve the number and quality of plants growing there. B. may contain data from up to nine countries. C. may not be put back into the soil. D. may help governments to be more aware of soil-related issues. E. may cause damage to different aspects of the environment. F. may be better for use at a global level.",
+          "options": [
+            "A. may improve the number and quality of plants growing there.",
+            "B. may contain data from up to nine countries.",
+            "C. may not be put back into the soil.",
+            "D. may help governments to be more aware of soil-related issues.",
+            "E. may cause damage to different aspects of the environment.",
+            "F. may be better for use at a global level."
+          ],
+          "correct_answer": "D",
+          "points": 1
+        },
+        {
+          "question_number": 22,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "a reference to one person’s motivation for a soil-improvement project",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ],
+          "correct_answer": "E",
+          "points": 1
+        },
+        {
+          "question_number": 23,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "an explanation of how soil stayed healthy before the development of farming",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ],
+          "correct_answer": "C",
+          "points": 1
+        },
+        {
+          "question_number": 24,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "examples of different ways of collecting information on soil degradation",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ],
+          "correct_answer": "F",
+          "points": 1
+        },
+        {
+          "question_number": 25,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "a suggestion for a way of keeping some types of soil safe in the near future",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ],
+          "correct_answer": "G",
+          "points": 1
+        },
+        {
+          "question_number": 26,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "a reason why it is difficult to provide an overview of soil degradation",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ],
+          "correct_answer": "F",
+          "points": 1
+        }
+      ]
+    },
+    {
+      "type": "reading",
+      "title": "Reading Passage 3: Book Review",
+      "instructions": "<div class=\"ielts-reading-container\"><h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 27-29                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Choose the correct letter, <strong>A</strong>, <strong>B</strong>, <strong>C</strong> or <strong>D</strong>.</p>\n<p>Write the correct letter in boxes on your answer sheet.</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"27\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">27</strong><span class=\"ielts-q-title\"><span>What is the reviewer’s attitude to advocates of positive psychology?</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> They are wrong to reject the ideas of Bentham.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> They are over-influenced by their study of Bentham’s theories.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> They have a fresh new approach to ideas on human happiness.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"27\" name=\"question_27\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> They are ignorant about the ideas they should be considering.</span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"28\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">28</strong><span class=\"ielts-q-title\"><span>The reviewer refers to the Greek philosopher Aristotle in order to suggest that happiness</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> may not be just pleasure and the absence of pain.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> should not be the main goal of humans.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> is not something that should be fought for.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"28\" name=\"question_28\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> is not just an abstract concept.</span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"29\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">29</strong><span class=\"ielts-q-title\"><span>According to Davies, Bentham’s suggestion for linking the price of goods to happiness was significant because</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> it was the first successful way of assessing happiness.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> it established a connection between work and psychology.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> it was the first successful example of psychological research.</span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"29\" name=\"question_29\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> it involved consideration of the rights of consumers.</span></label></div></div></div>\n                                                                                                                                    </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 30-34                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <div class=\"ielts-reading-section-content-wrapper\"><p>Complete the summary using the list of words <strong>A-G</strong> below.</p>\n<p>Write the correct letter, <strong>A-G</strong>, in boxes on your answer sheet.</p>\n<p><strong>Jeremy Bentham</strong></p>\n<p>Jeremy Bentham was active in other areas besides philosophy. In the 1970s he suggested a type of technology to improve <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">30</strong><select data-qnum=\"30\" name=\"question_30\" class=\"ielts-inline-select\"><option value=\"\">[ 30 ] Tanlang...</option><option value=\"A. measurement\">A. measurement</option><option value=\"B. security\">B. security</option><option value=\"C. implementation\">C. implementation</option><option value=\"D. profits\">D. profits</option><option value=\"E. observation\">E. observation</option><option value=\"F. communication\">F. communication</option><option value=\"G. preservation\">G. preservation</option></select></span></span> for different Government departments. He developed a new way of printing banknotes to increase <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">31</strong><select data-qnum=\"31\" name=\"question_31\" class=\"ielts-inline-select\"><option value=\"\">[ 31 ] Tanlang...</option><option value=\"A. measurement\">A. measurement</option><option value=\"B. security\">B. security</option><option value=\"C. implementation\">C. implementation</option><option value=\"D. profits\">D. profits</option><option value=\"E. observation\">E. observation</option><option value=\"F. communication\">F. communication</option><option value=\"G. preservation\">G. preservation</option></select></span></span> and also designed a method for the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">32</strong><select data-qnum=\"32\" name=\"question_32\" class=\"ielts-inline-select\"><option value=\"\">[ 32 ] Tanlang...</option><option value=\"A. measurement\">A. measurement</option><option value=\"B. security\">B. security</option><option value=\"C. implementation\">C. implementation</option><option value=\"D. profits\">D. profits</option><option value=\"E. observation\">E. observation</option><option value=\"F. communication\">F. communication</option><option value=\"G. preservation\">G. preservation</option></select></span></span> of food. He also drew up plans for a prison which allowed the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">33</strong><select data-qnum=\"33\" name=\"question_33\" class=\"ielts-inline-select\"><option value=\"\">[ 33 ] Tanlang...</option><option value=\"A. measurement\">A. measurement</option><option value=\"B. security\">B. security</option><option value=\"C. implementation\">C. implementation</option><option value=\"D. profits\">D. profits</option><option value=\"E. observation\">E. observation</option><option value=\"F. communication\">F. communication</option><option value=\"G. preservation\">G. preservation</option></select></span></span> of prisoners at al times, and believed the same design could be used for other institutions as well. When researching happiness, he investigated possibilities for its <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-select-wrap\"><strong class=\"ielts-q-badge\">34</strong><select data-qnum=\"34\" name=\"question_34\" class=\"ielts-inline-select\"><option value=\"\">[ 34 ] Tanlang...</option><option value=\"A. measurement\">A. measurement</option><option value=\"B. security\">B. security</option><option value=\"C. implementation\">C. implementation</option><option value=\"D. profits\">D. profits</option><option value=\"E. observation\">E. observation</option><option value=\"F. communication\">F. communication</option><option value=\"G. preservation\">G. preservation</option></select></span></span>, and suggested some methods of doing this.</p>\n</div>                                                <div class=\"options-dnd-panel dnd-panel dnd-panel--inline\" data-dnd-group=\"9516\">\n                                                    <p class=\"dnd-panel-instruction\">Drag and drop an option to fill in each blank.</p>\n                                                    <div class=\"dnd-cards-container\">\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"A\" data-text=\"A. measurement\">\n                                                                <span class=\"dnd-label\">A.</span>\n                                                                <span class=\"dnd-text\">measurement</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"B\" data-text=\"B. security\">\n                                                                <span class=\"dnd-label\">B.</span>\n                                                                <span class=\"dnd-text\">security</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"C\" data-text=\"C. implementation\">\n                                                                <span class=\"dnd-label\">C.</span>\n                                                                <span class=\"dnd-text\">implementation</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"D\" data-text=\"D. profits\">\n                                                                <span class=\"dnd-label\">D.</span>\n                                                                <span class=\"dnd-text\">profits</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"E\" data-text=\"E. observation\">\n                                                                <span class=\"dnd-label\">E.</span>\n                                                                <span class=\"dnd-text\">observation</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"F\" data-text=\"F. communication\">\n                                                                <span class=\"dnd-label\">F.</span>\n                                                                <span class=\"dnd-text\">communication</span>\n                                                            </div>\n                                                                                                                    <div class=\"dnd-card\" draggable=\"true\" data-value=\"G\" data-text=\"G. preservation\">\n                                                                <span class=\"dnd-label\">G.</span>\n                                                                <span class=\"dnd-text\">preservation</span>\n                                                            </div>\n                                                                                                            </div>\n                                                </div>\n                                                                                    </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                                \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>\n                                                                                                                                                            <h2 class=\"ielts-reading-question-section-heading\">\n                                            Questions 35-40                                                                                                                                                \n                                                                                                                                    </h2>\n                                        <div class=\"ielts-reading-question-section-content\">\n                                            <p>Do the following statements agree with the claims of the writer in the Reading Passage?</p>\n<p>In boxes on your answer sheet, write</p>\n<p><strong>YES</strong>                  if the statement agrees with the claims of the writer</p>\n<p><strong>NO</strong>                   if the statement contradicts the claims of the writer</p>\n<p><strong>NOT GIVEN</strong>    if it is impossible to say what the writer thinks about this</p>\n                                        </div>\n                                        <div class=\"ielts-reading-questions\">\n                                                                                                                                                                                            <div class=\"ielts-standalone-q\" data-qnum=\"35\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">35</strong><span class=\"ielts-q-title\"><span>One strength of <em>The Happiness Industry </em>is its discussion of the relationship between psychology and economics.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"35\" name=\"question_35\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"35\" name=\"question_35\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"35\" name=\"question_35\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"36\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">36</strong><span class=\"ielts-q-title\"><span>It is more difficult to measure some emotions than others.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"36\" name=\"question_36\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"36\" name=\"question_36\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"36\" name=\"question_36\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"37\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">37</strong><span class=\"ielts-q-title\"><span>Watson’s ideas on behaviourism were supported by research on humans he carried out before 1915.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"37\" name=\"question_37\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"37\" name=\"question_37\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"37\" name=\"question_37\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"38\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">38</strong><span class=\"ielts-q-title\"><span>Watson’s ideas have been most influential on governments outside America.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"38\" name=\"question_38\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"39\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">39</strong><span class=\"ielts-q-title\"><span>The need for happiness is linked to industrialisation.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"39\" name=\"question_39\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div><div class=\"ielts-standalone-q\" data-qnum=\"40\"><div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">40</strong><span class=\"ielts-q-title\"><span>A main aim of government should be to increase the happiness of the population.</span></div><div class=\"ielts-radio-group\"><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"YES\"><span class=\"ielts-radio-text\"><strong>YES</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"NO\"><span class=\"ielts-radio-text\"><strong>NO</strong> </span></label><label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"40\" name=\"question_40\" value=\"NOT GIVEN\"><span class=\"ielts-radio-text\"><strong>NOT GIVEN</strong> </span></label></div></div></div>\n                                                                                                                                    </div>\n                                        </div>                                                                    </div></div>",
+      "passage_text": "Book Review\nThe Happiness Industry: How the Government and Big Business Sold Us Well-Being\nBy William Davies\n‘Happiness is the ultimate goal because it is self-evidently good. If we are asked why happiness matters we can give no further external reason. It just obviously does matter.’ This pronouncement by Richard Layard, an economist and advocate of ‘positive psychology’, summarises the beliefs of many people today. For Layard and others like him, it is obvious that the purpose of government is to promote a state of collective well-being. The only question is how to achieve it, and here positive psychology – a supposed science that not only identifies what makes people happy but also allows their happiness to be measured – can show the way. Equipped with this science, they say, governments can secure happiness in society in a way they never could in the past.\nIt is an astonishingly crude and simple-minded way of thinking, and for that very reason increasingly popular. Those who think in this way are oblivious to the vast philosophical literature in which the meaning and value of happiness have been explored and questioned, and write as if nothing of any importance had been thought on the subject until it came to their attention. It was the philosopher Jeremy Bentham (1748-1832) who was more than anyone else responsible for the development of this way of thinking. For Bentham it was obvious that the human good consists of pleasure and the absence of pain. The Greek philosopher Aristotle may have identified happiness with self-realisation in the 4th century BC, and thinkers throughout the ages may have struggled to reconcile the pursuit of happiness with other human values, but for Bentham all this was mere metaphysics or fiction. Without knowing anything much of him or the school of moral theory he established – since they are by education and intellectual conviction illiterate in the history of ideas – our advocates of positive psychology follow in his tracks in rejecting as outmoded and irrelevant pretty much the entirety of ethical reflection on human happiness to date.\nBut as William Davies notes in his recent book The Happiness Industry , the view that happiness is the only self-evident good is actually a way of limiting moral inquiry. One of the virtues of this rich, lucid and arresting book is that it places the current cult of happiness in a well-defined historical framework. Rightly, Davies begins his story with Bentham, noting that he was far more than a philosopher. Davies writes, ‘Bentham’s activities were those which we might now associate with a public sector management consultant’. In the 1790s, he wrote to the Home Office suggesting that the departments of government be linked together through a set of ‘conversation tubes’, and to the Bank of England with a design for a printing device that could produce unforgeable banknotes. He drew up plans for a ‘frigidarium’ to keep provisions such as meat, fish, fruit and vegetables fresh. His celebrated design for a prison to be known as a ‘Panopticon’, in which prisoners would be kept in solitary confinement while being visible at all times to the guards, was very nearly adopted. (Surprisingly, Davies does not discuss the fact that Bentham meant his Panopticon not just as a model prison but also as an instrument of control that could be applied to schools and factories.)\nBentham was also a pioneer of the ‘science of happiness’. If happiness is to be regarded as a science, it has to be measured, and Bentham suggested two ways in which this might be done. Viewing happiness as a complex of pleasurable sensations, he suggested that it might be quantified by measuring the human pulse rate. Alternatively, money could be used as the standard for quantification: if two different goods have the same price, it can be claimed that they produce the same quantity of pleasure in the consumer. Bentham was more attracted by the latter measure. By associating money so closely to inner experience, Davies writes, Bentham ‘set the stage for the entangling of psychological research and capitalism that would shape the business practices of the twentieth century’.\nThe Happiness Industry describes how the project of a science of happiness has become integral to capitalism. We learn much that is interesting about how economic problems are being redefined and treated as psychological maladies. In addition, Davies shows how the belief that inner states of pleasure and displeasure can be objectively measured has informed management studies and advertising. The tendency of thinkers such as J B Watson, the founder of behaviourism*, was that human beings could be shaped, or manipulated, by policymakers and managers. Watson had no factual basis for his view of human action. When he became president of the American Psychological Association in 1915, he ‘had never even studied a single human being’: his research had been confined to experiments on white rats. Yet Watson’s reductive model is now widely applied, with ‘behaviour change’ becoming the goal of governments: in Britain, a ‘Behaviour Insights Team’ has been established by the government to study how people can be encouraged, at minimum cost to the public purse, to live in what are considered to be socially desirable ways.\nModern industrial societies appear to need the possibility of ever-increasing happiness to motivate them in their labours. But whatever its intellectual pedigree, the idea that governments should be responsible for promoting happiness is always a threat to human freedom.\n———————–\n* ‘behaviourism’: a branch of psychology which is concerned with observable behaviour",
+      "order_index": 3,
+      "questions": [
+        {
+          "question_number": 27,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "What is the reviewer’s attitude to advocates of positive psychology?",
+          "options": [
+            "They are wrong to reject the ideas of Bentham.",
+            "They are over-influenced by their study of Bentham’s theories.",
+            "They have a fresh new approach to ideas on human happiness.",
+            "They are ignorant about the ideas they should be considering."
+          ],
+          "correct_answer": "D",
+          "points": 1
+        },
+        {
+          "question_number": 28,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "The reviewer refers to the Greek philosopher Aristotle in order to suggest that happiness",
+          "options": [
+            "may not be just pleasure and the absence of pain.",
+            "should not be the main goal of humans.",
+            "is not something that should be fought for.",
+            "is not just an abstract concept."
+          ],
+          "correct_answer": "A",
+          "points": 1
+        },
+        {
+          "question_number": 29,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "According to Davies, Bentham’s suggestion for linking the price of goods to happiness was significant because",
+          "options": [
+            "it was the first successful way of assessing happiness.",
+            "it established a connection between work and psychology.",
+            "it was the first successful example of psychological research.",
+            "it involved consideration of the rights of consumers."
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 30,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ for different Government departments. He developed a new way of printing banknotes to increase",
+          "options": [
+            "1",
+            "231",
+            "9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "f7bac110fb",
+            "yes"
+          ],
+          "correct_answer": "F",
+          "points": 1
+        },
+        {
+          "question_number": 31,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ and also designed a method for the",
+          "options": [
+            "1",
+            "231",
+            "9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "f7bac110fb",
+            "yes"
+          ],
+          "correct_answer": "B",
+          "points": 1
+        },
+        {
+          "question_number": 32,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ of food. He also drew up plans for a prison which allowed the",
+          "options": [
+            "1",
+            "231",
+            "9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "f7bac110fb",
+            "yes"
+          ],
+          "correct_answer": "G",
+          "points": 1
+        },
+        {
+          "question_number": 33,
+          "section_part": 1,
+          "question_type": "single_choice",
+          "question_text": "_______ of prisoners at al times, and believed the same design could be used for other institutions as well. When researching happiness, he investigated possibilities for its",
+          "options": [
+            "1",
+            "231",
+            "9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "f7bac110fb",
+            "yes"
+          ],
+          "correct_answer": "E",
+          "points": 1
+        },
+        {
+          "question_number": 34,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "_______ , and suggested some methods of doing this. Drag and drop an option to fill in each blank. A. measurement B. security C. implementation D. profits E. observation F. communication G. preservation",
+          "options": [
+            "1",
+            "231",
+            "9",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "NO",
+            "NOT GIVEN",
+            "Post Comment",
+            "YES",
+            "f7bac110fb",
+            "yes"
+          ],
+          "correct_answer": "A",
+          "points": 1
+        },
+        {
+          "question_number": 35,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "One strength of The Happiness Industry is its discussion of the relationship between psychology and economics.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "YES",
+          "points": 1
+        },
+        {
+          "question_number": 36,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "It is more difficult to measure some emotions than others.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 37,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Watson’s ideas on behaviourism were supported by research on humans he carried out before 1915.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NO",
+          "points": 1
+        },
+        {
+          "question_number": 38,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "Watson’s ideas have been most influential on governments outside America.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NOT GIVEN",
+          "points": 1
+        },
+        {
+          "question_number": 39,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "The need for happiness is linked to industrialisation.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "YES",
+          "points": 1
+        },
+        {
+          "question_number": 40,
+          "section_part": 2,
+          "question_type": "single_choice",
+          "question_text": "A main aim of government should be to increase the happiness of the population.",
+          "options": [
+            "YES",
+            "NO",
+            "NOT GIVEN"
+          ],
+          "correct_answer": "NO",
+          "points": 1
+        }
+      ]
+    }
+  ]
+}

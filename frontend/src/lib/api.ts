@@ -203,8 +203,14 @@ export const apiGetTestDetails = async (id: number): Promise<Test> => {
 };
 
 // Session & Test Taking API
-export const apiStartSession = async (testId: number): Promise<TestSession> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/tests/${testId}/start`, {
+export const apiStartSession = async (testId: number, forceNew: boolean = false): Promise<TestSession> => {
+  return fetchWithAuth(`${CORE_API_URL}/api/v1/tests/${testId}/start?force_new=${forceNew}`, {
+    method: 'POST',
+  });
+};
+
+export const apiStartRandomMock = async (forceNew: boolean = false): Promise<TestSession> => {
+  return fetchWithAuth(`${CORE_API_URL}/api/v1/mock/start?force_new=${forceNew}`, {
     method: 'POST',
   });
 };
@@ -309,4 +315,26 @@ export const apiUploadAudio = async (blob: Blob, filename: string = 'recording.w
     url: `${MEDIA_API_URL}${data.url}`,
     filename: data.filename,
   };
+};
+
+/**
+ * Sorts Cambridge tests strictly from 13 to 21 ascending,
+ * followed by test number (1 to 4), and then any remaining tests.
+ */
+export const sortCambridgeTests = (a: Test, b: Test): number => {
+  const getBook = (title: string): number => {
+    const m = title.match(/Cambridge IELTS (\d+)/i);
+    if (!m) return 999;
+    const n = parseInt(m[1], 10);
+    return n >= 13 ? n : 100 + n;
+  };
+  const getTestNum = (title: string): number => {
+    const m = title.match(/Test (\d+)/i);
+    return m ? parseInt(m[1], 10) : 0;
+  };
+  const bookDiff = getBook(a.title) - getBook(b.title);
+  if (bookDiff !== 0) return bookDiff;
+  const testDiff = getTestNum(a.title) - getTestNum(b.title);
+  if (testDiff !== 0) return testDiff;
+  return a.id - b.id;
 };

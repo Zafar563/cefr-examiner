@@ -1,0 +1,41 @@
+{
+  "id": 1643,
+  "title": "Cambridge IELTS 16 Academic Writing Test 3",
+  "description": "Haqiqiy IELTS/CEFR Academic Writing formati: Task 1 (The plans below show the site of an airport now and how it will look after redev - min 150 so‘z) va Task 2 (Many manufactured food and drink products contain high levels of sugar, which ca - min 250 so‘z).",
+  "duration_minutes": 60,
+  "sections": [
+    {
+      "id": 16431,
+      "test_id": 1643,
+      "type": "writing",
+      "title": "Writing Assessment (Task 1 & Task 2)",
+      "instructions": "Ushbu imtihon 2 ta topshiriqdan iborat. Topshiriq 1 uchun tavsiya etilgan vaqt: 20 daqiqa (kamida 150 so‘z). Topshiriq 2 uchun tavsiya etilgan vaqt: 40 daqiqa (kamida 250 so‘z). Insho matningizni pastdagi javob maydoniga kiriting.",
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 164301,
+          "section_id": 16431,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 1\n\nYou should spend about 20 minutes on this task.\n\nThe plans below show the site of an airport now and how it will look after redevelopment next year.\nSummarize the information by selecting and reporting the main features, and make comparisons where relevant.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+          "options": [
+            "/images/writing/cambridge_16_writing_t3.png",
+            "https://engnovate.com/wp-content/uploads/2023/08/cambridge-ielts-16-academic-writing-test-3-1.png"
+          ],
+          "correct_answer": "",
+          "points": 15,
+          "order_index": 1
+        },
+        {
+          "id": 164302,
+          "section_id": 16431,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 2\n\nYou should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nMany manufactured food and drink products contain high levels of sugar, which causes many health problems. Sugary products should be made more expensive to encourage people to consume less sugar.\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "options": [],
+          "correct_answer": "",
+          "points": 25,
+          "order_index": 2
+        }
+      ]
+    }
+  ]
+}

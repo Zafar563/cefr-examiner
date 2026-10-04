@@ -1,0 +1,50 @@
+{
+  "id": 185,
+  "title": "Cambridge IELTS 18 Academic Speaking Test 1",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 18 Test 1 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1851,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 18501,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. What kinds of bills do you have to pay?\n2. How do you usually pay your bills — in cash or by another method? [Why?]\n3. Have you ever forgotten to pay a bill? [Why/Why not?]\n4. Is there anything you could do to make your bills cheaper? [Why/Why not?]",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 18502,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe some food or drink that you learned to prepare.\nYou should say:\nAnd explain how you felt about learning to prepare this food or drink.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 18503,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What kinds of things can children learn to cook?\n2. Do you think it is important for children to learn to cook?\n3. Do you think young people should learn to cook at home or at school?\n4. How enjoyable do you think it would be to work as a professional chef?\n5. What skills does a person need to be a great chef?\n6. How much influence do celebrity/TV chefs have on what ordinary people cook?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": 188,
+  "title": "Cambridge IELTS 18 Academic Speaking Test 4",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 18 Test 4 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1881,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 18801,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. How many hours do you usually sleep at night?\n2. Do you sometimes sleep during the day? [Why/Why not?]\n3. What do you do if you can’t get to sleep at night? [Why?]\n4. Do you ever remember the dreams you’ve had while you were asleep?",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 18802,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a time when you met someone who you became good friends with.\nYou should say:\n• When and where you met this person\n• What you thought about this person\n• When you first met\nAnd explain why you think you became good friends with this person.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 18803,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. How important is it for children to have lots of friends at school?\n2. Do you think it is wrong for parents to influence which friends their children have?\n3. Why do you think children often choose different friends as they get older?\n4. If a person is moving to a new town, what is a good way for them to make friends?\n5. Can you think of any disadvantages of making new friends online?\n6. Would you say it is harder for people to make new friends as they get older?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

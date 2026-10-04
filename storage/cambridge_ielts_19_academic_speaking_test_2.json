@@ -1,0 +1,50 @@
+{
+  "id": 196,
+  "title": "Cambridge IELTS 19 Academic Speaking Test 2",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 19 Test 2 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1961,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 19601,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. Have you travelled a lot by plane? [To where?/Why not?]\n2. Why do you think some people enjoy travelling by plane?\n3. Would you like to live near an airport? [Why/Why not?]\n4. In the future, do you think that you will travel by plane more often? [Why/Why not?]",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 19602,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a person from your country who has won a prize, award or medal.\nYou should say:\n• Who this person is\n• Which prize, award or medal they received\n• What they did to win this\nAnd explain whether you think it was right that this person received this prize, award or medal.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 19603,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What types of school prizes do children in your country receive?\n2. What do you think are the advantages of rewarding schoolchildren for good work?\n3. Do you agree that it’s more important for children to receive rewards from their parents than from teachers?\n4. Do you think that some sportspeople (e.g., top footballers) are paid too much money?\n5. Should everyone on a team get the same prize money when they win?\n6. Do you agree with the view that, in sport, taking part is more important than winning?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

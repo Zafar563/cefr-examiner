@@ -1,0 +1,50 @@
+{
+  "id": 155,
+  "title": "Cambridge IELTS 15 Academic Speaking Test 1",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 15 Test 1 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1551,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 15501,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. What kinds of emails do you receive about your work or studies?\n2. Do you prefer to email, phone, or text your friends? [Why?]\n3. Do you reply to emails and messages as soon as you receive them? [Why/why not?]\n4. Are you happy to receive emails that are advertising things? [Why/why not?]",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 15502,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a hotel that you know\nYou should say:\n• Where this hotel is\n• What this hotel looks like\n• What facilities this hotel has\nAnd explain whether you think this is a nice hotel to stay in.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 15503,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What things are important when people are choosing a hotel?\n2. Why do some people not like staying in hotels?\n3. Do you think staying in a luxury hotel is a waste of money?\n4. Do you think hotel work is a good career for life?\n5. How does working in a big hotel compare with working in a small hotel?\n6. What skills are needed to be a successful hotel manager?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

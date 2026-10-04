@@ -142,7 +142,40 @@ func (h *Handler) StartSession(c *gin.Context) {
 		return
 	}
 
-	session, err := h.repo.StartSession(userID, testID)
+	forceNew := c.Query("force_new") == "true"
+	if !forceNew && c.Request.Body != nil && c.Request.ContentLength > 0 {
+		var body struct {
+			ForceNew bool `json:"force_new"`
+		}
+		if err := c.ShouldBindJSON(&body); err == nil && body.ForceNew {
+			forceNew = true
+		}
+	}
+
+	session, err := h.repo.StartSession(userID, testID, forceNew)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, session)
+}
+
+func (h *Handler) StartRandomMockSession(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	if userID <= 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	forceNew := c.Query("force_new") == "true"
+	var body struct {
+		ForceNew bool `json:"force_new"`
+	}
+	if err := c.ShouldBindJSON(&body); err == nil && body.ForceNew {
+		forceNew = true
+	}
+
+	session, err := h.repo.StartRandomMockSession(userID, forceNew)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

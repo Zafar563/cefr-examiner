@@ -1,0 +1,496 @@
+{
+  "id": 25,
+  "title": "Cambridge IELTS 21 Academic Listening Test 1",
+  "description": "Rasmiy Cambridge IELTS 21 to'plamidan olingan to'liq 4 ta qism (Part 1: Oyster Bay Sailing Club, Part 2: Working as a Film Makeup Artist, Part 3: Ocean Biodiversity Research, Part 4: The Importance of Rubber) va 40 ta savoldan iborat akademik Listening imtihoni.",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 30,
+  "is_active": true,
+  "sections": [
+    {
+      "id": 251,
+      "test_id": 25,
+      "type": "listening",
+      "title": "Listening Part 1: Oyster Bay Sailing Club",
+      "instructions": "<div class=\"ielts-reading-container\">\n  <h2 class=\"ielts-reading-question-section-heading\">Questions 1-6</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <div class=\"ielts-reading-section-content-wrapper\">\n      <p><strong>Complete the table below.</strong></p>\n      <p class=\"text-xs text-slate-500 mb-3\">Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.</p>\n      <div class=\"overflow-x-auto my-3\">\n        <table class=\"w-full text-sm border-collapse border border-slate-300\">\n          <thead>\n            <tr class=\"bg-slate-100 border-b border-slate-300 text-slate-800\">\n              <th class=\"p-3 text-left border-r border-slate-300 font-bold\">Name of course</th>\n              <th class=\"p-3 text-left border-r border-slate-300 font-bold\">What you learn</th>\n              <th class=\"p-3 text-left border-r border-slate-300 font-bold\">Cost</th>\n              <th class=\"p-3 text-left font-bold\">Other information</th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr class=\"border-b border-slate-200\">\n              <td class=\"p-3 align-top font-semibold text-slate-900 border-r border-slate-300\">Taster day</td>\n              <td class=\"p-3 align-top border-r border-slate-300\">introduction to sailing</td>\n              <td class=\"p-3 align-top border-r border-slate-300\">£120 if booking one place</td>\n              <td class=\"p-3 align-top\">small groups (max <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">1</strong><input type=\"text\" data-qnum=\"1\" name=\"question_1\" class=\"ielts-inline-input\" placeholder=\"[1] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> people)</td>\n            </tr>\n            <tr class=\"border-b border-slate-200 bg-slate-50/50\">\n              <td class=\"p-3 align-top font-semibold text-slate-900 border-r border-slate-300\">Level 1</td>\n              <td class=\"p-3 align-top border-r border-slate-300\">\n                basic theory e.g. understanding the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">2</strong><input type=\"text\" data-qnum=\"2\" name=\"question_2\" class=\"ielts-inline-input\" placeholder=\"[2] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> and tides<br><br>\n                basic sailing skills including <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">3</strong><input type=\"text\" data-qnum=\"3\" name=\"question_3\" class=\"ielts-inline-input\" placeholder=\"[3] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> information\n              </td>\n              <td class=\"p-3 align-top border-r border-slate-300\">\n                £200<br><br>\n                <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">4</strong><input type=\"text\" data-qnum=\"4\" name=\"question_4\" class=\"ielts-inline-input\" placeholder=\"[4] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> available for club members\n              </td>\n              <td class=\"p-3 align-top\">\n                all inclusive (plus a useful <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">5</strong><input type=\"text\" data-qnum=\"5\" name=\"question_5\" class=\"ielts-inline-input\" placeholder=\"[5] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span>)<br><br>\n                a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">6</strong><input type=\"text\" data-qnum=\"6\" name=\"question_6\" class=\"ielts-inline-input\" placeholder=\"[6] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> at the end of the course for all participants\n              </td>\n            </tr>\n          </tbody>\n        </table>\n      </div>\n    </div>\n  </div>\n\n  <h2 class=\"ielts-reading-question-section-heading mt-6\">Questions 7-10</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <div class=\"ielts-reading-section-content-wrapper\">\n      <p><strong>Complete the notes below.</strong></p>\n      <p class=\"text-xs text-slate-500 mb-3\">Write <strong>ONE WORD ONLY</strong> for each answer.</p>\n      <div class=\"p-4 bg-slate-50 rounded-xl border border-slate-200 my-3 space-y-3\">\n        <h4 class=\"font-bold text-slate-900 border-b pb-2\">General information</h4>\n        <ul class=\"list-disc pl-5 space-y-2 text-slate-800 text-sm\">\n          <li>Participants must be able to swim.</li>\n          <li>Bring suitable clothing, a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">7</strong><input type=\"text\" data-qnum=\"7\" name=\"question_7\" class=\"ielts-inline-input\" placeholder=\"[7] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> and toiletries (e.g. shampoo).</li>\n          <li>There is a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">8</strong><input type=\"text\" data-qnum=\"8\" name=\"question_8\" class=\"ielts-inline-input\" placeholder=\"[8] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> at the club.</li>\n          <li>Online training <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">9</strong><input type=\"text\" data-qnum=\"9\" name=\"question_9\" class=\"ielts-inline-input\" placeholder=\"[9] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> are recommended.</li>\n          <li><span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">10</strong><input type=\"text\" data-qnum=\"10\" name=\"question_10\" class=\"ielts-inline-input\" placeholder=\"[10] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> are available for course participants.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n</div>",
+      "audio_url": "https://ielts-listening-audio.engnovatemedia.com/3178700-cambridge-ielts-21-academic-listening-test-1-1.mp3",
+      "passage_text": "WOMAN: Hello, Oyster Bay Sailing Club. How can I help you?\nMAN: Oh hi. I'd like to find out about sailing courses for beginners.\nWOMAN: No problem. Is it for yourself?\nMAN: Yes. I had a look online but I'm not sure which course would be best.\nWOMAN: OK. Well you might be interested in our Taster Days?\nMAN: Possibly.\nWOMAN: So these are for people who've never sailed before - it's basically an introduction to sailing to find out whether you enjoy it and want to carry on with it.\nMAN: And how much is that?\nWOMAN: It's £120 for the day - but it's reduced to £110 each if there are two of you.\nMAN: No, it would just be me.\nWOMAN: Oh that's fine. You'd be in a small group, usually about eight people but no more than ten - and everyone's always very friendly.\nMAN: Uh huh. And are there any other suitable courses?\nWOMAN: The other option is the Level 1 course. These are two-day weekend courses and we run those all year round.\nMAN: OK. And what do you learn on that course?\nWOMAN: This is a mix of theory and practical skills. So you learn about things like the weather, which is obviously really important and also the tides, as well as learning basic sailing skills. You go out into the harbour in special training dinghies for beginners, two people in each dinghy and an instructor. He or she will make sure you understand everything you need to know about safety.\nMAN: It sounds like hard work!\nWOMAN: Yes, but you'll have a lot of fun too.\nMAN: And the cost of that one is ... ?\nWOMAN: £200. But it's a bit cheaper if you decide to join the club. There's a discount for members.\nMAN: Well, I'm not sure about that yet.\nWOMAN: You've got plenty of time to decide.\nMAN: And does the cost include everything?\nWOMAN: Yes, everything's included and you also get a really good dictionary explaining all the sailing terminology. A lot of people struggle with this at first. It's got lots of pictures, so I'm sure you'd find it really helpful. And on completion of the course you get a certificate. Then you're ready to move on to the Level 2 course.\nMAN: Sounds good.\nWOMAN: I think that's all the info you need for now. Just a couple of general things. For example, it's really important that you know how to swim.\nMAN: Yes, I'm pretty confident in the water.\nWOMAN: Great. The other thing I should tell you is that we provide wetsuits and life jackets but you need to bring swimming trunks and some old trainers.\nMAN: And a towel?\nWOMAN: Yes definitely. And you might want to bring your own toiletries, things like shampoo.\nMAN: OK. What about food and drink? Do I need to bring that or is there a café at the club?\nWOMAN: Yes, you can get sandwiches, cakes and snacks there. The food's pretty reasonable.\nMAN: OK good. Well I think I'm interested in the Level 1 course. But I know absolutely nothing about sailing so is there anything I can do to prepare myself a bit?\nWOMAN: I recommend you watch some videos we use for training. They're available online. I can send you the link. They'll give you an idea of what to expect.\nMAN: Perfect, thanks. That would be very helpful. Oh and just one other thing - I'll be cycling to the club and will need somewhere to put valuables. I'm just wondering if there are lockers for people to use?\nWOMAN: Yes, there are plenty in the changing rooms.\nMAN: Great. OK well could you book me onto...",
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 2501,
+          "order_index": 1,
+          "type": "text_input",
+          "text": "Taster day: small groups (max 1 ... people)",
+          "options": [],
+          "answer": "10|ten"
+        },
+        {
+          "id": 2502,
+          "order_index": 2,
+          "type": "text_input",
+          "text": "Level 1: basic theory e.g. understanding the 2 ... and tides",
+          "options": [],
+          "answer": "weather"
+        },
+        {
+          "id": 2503,
+          "order_index": 3,
+          "type": "text_input",
+          "text": "Level 1: basic sailing skills including 3 ... information",
+          "options": [],
+          "answer": "safety"
+        },
+        {
+          "id": 2504,
+          "order_index": 4,
+          "type": "text_input",
+          "text": "Level 1: Cost £200, 4 ... available for club members",
+          "options": [],
+          "answer": "discount"
+        },
+        {
+          "id": 2505,
+          "order_index": 5,
+          "type": "text_input",
+          "text": "Level 1: all inclusive (plus a useful 5 ...)",
+          "options": [],
+          "answer": "dictionary"
+        },
+        {
+          "id": 2506,
+          "order_index": 6,
+          "type": "text_input",
+          "text": "Level 1: a 6 ... at the end of the course for all participants",
+          "options": [],
+          "answer": "certificate"
+        },
+        {
+          "id": 2507,
+          "order_index": 7,
+          "type": "text_input",
+          "text": "Bring suitable clothing, a 7 ... and toiletries (e.g. shampoo).",
+          "options": [],
+          "answer": "towel"
+        },
+        {
+          "id": 2508,
+          "order_index": 8,
+          "type": "text_input",
+          "text": "There is a 8 ... at the club.",
+          "options": [],
+          "answer": "café|cafe"
+        },
+        {
+          "id": 2509,
+          "order_index": 9,
+          "type": "text_input",
+          "text": "Online training 9 ... are recommended.",
+          "options": [],
+          "answer": "videos"
+        },
+        {
+          "id": 2510,
+          "order_index": 10,
+          "type": "text_input",
+          "text": "10 ... are available for course participants.",
+          "options": [],
+          "answer": "lockers"
+        }
+      ]
+    },
+    {
+      "id": 252,
+      "test_id": 25,
+      "type": "listening",
+      "title": "Listening Part 2: Working as a Film Makeup Artist",
+      "instructions": "<div class=\"ielts-reading-container\">\n  <h2 class=\"ielts-reading-question-section-heading\">Questions 11-16</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <p>Choose the correct letter, <strong>A</strong>, <strong>B</strong> or <strong>C</strong>.</p>\n  </div>\n  <div class=\"ielts-reading-questions\">\n    <div class=\"ielts-standalone-q\" data-qnum=\"11\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">11</strong><span class=\"ielts-q-title\">What should trainees always expect to get when working on low budget short films?</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> travel expenses</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> a minimum wage</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"11\" name=\"question_11\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> meals</span></label>\n      </div>\n    </div>\n    <div class=\"ielts-standalone-q\" data-qnum=\"12\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">12</strong><span class=\"ielts-q-title\">According to the speaker, on big budget films trainees may get experience of</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> makeup for special effects.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> working with different ethnicities.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"12\" name=\"question_12\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> creating a variety of hair styles.</span></label>\n      </div>\n    </div>\n    <div class=\"ielts-standalone-q\" data-qnum=\"13\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">13</strong><span class=\"ielts-q-title\">The speaker says a problem for makeup artists is</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> dealing with difficult directors.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> being shouted at by their supervisor.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"13\" name=\"question_13\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> waiting around for hours doing nothing.</span></label>\n      </div>\n    </div>\n    <div class=\"ielts-standalone-q\" data-qnum=\"14\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">14</strong><span class=\"ielts-q-title\">How did the speaker feel when she met famous actors for the first time?</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> very shy</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> very proud</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"14\" name=\"question_14\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> very disappointed</span></label>\n      </div>\n    </div>\n    <div class=\"ielts-standalone-q\" data-qnum=\"15\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">15</strong><span class=\"ielts-q-title\">What advice does the speaker give about makeup kits?</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> Always carry a basic kit with you.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> Only buy the best products for a makeup kit.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"15\" name=\"question_15\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> Ask other makeup artists to check your kit.</span></label>\n      </div>\n    </div>\n    <div class=\"ielts-standalone-q\" data-qnum=\"16\">\n      <div class=\"ielts-q-header\"><strong class=\"ielts-q-badge\">16</strong><span class=\"ielts-q-title\">What advice does the speaker give about creating a portfolio?</span></div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> Keep print and digital photos.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> Only include a small selection of photos.</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"radio\" data-qnum=\"16\" name=\"question_16\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> Get permission to use photos.</span></label>\n      </div>\n    </div>\n  </div>\n\n  <h2 class=\"ielts-reading-question-section-heading mt-6\">Questions 17-20</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <p>What ability is required for each of the following duties?</p>\n    <p class=\"text-xs text-slate-500 mb-3\">Choose the correct letter, <strong>A</strong>, <strong>B</strong>, or <strong>C</strong>, next to Questions 17-20.</p>\n    <div class=\"p-4 bg-slate-50 border border-slate-200 rounded-xl my-3 space-y-1.5 text-sm font-medium\">\n      <p><strong>A</strong> being well-organised</p>\n      <p><strong>B</strong> being flexible</p>\n      <p><strong>C</strong> working quickly</p>\n    </div>\n    <div class=\"space-y-3 mt-4\">\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">17</strong> Prepping an actor</span>\n        <select data-qnum=\"17\" name=\"question_17\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - being well-organised</option>\n          <option value=\"B\">B - being flexible</option>\n          <option value=\"C\">C - working quickly</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">18</strong> Continuity</span>\n        <select data-qnum=\"18\" name=\"question_18\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - being well-organised</option>\n          <option value=\"B\">B - being flexible</option>\n          <option value=\"C\">C - working quickly</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">19</strong> General</span>\n        <select data-qnum=\"19\" name=\"question_19\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - being well-organised</option>\n          <option value=\"B\">B - being flexible</option>\n          <option value=\"C\">C - working quickly</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">20</strong> Applying makeup</span>\n        <select data-qnum=\"20\" name=\"question_20\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - being well-organised</option>\n          <option value=\"B\">B - being flexible</option>\n          <option value=\"C\">C - working quickly</option>\n        </select>\n      </div>\n    </div>\n  </div>\n</div>",
+      "audio_url": "https://ielts-listening-audio.engnovatemedia.com/3178722-cambridge-ielts-21-academic-listening-test-1-2.mp3",
+      "passage_text": "MAN: Hello and welcome to the film making podcast. In this week's episode, Claire Lemarre talks to us about how to become a makeup artist. Claire's been working as a makeup artist in the film industry for over 20 years and has lots of useful advice about how to get started.\nWOMAN: Thanks Ian. Well, before you can become a makeup artist on films you have to spend about 2 years working as a makeup trainee.\nA good place to get your first job would be on a low budget short film. Of course, this means that you'll be working for free. But it's often worth it for the experience. Make sure your transport costs are covered - and remember, there's very unlikely to be any catering provided, so bring plenty of food.\nIf you're lucky, you might start out on a big budget film where you'll get the most useful experience. On productions like this, makeup and hair styling are separate departments - so you won't need to bring your curling tongs! But you're likely to get the opportunity to work with a range of age groups, as well as different ethnicities. Doing makeup for special effects is highly specialised, so don't expect to be offered any practical experience in that.\nOne problem with working in the makeup department is that it's a high-pressure environment. There are very few times when you'll be bored or have nothing to do. It can be stressful but you'll see that the top makeup artists are very professional - even when they're having to work with directors who are impatient, or unhappy with the makeup artist's work. Follow your supervisor's lead and try to remain calm at all times.\nI've worked with many very famous actors over the years. At first, I found it overwhelming and could hardly speak. I was so in awe. That's preferable, by the way, to becoming too excited and asking for selfies. Now meeting the talent is just a normal part of the job and to be honest most actors don't look that special without all the makeup!\nEvery makeup trainee will need a makeup kit, which they'll be expected to have with them at all times. Just the essentials will do for the kinds of tasks you'll be given - it won't be anything complicated. It's worth looking at what the other makeup artists have in their kits - but whatever you do, don't borrow anything without asking first.\nIt's very important to build your portfolio. You should take photos of all the work you do and ideally show the different stages of makeup application if you can. But remember you'll need to get approval from the makeup designer in charge of the department. As you'll be sending your portfolio digitally, you won't need to get photos printed.\nSo what does a makeup trainee actually do? You need to think about whether you're the right kind of person to do the job and whether you'd enjoy it. So, to give you some idea, here are some of the things you might be required to do.\nYou may be asked to help prep an actor ready for makeup. Some actors will arrive having already cleansed and moisturized their skin. But sometimes you'll need to step in and get this done without wasting any time, otherwise the makeup artist will get behind schedule.\nTrainees play a useful role in continuity. It will be your responsibility to take photos, log them digitally and print out a hard copy to put in each actor's file. This information needs to be kept in good order as a reshoot can mean replicating makeup months later.\nGeneral duties mean doing anything from getting the teas and coffees to putting on a wash. Having a positive attitude and being willing to do whatever is asked of you will help you get your next film job.\nYou won't be asked to apply makeup to any of the principal cast, only the extras. If there are dozens of extras involved you'll need to keep up a swift pace and not spend too long on each person. It takes quite a lot of confidence to be able to do this well.\nOK now about terms and conditions....",
+      "order_index": 2,
+      "questions": [
+        {
+          "id": 2511,
+          "order_index": 11,
+          "type": "single_choice",
+          "text": "What should trainees always expect to get when working on low budget short films?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2512,
+          "order_index": 12,
+          "type": "single_choice",
+          "text": "According to the speaker, on big budget films trainees may get experience of",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "B"
+        },
+        {
+          "id": 2513,
+          "order_index": 13,
+          "type": "single_choice",
+          "text": "The speaker says a problem for makeup artists is",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2514,
+          "order_index": 14,
+          "type": "single_choice",
+          "text": "How did the speaker feel when she met famous actors for the first time?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2515,
+          "order_index": 15,
+          "type": "single_choice",
+          "text": "What advice does the speaker give about makeup kits?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2516,
+          "order_index": 16,
+          "type": "single_choice",
+          "text": "What advice does the speaker give about creating a portfolio?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "C"
+        },
+        {
+          "id": 2517,
+          "order_index": 17,
+          "type": "single_choice",
+          "text": "What ability is required for Prepping an actor?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "C"
+        },
+        {
+          "id": 2518,
+          "order_index": 18,
+          "type": "single_choice",
+          "text": "What ability is required for Continuity?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2519,
+          "order_index": 19,
+          "type": "single_choice",
+          "text": "What ability is required for General duties?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "B"
+        },
+        {
+          "id": 2520,
+          "order_index": 20,
+          "type": "single_choice",
+          "text": "What ability is required for Applying makeup?",
+          "options": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answer": "C"
+        }
+      ]
+    },
+    {
+      "id": 253,
+      "test_id": 25,
+      "type": "listening",
+      "title": "Listening Part 3: Ocean Biodiversity Research",
+      "instructions": "<div class=\"ielts-reading-container\">\n  <h2 class=\"ielts-reading-question-section-heading\">Questions 21-22</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <p>Choose <strong>TWO</strong> letters, <strong>A-E</strong>.</p>\n    <div class=\"ielts-standalone-q mt-3\" data-qnum=\"21\">\n      <div class=\"ielts-q-header\">\n        <strong class=\"ielts-q-badge\">21-22</strong>\n        <span class=\"ielts-q-title\">Which TWO features of the lecture on ocean biodiversity had the greatest impact on the students?</span>\n      </div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"21,22\" data-limit=\"2\" name=\"question_21_22[]\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> the references to local problems</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"21,22\" data-limit=\"2\" name=\"question_21_22[]\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> the broad focus of the examples</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"21,22\" data-limit=\"2\" name=\"question_21_22[]\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> the practical suggestions for solutions</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"21,22\" data-limit=\"2\" name=\"question_21_22[]\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> the type of issues discussed</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"21,22\" data-limit=\"2\" name=\"question_21_22[]\" value=\"E\"><span class=\"ielts-radio-text\"><strong>E</strong> the implications for government policy</span></label>\n      </div>\n    </div>\n  </div>\n\n  <h2 class=\"ielts-reading-question-section-heading mt-6\">Questions 23-24</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <p>Choose <strong>TWO</strong> letters, <strong>A-E</strong>.</p>\n    <div class=\"ielts-standalone-q mt-3\" data-qnum=\"23\">\n      <div class=\"ielts-q-header\">\n        <strong class=\"ielts-q-badge\">23-24</strong>\n        <span class=\"ielts-q-title\">Which TWO details about the research project particularly impressed the students?</span>\n      </div>\n      <div class=\"ielts-radio-group\">\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" name=\"question_23_24[]\" value=\"A\"><span class=\"ielts-radio-text\"><strong>A</strong> the team's previous successes</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" name=\"question_23_24[]\" value=\"B\"><span class=\"ielts-radio-text\"><strong>B</strong> its wide geographical scale</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" name=\"question_23_24[]\" value=\"C\"><span class=\"ielts-radio-text\"><strong>C</strong> the use of new technology</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" name=\"question_23_24[]\" value=\"D\"><span class=\"ielts-radio-text\"><strong>D</strong> the extensive statistical evidence</span></label>\n        <label class=\"ielts-radio-btn\"><input type=\"checkbox\" data-multi-qnums=\"23,24\" data-limit=\"2\" name=\"question_23_24[]\" value=\"E\"><span class=\"ielts-radio-text\"><strong>E</strong> the large range of specialists involved</span></label>\n      </div>\n    </div>\n  </div>\n\n  <h2 class=\"ielts-reading-question-section-heading mt-6\">Questions 25-30</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <p>What is the students' opinion of each of the following resources related to ocean biodiversity?</p>\n    <p class=\"text-xs text-slate-500 mb-3\">Choose <strong>SIX</strong> answers from the box and write the correct letter, <strong>A-H</strong>, next to Questions 25-30.</p>\n    <div class=\"p-4 bg-slate-50 border border-slate-200 rounded-xl my-3 space-y-1.5 text-sm font-medium\">\n      <p><strong>A</strong> This is aimed at a very specialist audience.</p>\n      <p><strong>B</strong> This is now rather outdated.</p>\n      <p><strong>C</strong> This was an effective description of a new danger.</p>\n      <p><strong>D</strong> This suggests possible ways to improve the situation.</p>\n      <p><strong>E</strong> This does not give a balanced account.</p>\n      <p><strong>F</strong> This is too predictable to be useful.</p>\n      <p><strong>G</strong> This gives insufficient evidence for its claims.</p>\n      <p><strong>H</strong> This gives a clear explanation of the problems.</p>\n    </div>\n    <div class=\"space-y-3 mt-4\">\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">25</strong> Article on invasive lionfish</span>\n        <select data-qnum=\"25\" name=\"question_25\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">26</strong> Documentary on microplastics</span>\n        <select data-qnum=\"26\" name=\"question_26\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">27</strong> Podcast on ocean pollution</span>\n        <select data-qnum=\"27\" name=\"question_27\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">28</strong> Book on coastal ecosystems</span>\n        <select data-qnum=\"28\" name=\"question_28\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">29</strong> Article on metal toxicity</span>\n        <select data-qnum=\"29\" name=\"question_29\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n      <div class=\"flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl shadow-xs\">\n        <span class=\"text-sm font-semibold text-slate-800\"><strong class=\"ielts-q-badge mr-2\">30</strong> Podcast on floating marine cities</span>\n        <select data-qnum=\"30\" name=\"question_30\" class=\"ielts-inline-select px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white font-semibold text-slate-800\">\n          <option value=\"\">-- Tanlang --</option>\n          <option value=\"A\">A - aimed at a very specialist audience</option>\n          <option value=\"B\">B - now rather outdated</option>\n          <option value=\"C\">C - effective description of a new danger</option>\n          <option value=\"D\">D - suggests possible ways to improve</option>\n          <option value=\"E\">E - does not give a balanced account</option>\n          <option value=\"F\">F - too predictable to be useful</option>\n          <option value=\"G\">G - gives insufficient evidence for its claims</option>\n          <option value=\"H\">H - gives a clear explanation of the problems</option>\n        </select>\n      </div>\n    </div>\n  </div>\n</div>",
+      "audio_url": "https://ielts-listening-audio.engnovatemedia.com/3178721-cambridge-ielts-21-academic-listening-test-1-3.mp3",
+      "passage_text": "PHIL: That lecture from the visiting speaker yesterday was good, wasn't it?\nLUCY: Yeah. I learned a lot from her about ocean biodiversity. I've already done some reading on it, and I did an assignment on some of the problems associated with it last year, but I especially liked the way her lecture focused on more long-term issues.\nPHIL: Yes, things that aren't currently receiving widespread attention but are likely to be important in the future. That impressed me too. It wasn't exactly a feel-good conclusion because it's hard to see any real solution for a lot of the problems.\nLUCY: No, though she did point to where policy changes could be made to protect our marine and coastal environments.\nPHIL: Mm. But that's just at a national level. The examples she gave were at a more global level, and they really made it clear to me just how wide-ranging the threats to ocean biodiversity are.\nLUCY: Yes, me too.\nPHIL: The research project she described was impressive, wasn't it? I'd have thought it was quite unusual to have so many experts working together.\nLUCY: Yeah, and from such different backgrounds. Must have been a really exciting team to work with. I'd heard of a couple of them before - they were involved in research way back in 2009 warning about the dangers of ocean pollution.\nPHIL: But now people are much more aware of that, aren't they?\nLUCY: I suppose so.\nPHIL: Another thing about the research is that the team members came from all round the world. Though I suppose that's not unusual nowadays, now everyone can work remotely.\nLUCY: Right. I liked the way she didn't bombard us with figures - I mean, they were available, but she focused more on the general points they indicated.\nPHIL: Mm. And the description of improvements in systems used for tracking marine animals and things like robots were really interesting.\nLUCY: Yes, and her description of how robotics can be used to investigate threats to biodiversity.\nPHIL: Absolutely.\nPHIL: While you're here, can we talk about the list of resources we have to evaluate for the seminar tomorrow. I've had a look at them all, but it's been a bit of a rush.\nLUCY: Yeah. What did you think of that article on invasive lionfish? The one claiming they were expanding their habitat throughout the Mediterranean Sea.\nPHIL: Well, the writer went on about how dangerous they were in environmental terms, which is probably true, but he didn't really provide much information to explain why.\nLUCY: I know what you mean.\nPHIL: I watched the documentary on microplastics, at least I started to, but then I found it was made ten years ago so I gave up.\nLUCY: I watched to the end but you're right, it was showing its age. People had hardly heard of microplastics then, whereas now everyone knows about them and how dangerous they are.\nPHIL: Yeah. Did you listen to the podcast on ocean pollution?\nLUCY: Mm. I didn't get anything out of it though. Most of it was stating the obvious.\nPHIL: Yes, it mentioned pesticides and plastic and things, and it clearly made the point that they were a bad thing, but everybody knows that anyway. Did you read that book on coastal ecosystems?\nLUCY: The one by John Harper? Yes, I found it hard going at first, it went into a lot of detail about things like the effects of offshore windfarms and fish farms, but actually I ended up with a much better understanding of the issues.\nPHIL: Yes, I agree and I thought it was a well-written summary of those. And the diagrams helped a lot too.\nLUCY: The article on metal toxicity was way above my head, I didn't know anything about how metals from industrial emissions react in the ocean... and I still don't understand it.\nPHIL: I gave up reading after the first chapter - I just couldn't follow it.\nLUCY: That podcast on floating marine cities was interesting, though it presented a rather one-sided picture, I thought.\nPHIL: Yes, it focused on how this would benefit people and ignored the effects on the environment.\nLUCY: But anyway, shall we ...",
+      "order_index": 3,
+      "questions": [
+        {
+          "id": 2521,
+          "order_index": 21,
+          "type": "single_choice",
+          "text": "Which TWO features of the lecture on ocean biodiversity had the greatest impact on the students? (Answer 1)",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "answer": "B|D"
+        },
+        {
+          "id": 2522,
+          "order_index": 22,
+          "type": "single_choice",
+          "text": "Which TWO features of the lecture on ocean biodiversity had the greatest impact on the students? (Answer 2)",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "answer": "D|B"
+        },
+        {
+          "id": 2523,
+          "order_index": 23,
+          "type": "single_choice",
+          "text": "Which TWO details about the research project particularly impressed the students? (Answer 1)",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "answer": "C|E"
+        },
+        {
+          "id": 2524,
+          "order_index": 24,
+          "type": "single_choice",
+          "text": "Which TWO details about the research project particularly impressed the students? (Answer 2)",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ],
+          "answer": "E|C"
+        },
+        {
+          "id": 2525,
+          "order_index": 25,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Article on invasive lionfish?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "G"
+        },
+        {
+          "id": 2526,
+          "order_index": 26,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Documentary on microplastics?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "B"
+        },
+        {
+          "id": 2527,
+          "order_index": 27,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Podcast on ocean pollution?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "F"
+        },
+        {
+          "id": 2528,
+          "order_index": 28,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Book on coastal ecosystems?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "H"
+        },
+        {
+          "id": 2529,
+          "order_index": 29,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Article on metal toxicity?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "A"
+        },
+        {
+          "id": 2530,
+          "order_index": 30,
+          "type": "single_choice",
+          "text": "What is the students' opinion of Podcast on floating marine cities?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H"
+          ],
+          "answer": "E"
+        }
+      ]
+    },
+    {
+      "id": 254,
+      "test_id": 25,
+      "type": "listening",
+      "title": "Listening Part 4: The Importance of Rubber",
+      "instructions": "<div class=\"ielts-reading-container\">\n  <h2 class=\"ielts-reading-question-section-heading\">Questions 31-40</h2>\n  <div class=\"ielts-reading-question-section-content\">\n    <div class=\"ielts-reading-section-content-wrapper\">\n      <p><strong>Complete the notes below.</strong></p>\n      <p class=\"text-xs text-slate-500 mb-3\">Write <strong>ONE WORD ONLY</strong> for each answer.</p>\n\n      <div class=\"p-4 bg-slate-50 border border-slate-200 rounded-xl my-4 space-y-4 text-sm leading-relaxed\">\n        <h3 class=\"text-base font-bold text-slate-900 border-b pb-2\">Sources of rubber</h3>\n\n        <div>\n          <p class=\"font-semibold text-slate-800 mb-2\">Three resources which are essential for industrial civilisation</p>\n          <ul class=\"list-disc pl-5 space-y-1.5 text-slate-700\">\n            <li><span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">31</strong><input type=\"text\" data-qnum=\"31\" name=\"question_31\" class=\"ielts-inline-input\" placeholder=\"[31] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span></li>\n            <li>fossil fuels</li>\n            <li>rubber</li>\n          </ul>\n        </div>\n\n        <div>\n          <p class=\"font-semibold text-slate-800 mb-1\">Natural rubber</p>\n          <p class=\"text-slate-600 mb-2\">This mainly comes from the Pará rubber tree, now cultivated in South-East Asia.</p>\n          <p class=\"text-slate-800 font-medium mb-1\">The supply is limited because</p>\n          <ul class=\"list-disc pl-5 space-y-1.5 text-slate-700\">\n            <li>the growth of the tree is <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">32</strong><input type=\"text\" data-qnum=\"32\" name=\"question_32\" class=\"ielts-inline-input\" placeholder=\"[32] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n            <li>production cannot easily be adjusted because of increasing or decreasing <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">33</strong><input type=\"text\" data-qnum=\"33\" name=\"question_33\" class=\"ielts-inline-input\" placeholder=\"[33] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n            <li>the tree only grows near the <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">34</strong><input type=\"text\" data-qnum=\"34\" name=\"question_34\" class=\"ielts-inline-input\" placeholder=\"[34] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n            <li>extracting the latex (rubber) is labour-intensive</li>\n            <li>it is very difficult to <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">35</strong><input type=\"text\" data-qnum=\"35\" name=\"question_35\" class=\"ielts-inline-input\" placeholder=\"[35] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> rubber after production.</li>\n          </ul>\n        </div>\n\n        <div>\n          <p class=\"font-semibold text-slate-800 mb-1\">New threats include</p>\n          <ul class=\"list-disc pl-5 space-y-1.5 text-slate-700\">\n            <li>lack of genetic diversity, leading to danger of disease caused by a <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">36</strong><input type=\"text\" data-qnum=\"36\" name=\"question_36\" class=\"ielts-inline-input\" placeholder=\"[36] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n            <li>a shift to the cultivation of palm oil</li>\n            <li>extreme <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">37</strong><input type=\"text\" data-qnum=\"37\" name=\"question_37\" class=\"ielts-inline-input\" placeholder=\"[37] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> events.</li>\n          </ul>\n        </div>\n\n        <div>\n          <p class=\"font-semibold text-slate-800 mb-1\">Synthetic rubber</p>\n          <ul class=\"list-disc pl-5 space-y-1.5 text-slate-700\">\n            <li>may be used for engine parts and cooking utensils</li>\n            <li>is less <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">38</strong><input type=\"text\" data-qnum=\"38\" name=\"question_38\" class=\"ielts-inline-input\" placeholder=\"[38] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> than natural rubber</li>\n            <li>is unsuitable for many purposes e.g. the tyres of aircraft.</li>\n          </ul>\n        </div>\n\n        <div>\n          <p class=\"font-semibold text-slate-800 mb-1\">An alternative source of natural rubber</p>\n          <ul class=\"list-disc pl-5 space-y-1.5 text-slate-700\">\n            <li>A wild flower (a type of dandelion) has rubber in its <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">39</strong><input type=\"text\" data-qnum=\"39\" name=\"question_39\" class=\"ielts-inline-input\" placeholder=\"[39] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n            <li>It can be grown in many locations and does not require good <span class=\"ielts-reading-question-item\"><span class=\"ielts-inline-input-wrap\"><strong class=\"ielts-q-badge\">40</strong><input type=\"text\" data-qnum=\"40\" name=\"question_40\" class=\"ielts-inline-input\" placeholder=\"[40] javob...\" autocomplete=\"off\" spellcheck=\"false\"></span></span> .</li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>",
+      "audio_url": "https://ielts-listening-audio.engnovatemedia.com/3178719-cambridge-ielts-21-academic-listening-test-1-4.mp3",
+      "passage_text": "Much of the world now lives in an industrial civilisation. But this has only become possible because we have the necessary natural resources. There are three types of natural resource without which industry could not exist. One of these is metal - without that we'd have no machines and no transportation. Another is fossil fuels, which we need to power those machines. But there's a third resource that's essential to connect the different parts of a machine together with belts and pipes and shock absorbers, and that is rubber. It's now used in over 40,000 products, from waterproof footwear to surgical gloves.\nAt present, we have two types of rubber in common use. One is natural rubber, which nearly all comes from the Pará rubber tree. This was originally native to Brazil, but is now cultivated on plantations in South-East Asia. Recently, however, concern's been growing that supplies may soon be insufficient for the world's needs. So what exactly is limiting the supply of natural rubber?\nWell, for one thing, rubber trees don't just spring up overnight. It can take eight to ten years for a tree to start producing rubber, so cultivating them's a slow process. And this leads to another problem. With most crops, farmers don't have to think very far ahead, so they can easily change what crop they produce, or how much of a crop they produce, if they find the demand for that crop is rising or falling. But if you have to plant eight or ten years ahead, that's much harder. And also the rubber tree's very choosy about where it grows. It needs the right temperature, the right amount of rainfall, and the right altitude - not too high and not too low. The result is that it can't be grown in the northern or southern parts of the globe, only around the equator. Another problem is that the rubber is basically extracted in the same way as it's been done for hundreds of years, and that's by hand, by making small cuts in the trunk of the tree, and putting a little cup there to catch the latex, as the rubber is called. It's very labour-intensive. And it's not just the initial production that's limiting supplies. With other resources such as water and glass, when we've finished using them we can recycle them, but although this is also possible with rubber, it's very difficult, so that also reduces the amount we have available.\nAnd in the last few years, there have been new threats to the supply of natural rubber. One problem is linked to the fact that nearly all the rubber trees in South-East Asia are descended from just a small number of seeds brought from Brazil in the nineteenth century. This means that there's very little genetic diversity among the trees, which in turn makes them very vulnerable to disease. The most dangerous threat is a fungus, which destroyed large numbers of rubber trees in Brazil, and which could cause devastation to plantations worldwide. Another problem is that farmers in South-East Asia are increasingly turning to the cultivation of palm oil, which is easier and more profitable for them. And finally, in recent years South-East Asia, like other parts of the world, has been repeatedly hit by extreme types of weather, and this looks likely to continue in the future.\nHowever, as well as using natural rubber, it's also possible to make rubber synthetically. This works very well for some purposes, for example, making engine parts, or silicone pots and pans used for cooking. But compared with natural rubber, it's not anything like as strong, and this means it can't replace natural rubber in other products. For example, while a mixture of natural rubber and synthetic rubber works well in car tyres, only natural rubber can stand up to the extreme speeds of aircraft tyres during take-off and landing.\nSo for some time, scientists have been looking for alternative sources of natural rubber. One that's been known about for some time seems initially to be a rather unlikely source. It's a wild plant with yellow flowers that we normally regard as a weed when we see it in our gardens. But when it's pulled up and its roots cut open, they're found to contain rubber.\nNow, compared to the rubber tree, dandelions produce relatively small amounts of rubber, but unlike rubber trees, they're very adaptable. They'll grow in all sorts of places, and they don't need rich soil. So at present there are several projects underway investigating the possibility of using dandelions as a source of rubber.\nAnother possibility is a desert shrub grown in Mexico and Texas ...",
+      "order_index": 4,
+      "questions": [
+        {
+          "id": 2531,
+          "order_index": 31,
+          "type": "text_input",
+          "text": "Three resources which are essential for industrial civilisation: 31 ...",
+          "options": [],
+          "answer": "metal"
+        },
+        {
+          "id": 2532,
+          "order_index": 32,
+          "type": "text_input",
+          "text": "The supply is limited because the growth of the tree is 32 ...",
+          "options": [],
+          "answer": "slow"
+        },
+        {
+          "id": 2533,
+          "order_index": 33,
+          "type": "text_input",
+          "text": "production cannot easily be adjusted because of increasing or decreasing 33 ...",
+          "options": [],
+          "answer": "demand"
+        },
+        {
+          "id": 2534,
+          "order_index": 34,
+          "type": "text_input",
+          "text": "the tree only grows near the 34 ...",
+          "options": [],
+          "answer": "equator"
+        },
+        {
+          "id": 2535,
+          "order_index": 35,
+          "type": "text_input",
+          "text": "it is very difficult to 35 ... rubber after production.",
+          "options": [],
+          "answer": "recycle"
+        },
+        {
+          "id": 2536,
+          "order_index": 36,
+          "type": "text_input",
+          "text": "lack of genetic diversity, leading to danger of disease caused by a 36 ...",
+          "options": [],
+          "answer": "fungus"
+        },
+        {
+          "id": 2537,
+          "order_index": 37,
+          "type": "text_input",
+          "text": "extreme 37 ... events.",
+          "options": [],
+          "answer": "weather"
+        },
+        {
+          "id": 2538,
+          "order_index": 38,
+          "type": "text_input",
+          "text": "Synthetic rubber is less 38 ... than natural rubber",
+          "options": [],
+          "answer": "strong"
+        },
+        {
+          "id": 2539,
+          "order_index": 39,
+          "type": "text_input",
+          "text": "A wild flower (a type of dandelion) has rubber in its 39 ...",
+          "options": [],
+          "answer": "roots|root"
+        },
+        {
+          "id": 2540,
+          "order_index": 40,
+          "type": "text_input",
+          "text": "It can be grown in many locations and does not require good 40 ...",
+          "options": [],
+          "answer": "soil"
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"cefr-core-backend/internal/models"
@@ -57,7 +58,16 @@ func (r *Repository) GetUserByID(id int) (*models.User, error) {
 
 // Test operations
 func (r *Repository) GetActiveTests() ([]models.Test, error) {
-	query := `SELECT id, title, description, level, duration_minutes, is_active, created_at FROM tests WHERE is_active = true ORDER BY id ASC`
+	query := `SELECT id, title, description, level, duration_minutes, is_active, created_at 
+		FROM tests 
+		WHERE is_active = true 
+		ORDER BY 
+			CASE 
+				WHEN (regexp_match(title, 'Cambridge IELTS ([0-9]+)'))[1]::int >= 13 THEN (regexp_match(title, 'Cambridge IELTS ([0-9]+)'))[1]::int
+				ELSE 100 + COALESCE((regexp_match(title, 'Cambridge IELTS ([0-9]+)'))[1]::int, 900)
+			END ASC,
+			COALESCE((regexp_match(title, 'Test ([0-9]+)'))[1]::int, 0) ASC,
+			id ASC`
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
@@ -126,27 +136,72 @@ func (r *Repository) GetTestDetails(testID int, includeAnswers bool) (*models.Te
 	return &t, nil
 }
 
+// AutoSubmitExpiredSessions closes any in_progress sessions whose expires_at is past now
+func (r *Repository) AutoSubmitExpiredSessions(userID int) {
+	query := `SELECT id FROM test_sessions WHERE status = 'in_progress' AND expires_at <= NOW()`
+	var rows *sql.Rows
+	var err error
+	if userID > 0 {
+		query += ` AND user_id = $1`
+		rows, err = r.db.Query(query, userID)
+	} else {
+		rows, err = r.db.Query(query)
+	}
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	var expiredIDs []int
+	for rows.Next() {
+		var id int
+		if err := rows.Scan(&id); err == nil {
+			expiredIDs = append(expiredIDs, id)
+		}
+	}
+	rows.Close()
+
+	for _, id := range expiredIDs {
+		_ = r.SubmitSession(id)
+	}
+}
+
 // Session operations
-func (r *Repository) StartSession(userID, testID int) (*models.TestSession, error) {
-	// Check existing in_progress session
-	var existing models.TestSession
-	err := r.db.QueryRow(`
-		SELECT id, user_id, test_id, status, started_at, expires_at, current_section_index
-		FROM test_sessions
-		WHERE user_id = $1 AND test_id = $2 AND status = 'in_progress'
-		ORDER BY id DESC LIMIT 1
-	`, userID, testID).Scan(
-		&existing.ID, &existing.UserID, &existing.TestID, &existing.Status,
-		&existing.StartedAt, &existing.ExpiresAt, &existing.CurrentSectionIndex,
-	)
-	if err == nil {
-		// Session already active
-		return &existing, nil
+func (r *Repository) StartSession(userID, testID int, forceNew bool) (*models.TestSession, error) {
+	// Auto-submit any expired in_progress sessions for this user first
+	r.AutoSubmitExpiredSessions(userID)
+
+	if forceNew {
+		// Close any currently in_progress session for this specific test
+		var activeID int
+		if err := r.db.QueryRow(`
+			SELECT id FROM test_sessions
+			WHERE user_id = $1 AND test_id = $2 AND status = 'in_progress'
+			ORDER BY id DESC LIMIT 1
+		`, userID, testID).Scan(&activeID); err == nil {
+			_ = r.SubmitSession(activeID)
+		}
+	} else {
+		// Check existing in_progress session that is still valid (not expired)
+		var existing models.TestSession
+		err := r.db.QueryRow(`
+			SELECT id, user_id, test_id, status, started_at, expires_at, current_section_index
+			FROM test_sessions
+			WHERE user_id = $1 AND test_id = $2 AND status = 'in_progress' AND expires_at > NOW()
+			ORDER BY id DESC LIMIT 1
+		`, userID, testID).Scan(
+			&existing.ID, &existing.UserID, &existing.TestID, &existing.Status,
+			&existing.StartedAt, &existing.ExpiresAt, &existing.CurrentSectionIndex,
+		)
+		if err == nil {
+			// Session already active and not expired
+			return &existing, nil
+		}
 	}
 
 	// Fetch test duration
 	var durationMinutes int
-	err = r.db.QueryRow(`SELECT duration_minutes FROM tests WHERE id = $1`, testID).Scan(&durationMinutes)
+	err := r.db.QueryRow(`SELECT duration_minutes FROM tests WHERE id = $1`, testID).Scan(&durationMinutes)
 	if err != nil {
 		return nil, fmt.Errorf("test not found: %w", err)
 	}
@@ -169,6 +224,256 @@ func (r *Repository) StartSession(userID, testID int) (*models.TestSession, erro
 	return &s, nil
 }
 
+func (r *Repository) StartRandomMockSession(userID int, forceNew bool) (*models.TestSession, error) {
+	// Auto-submit any expired sessions for this user first
+	r.AutoSubmitExpiredSessions(userID)
+
+	if forceNew {
+		var activeMockID int
+		checkActive := `
+			SELECT ts.id FROM test_sessions ts
+			JOIN tests t ON ts.test_id = t.id
+			WHERE ts.user_id = $1 AND ts.status = 'in_progress' AND (t.title ILIKE '%mock%')
+			ORDER BY ts.id DESC LIMIT 1
+		`
+		if err := r.db.QueryRow(checkActive, userID).Scan(&activeMockID); err == nil {
+			_ = r.SubmitSession(activeMockID)
+		}
+	} else {
+		// Check existing in_progress mock session if not forcing new
+		var existing models.TestSession
+		checkMockQuery := `
+			SELECT ts.id, ts.user_id, ts.test_id, ts.status, ts.started_at, ts.expires_at, ts.current_section_index
+			FROM test_sessions ts
+			JOIN tests t ON ts.test_id = t.id
+			WHERE ts.user_id = $1 AND ts.status = 'in_progress' AND ts.expires_at > NOW()
+			  AND (t.title ILIKE '%mock%')
+			ORDER BY ts.id DESC LIMIT 1
+		`
+		err := r.db.QueryRow(checkMockQuery, userID).Scan(
+			&existing.ID, &existing.UserID, &existing.TestID, &existing.Status,
+			&existing.StartedAt, &existing.ExpiresAt, &existing.CurrentSectionIndex,
+		)
+		if err == nil {
+			return &existing, nil
+		}
+	}
+
+	// 1. Pick a random Listening test
+	var listeningTestID int
+	var listeningTitle string
+	err := r.db.QueryRow(`
+		SELECT id, title FROM tests
+		WHERE is_active = true AND id IN (SELECT DISTINCT test_id FROM sections WHERE type = 'listening')
+		ORDER BY RANDOM() LIMIT 1
+	`).Scan(&listeningTestID, &listeningTitle)
+	if err != nil {
+		return nil, fmt.Errorf("no listening tests available: %w", err)
+	}
+
+	// 2. Pick a random Reading test
+	var readingTestID int
+	var readingTitle string
+	err = r.db.QueryRow(`
+		SELECT id, title FROM tests
+		WHERE is_active = true AND id IN (SELECT DISTINCT test_id FROM sections WHERE type = 'reading')
+		ORDER BY RANDOM() LIMIT 1
+	`).Scan(&readingTestID, &readingTitle)
+	if err != nil {
+		return nil, fmt.Errorf("no reading tests available: %w", err)
+	}
+
+	// 3. Pick a random Speaking test
+	var speakingTestID int
+	var speakingTitle string
+	err = r.db.QueryRow(`
+		SELECT id, title FROM tests
+		WHERE is_active = true AND id IN (SELECT DISTINCT test_id FROM sections WHERE type = 'speaking')
+		ORDER BY RANDOM() LIMIT 1
+	`).Scan(&speakingTestID, &speakingTitle)
+	if err != nil {
+		return nil, fmt.Errorf("no speaking tests available: %w", err)
+	}
+
+	// 4. Optionally pick a random Writing test
+	var writingTestID int
+	var writingTitle string
+	hasWriting := false
+	err = r.db.QueryRow(`
+		SELECT id, title FROM tests
+		WHERE is_active = true AND id IN (SELECT DISTINCT test_id FROM sections WHERE type = 'writing')
+		ORDER BY RANDOM() LIMIT 1
+	`).Scan(&writingTestID, &writingTitle)
+	if err == nil {
+		hasWriting = true
+	}
+
+	// 5. Begin transaction
+	tx, err := r.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	var newTitle string
+	var newDesc string
+	durationMins := 120
+	if hasWriting {
+		durationMins = 180
+		newTitle = "CEFR Multi-Level Full Mock Exam (Listening + Reading + Writing + Speaking)"
+		newDesc = fmt.Sprintf("Tasodifiy tanlangan to'liq 4 ko'nikmali sinov imtihoni: 🎧 %s | 📖 %s | ✍️ %s | 🎙️ %s. Barcha ko'nikmalar bo'yicha to'liq CEFR / IELTS simulyatsiyasi.", listeningTitle, readingTitle, writingTitle, speakingTitle)
+	} else {
+		newTitle = "CEFR Multi-Level Full Mock Exam (Listening + Reading + Speaking)"
+		newDesc = fmt.Sprintf("Tasodifiy tanlangan to'liq sinov imtihoni: 🎧 %s | 📖 %s | 🎙️ %s. 3 ta ko'nikma bo'yicha to'liq CEFR / IELTS simulyatsiyasi.", listeningTitle, readingTitle, speakingTitle)
+	}
+
+	var newTestID int
+	testInsertQuery := `
+		INSERT INTO tests (title, description, level, duration_minutes, is_active)
+		VALUES ($1, $2, 'Multi-level (A1-C1)', $3, false)
+		RETURNING id
+	`
+	if err := tx.QueryRow(testInsertQuery, newTitle, newDesc, durationMins).Scan(&newTestID); err != nil {
+		return nil, fmt.Errorf("failed to create combined test: %w", err)
+	}
+
+	currentOrderIndex := 1
+
+	copySections := func(srcTestID int, secType string) error {
+		secRows, err := tx.Query(`
+			SELECT id, title, instructions, audio_url, passage_text
+			FROM sections
+			WHERE test_id = $1 AND type = $2
+			ORDER BY order_index ASC
+		`, srcTestID, secType)
+		if err != nil {
+			return err
+		}
+		defer secRows.Close()
+
+		type SecData struct {
+			OldID        int
+			Title        string
+			Instructions sql.NullString
+			AudioURL     sql.NullString
+			PassageText  sql.NullString
+		}
+		var secList []SecData
+		for secRows.Next() {
+			var s SecData
+			if err := secRows.Scan(&s.OldID, &s.Title, &s.Instructions, &s.AudioURL, &s.PassageText); err != nil {
+				return err
+			}
+			secList = append(secList, s)
+		}
+		secRows.Close()
+
+		for _, s := range secList {
+			var newSecID int
+			secTitle := s.Title
+			if secType == "listening" && !strings.Contains(strings.ToLower(secTitle), "listening") {
+				secTitle = "Listening: " + secTitle
+			} else if secType == "reading" && !strings.Contains(strings.ToLower(secTitle), "reading") {
+				secTitle = "Reading: " + secTitle
+			} else if secType == "writing" && !strings.Contains(strings.ToLower(secTitle), "writing") {
+				secTitle = "Writing: " + secTitle
+			} else if secType == "speaking" && !strings.Contains(strings.ToLower(secTitle), "speaking") {
+				secTitle = "Speaking: " + secTitle
+			}
+
+			err := tx.QueryRow(`
+				INSERT INTO sections (test_id, type, title, instructions, audio_url, passage_text, order_index)
+				VALUES ($1, $2, $3, $4, $5, $6, $7)
+				RETURNING id
+			`, newTestID, secType, secTitle, s.Instructions, s.AudioURL, s.PassageText, currentOrderIndex).Scan(&newSecID)
+			if err != nil {
+				return err
+			}
+			currentOrderIndex++
+
+			qRows, err := tx.Query(`
+				SELECT question_type, question_text, options, correct_answer, points, order_index
+				FROM questions
+				WHERE section_id = $1
+				ORDER BY order_index ASC
+			`, s.OldID)
+			if err != nil {
+				return err
+			}
+
+			type QData struct {
+				QType    string
+				QText    string
+				Options  []byte
+				Ans      sql.NullString
+				Points   int
+				OrderIdx int
+			}
+			var qList []QData
+			for qRows.Next() {
+				var q QData
+				if err := qRows.Scan(&q.QType, &q.QText, &q.Options, &q.Ans, &q.Points, &q.OrderIdx); err != nil {
+					qRows.Close()
+					return err
+				}
+				qList = append(qList, q)
+			}
+			qRows.Close()
+
+			for _, q := range qList {
+				_, err := tx.Exec(`
+					INSERT INTO questions (section_id, question_type, question_text, options, correct_answer, points, order_index)
+					VALUES ($1, $2, $3, $4, $5, $6, $7)
+				`, newSecID, q.QType, q.QText, q.Options, q.Ans, q.Points, q.OrderIdx)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+
+	if err := copySections(listeningTestID, "listening"); err != nil {
+		return nil, fmt.Errorf("failed copying listening sections: %w", err)
+	}
+
+	if err := copySections(readingTestID, "reading"); err != nil {
+		return nil, fmt.Errorf("failed copying reading sections: %w", err)
+	}
+
+	if hasWriting {
+		if err := copySections(writingTestID, "writing"); err != nil {
+			return nil, fmt.Errorf("failed copying writing sections: %w", err)
+		}
+	}
+
+	if err := copySections(speakingTestID, "speaking"); err != nil {
+		return nil, fmt.Errorf("failed copying speaking sections: %w", err)
+	}
+
+	now := time.Now()
+	expiresAt := now.Add(time.Duration(durationMins) * time.Minute)
+
+	var s models.TestSession
+	sessQuery := `
+		INSERT INTO test_sessions (user_id, test_id, status, started_at, expires_at, current_section_index)
+		VALUES ($1, $2, 'in_progress', $3, $4, 0)
+		RETURNING id, user_id, test_id, status, started_at, expires_at, current_section_index
+	`
+	err = tx.QueryRow(sessQuery, userID, newTestID, now, expiresAt).Scan(
+		&s.ID, &s.UserID, &s.TestID, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.CurrentSectionIndex,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed creating mock session: %w", err)
+	}
+
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return &s, nil
+}
+
 func (r *Repository) GetSessionDetails(sessionID int) (*models.TestSession, error) {
 	var s models.TestSession
 	query := `
@@ -184,6 +489,14 @@ func (r *Repository) GetSessionDetails(sessionID int) (*models.TestSession, erro
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	// If session has expired while in_progress, automatically submit and grade it!
+	if s.Status == "in_progress" && time.Now().After(s.ExpiresAt) {
+		_ = r.SubmitSession(sessionID)
+		s.Status = "submitted"
+		expTime := s.ExpiresAt
+		s.SubmittedAt = &expTime
 	}
 
 	// Fetch answers
@@ -250,7 +563,7 @@ func (r *Repository) SubmitSession(sessionID int) error {
 	defer tx.Rollback()
 
 	now := time.Now()
-	_, err = tx.Exec(`UPDATE test_sessions SET status = 'submitted', submitted_at = $1 WHERE id = $2`, now, sessionID)
+	_, err = tx.Exec(`UPDATE test_sessions SET status = CASE WHEN status = 'graded' THEN 'graded' ELSE 'submitted' END, submitted_at = COALESCE(submitted_at, $1) WHERE id = $2`, now, sessionID)
 	if err != nil {
 		return err
 	}
@@ -259,7 +572,10 @@ func (r *Repository) SubmitSession(sessionID int) error {
 	autoGradeQuery := `
 		UPDATE answers a
 		SET score = CASE
-			WHEN LOWER(TRIM(a.user_answer_text)) = LOWER(TRIM(COALESCE(q.correct_answer, ''))) THEN q.points
+			WHEN LOWER(TRIM(a.user_answer_text)) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
+			  OR LOWER(TRIM(a.user_answer_text)) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|'))
+			  OR LOWER(TRIM(a.user_answer_text)) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/'))
+			THEN q.points
 			ELSE 0
 		END,
 		is_graded = true
@@ -386,6 +702,8 @@ func (r *Repository) GradeAnswer(answerID int, score float64, feedback string) e
 }
 
 func (r *Repository) GetStudentResults(userID int) ([]models.TestSession, error) {
+	r.AutoSubmitExpiredSessions(userID)
+
 	query := `
 		SELECT ts.id, ts.user_id, ts.test_id, t.title, ts.status, ts.started_at, ts.expires_at, ts.submitted_at, ts.current_section_index
 		FROM test_sessions ts

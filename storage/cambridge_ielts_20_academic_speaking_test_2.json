@@ -1,0 +1,50 @@
+{
+  "id": 34,
+  "title": "Cambridge IELTS 20 Academic Speaking Test 2",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 20 Test 2 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 3401,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 34001,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. What's your favourite fruit?\n2. Are there any kinds of fruit that you don't like eating?\n3. Do you like eating cooked food that has fruit in it?\n4. Where's the best place to buy fruit where you live?",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 34002,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a time when you changed a plan you had made.\nYou should say:\n• What your original plan was\n• Why you changed it\n• What new plan you made and explain how you felt about changing your plan.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 34003,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What kinds of plans do friends make together?\n2. Do you think it's better to discuss future plans with friends or with family?\n3. When making plans for the future, is it important not to copy friends?\n4. When people are choosing what to study, how important is it that their course should lead directly to a career?\n5. Why is it a good idea to get some work experience before deciding on a future career?\n6. How easy do you think it is for people to change from one career to another?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

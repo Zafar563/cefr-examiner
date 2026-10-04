@@ -119,42 +119,7 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 		log.Println("Demo users verified: student@cefr.uz, examiner@cefr.uz, admin@cefr.uz (password: password123)")
 	}
 
-	// Check if test exists
-	var testCount int
-	_ = db.QueryRow(`SELECT COUNT(*) FROM tests`).Scan(&testCount)
-	if testCount == 0 {
-		testInsert := `
-			INSERT INTO tests (id, title, description, level, duration_minutes, is_active) VALUES
-			(1, 'CEFR Official Standard Mock Exam #1', 'To''liq 4 ta ko''nikmani (Listening, Reading, Writing, Speaking) qamrab oluvchi rasmiy ko''rinishdagi CEFR sinov imtihoni.', 'Multi-level (A1-C1)', 120, true)
-			ON CONFLICT (id) DO NOTHING;
 
-			INSERT INTO sections (id, test_id, type, title, instructions, audio_url, passage_text, order_index) VALUES
-			(1, 1, 'listening', 'Listening Comprehension', 'Quyidagi audioni tinglang (maksimal 2 marta). Har bir savolga to''g''ri javobni tanlang.', '/media/sample_listening.mp3', NULL, 1),
-			(2, 1, 'reading', 'Reading Comprehension', 'Chap tarafdagi matnni diqqat bilan o''qing va o''ng tarafdagi savollarga javob bering.', NULL, 
-			E'The Impact of Artificial Intelligence on Modern Language Learning\n\nArtificial Intelligence (AI) has significantly transformed the educational landscape over the last decade. In language learning, intelligent tutoring systems are now capable of providing instant, personalized feedback on pronunciation, grammar, and vocabulary usage. Unlike traditional classrooms where teacher-student interaction is constrained by time, AI-driven platforms offer continuous, round-the-clock immersion.\n\nRecent studies conducted across international universities indicate that learners utilizing adaptive speech recognition tools demonstrated a 28% faster acquisition of target phonemes compared to conventional self-study groups. Furthermore, automated lexical suggestors analyze student essays in real time, detecting subtle nuances in collocations and register that were historically only caught by native examiners.\n\nHowever, sociolinguists caution against complete reliance on synthetic algorithms. Language is inherently social, deeply rooted in cultural context, empathy, and interpersonal pragmatics. While AI excels at diagnostic drills and syntactic correction, authentic conversational fluency still demands genuine human interaction and unpredictable social exchange.', 
-			2),
-			(3, 1, 'writing', 'Writing Assessment', 'Berilgan 2 ta topshiriq bo''yicha insho yozing. So''zlar soni mezonlariga rioya qiling (Task 1: minimum 150 so''z; Task 2: minimum 250 so''z).', NULL, NULL, 3),
-			(4, 1, 'speaking', 'Speaking Assessment', 'Berilgan mavzular bo''yicha ovozli javob bering. Tayyorgarlik ko''ring va mikrofon tugmasini bosib javobingizni yozib yuboring.', NULL, NULL, 4)
-			ON CONFLICT (id) DO NOTHING;
-
-			INSERT INTO questions (section_id, question_type, question_text, options, correct_answer, points, order_index) VALUES
-			(1, 'single_choice', 'What is the main topic of the conversation in the audio clip?', '["A university campus tour", "Booking accommodation and flight tickets", "Preparing for an academic research conference", "Job interview preparation"]'::jsonb, 'Booking accommodation and flight tickets', 5, 1),
-			(1, 'single_choice', 'Which date did the passenger decide to depart?', '["Monday, 12th October", "Wednesday, 14th October", "Friday, 16th October", "Sunday, 18th October"]'::jsonb, 'Wednesday, 14th October', 5, 2),
-			(1, 'single_choice', 'What extra service was included in the premium package?', '["Free city transport pass", "Complimentary airport shuttle and breakfast", "Guided museum tour", "Baggage insurance only"]'::jsonb, 'Complimentary airport shuttle and breakfast', 5, 3),
-			(2, 'single_choice', 'According to paragraph 2, what advantage did students using adaptive speech recognition achieve?', '["They scored 50% higher on reading tests", "They achieved a 28% faster acquisition of phonemes", "They completely replaced human teachers", "They learned vocabulary without reading books"]'::jsonb, 'They achieved a 28% faster acquisition of phonemes', 5, 1),
-			(2, 'single_choice', 'Why do sociolinguists advise against solely relying on AI for language learning?', '["Because AI systems are too expensive for ordinary schools", "Because language requires cultural context, empathy, and human social pragmatics", "Because computer screens cause eye fatigue", "Because AI models make frequent grammar mistakes"]'::jsonb, 'Because language requires cultural context, empathy, and human social pragmatics', 5, 2),
-			(2, 'single_choice', 'The word "synthetic" in paragraph 3 is closest in meaning to:', '["Artificial / non-human", "Natural and organic", "Traditional and ancient", "Flawed and incorrect"]'::jsonb, 'Artificial / non-human', 5, 3),
-			(3, 'essay', 'Task 1: You have recently moved to a new city for work or study. Write a letter to a friend describing your new neighborhood, how you are settling in, and invite them to visit. (Write at least 150 words).', '[]'::jsonb, '', 15, 1),
-			(3, 'essay', 'Task 2: Some people believe that online education will eventually replace physical universities. To what extent do you agree or disagree? Give reasons and examples from your experience. (Write at least 250 words).', '[]'::jsonb, '', 15, 2),
-			(4, 'speaking_prompt', 'Part 1 (Personal Introduction): Describe your hometown or city. What do you like most about living there, and what changes would you like to see in the future? (Speak for 1-2 minutes).', '[]'::jsonb, '', 15, 1),
-			(4, 'speaking_prompt', 'Part 2 (In-depth discussion): Talk about a challenging goal you achieved in your life. Explain what the goal was, what obstacles you overcame, and what lessons you learned. (Speak for 2 minutes).', '[]'::jsonb, '', 15, 2);
-		`
-		if _, err := db.Exec(testInsert); err != nil {
-			log.Printf("Error inserting default mock test: %v", err)
-		} else {
-			log.Println("Default CEFR Mock Test seeded successfully.")
-		}
-	}
 
 	// Synchronize sequences
 	_, _ = db.Exec(`

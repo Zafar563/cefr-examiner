@@ -1,0 +1,50 @@
+{
+  "id": 176,
+  "title": "Cambridge IELTS 17 Academic Speaking Test 2",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 17 Test 2 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1761,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 17601,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. Did you have a favourite book when you were a child? [Why/Why not?]\n2. How much reading do you do for your work/studies? [Why/Why not?]\n3. What kinds of books do you read for pleasure? [Why/Why not?]\n4. Do you prefer to read a newspaper or a magazine online, or to buy a copy? [Why?]",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 17602,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a big city you would like to visit.\nYou should say:\n• Which big city you would like to visit\n• How you would travel there\n• What you would do there\nAnd explain why you would like to visit this big city.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 17603,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What are the most interesting things to do while visiting cities on holiday?\n2. Why can it be expensive to visit cities on holiday?\n3. Do you think it is better to visit cities alone or in a group with friends?\n4. Why have cities increased in size in recent years?\n5. What are the challenges created by ever-growing cities?\n6. In what ways do you think cities of the future will be different to cities today?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": 1443,
+  "title": "Cambridge IELTS 14 Academic Writing Test 3",
+  "description": "Haqiqiy IELTS/CEFR Academic Writing formati: Task 1 (The diagram below shows how electricity is generated in a hydroelectric power st - min 150 so‘z) va Task 2 (Some people say that music is a good way of bringing people of different culture - min 250 so‘z).",
+  "duration_minutes": 60,
+  "sections": [
+    {
+      "id": 14431,
+      "test_id": 1443,
+      "type": "writing",
+      "title": "Writing Assessment (Task 1 & Task 2)",
+      "instructions": "Ushbu imtihon 2 ta topshiriqdan iborat. Topshiriq 1 uchun tavsiya etilgan vaqt: 20 daqiqa (kamida 150 so‘z). Topshiriq 2 uchun tavsiya etilgan vaqt: 40 daqiqa (kamida 250 so‘z). Insho matningizni pastdagi javob maydoniga kiriting.",
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 144301,
+          "section_id": 14431,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 1\n\nYou should spend about 20 minutes on this task.\n\nThe diagram below shows how electricity is generated in a hydroelectric power station.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+          "options": [
+            "/images/writing/cambridge_14_writing_t3.png",
+            "https://engnovate.com/wp-content/uploads/2023/08/cambridge-ielts-14-academic-writing-test-3-1.png"
+          ],
+          "correct_answer": "",
+          "points": 15,
+          "order_index": 1
+        },
+        {
+          "id": 144302,
+          "section_id": 14431,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 2\n\nYou should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome people say that music is a good way of bringing people of different cultures and ages together.\nTo what extent do you agree of disagree with this opinion?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "options": [],
+          "correct_answer": "",
+          "points": 25,
+          "order_index": 2
+        }
+      ]
+    }
+  ]
+}

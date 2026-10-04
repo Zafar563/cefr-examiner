@@ -1,0 +1,41 @@
+{
+  "id": 1542,
+  "title": "Cambridge IELTS 15 Academic Writing Test 2",
+  "description": "Haqiqiy IELTS/CEFR Academic Writing formati: Task 1 (The graph below shows the number of tourists visiting a particular Caribbean isl - min 150 so‘z) va Task 2 (In the future, nobody will buy printed books or newspapers because they will be  - min 250 so‘z).",
+  "duration_minutes": 60,
+  "sections": [
+    {
+      "id": 15421,
+      "test_id": 1542,
+      "type": "writing",
+      "title": "Writing Assessment (Task 1 & Task 2)",
+      "instructions": "Ushbu imtihon 2 ta topshiriqdan iborat. Topshiriq 1 uchun tavsiya etilgan vaqt: 20 daqiqa (kamida 150 so‘z). Topshiriq 2 uchun tavsiya etilgan vaqt: 40 daqiqa (kamida 250 so‘z). Insho matningizni pastdagi javob maydoniga kiriting.",
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 154201,
+          "section_id": 15421,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 1\n\nYou should spend about 20 minutes on this task.\n\nThe graph below shows the number of tourists visiting a particular Caribbean island between 2010 and 2017.\nSummarize the information by selecting and reporting the main features, and make comparisons where relevant.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+          "options": [
+            "/images/writing/cambridge_15_writing_t2.png",
+            "https://engnovate.com/wp-content/uploads/2023/08/cambridge-ielts-15-academic-writing-test-2-1.png"
+          ],
+          "correct_answer": "",
+          "points": 15,
+          "order_index": 1
+        },
+        {
+          "id": 154202,
+          "section_id": 15421,
+          "question_type": "essay",
+          "question_text": "WRITING TASK 2\n\nYou should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn the future, nobody will buy printed books or newspapers because they will be able to read everything they want online without paying?\nTo what extent, do you agree or disagree with this statement?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+          "options": [],
+          "correct_answer": "",
+          "points": 25,
+          "order_index": 2
+        }
+      ]
+    }
+  ]
+}

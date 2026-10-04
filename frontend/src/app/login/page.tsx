@@ -56,14 +56,14 @@ function LoginForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 sm:p-8 bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <div className="flex border-b border-slate-100 mb-6">
+    <div className="max-w-md mx-auto my-10 p-6 sm:p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="flex border-b border-slate-100 dark:border-slate-800 mb-6">
         <button
           onClick={() => { setIsRegister(false); setError(''); }}
           className={`flex-1 py-3 text-sm font-semibold text-center border-b-2 transition-all ${
             !isRegister
-              ? 'border-emerald-600 text-emerald-700'
-              : 'border-transparent text-slate-500 hover:text-slate-700'
+              ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
           <LogIn className="w-4 h-4 inline-block mr-1.5" />
@@ -73,8 +73,8 @@ function LoginForm() {
           onClick={() => { setIsRegister(true); setError(''); }}
           className={`flex-1 py-3 text-sm font-semibold text-center border-b-2 transition-all ${
             isRegister
-              ? 'border-emerald-600 text-emerald-700'
-              : 'border-transparent text-slate-500 hover:text-slate-700'
+              ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
           }`}
         >
           <UserPlus className="w-4 h-4 inline-block mr-1.5" />
@@ -83,7 +83,7 @@ function LoginForm() {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+        <div className="mb-4 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
           <ShieldAlert className="w-4 h-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -92,49 +92,49 @@ function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {isRegister && (
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">To‘liq Ismingiz</label>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">To‘liq Ismingiz</label>
             <input
               type="text"
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Masalan, Jasur Rustamov"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
         )}
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Email Manzil</label>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Manzil</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="misol@cefr.uz"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 mb-1">Parol</label>
+          <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Parol</label>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         {isRegister && (
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Rolni tanlang</label>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Rolni tanlang</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as any)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
             >
               <option value="student">Student (O‘quvchi)</option>
               <option value="examiner">Examiner (O‘qituvchi / Tekshiruvchi)</option>
@@ -153,27 +153,27 @@ function LoginForm() {
       </form>
 
       {/* Demo helper */}
-      <div className="mt-6 pt-5 border-t border-slate-100">
-        <p className="text-xs text-slate-500 font-medium mb-2 text-center">Tayyor Demo hisoblarni tanlash:</p>
+      <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-2 text-center">Tayyor Demo hisoblarni tanlash:</p>
         <div className="flex flex-wrap gap-2 justify-center">
           <button
             type="button"
             onClick={() => setDemoCredentials('student@cefr.uz', 'student')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition-colors"
+            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
           >
             Student
           </button>
           <button
             type="button"
             onClick={() => setDemoCredentials('examiner@cefr.uz', 'examiner')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 text-indigo-800 hover:bg-indigo-100 transition-colors"
+            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
           >
             Examiner
           </button>
           <button
             type="button"
             onClick={() => setDemoCredentials('admin@cefr.uz', 'admin')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 transition-colors"
+            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
           >
             Admin
           </button>

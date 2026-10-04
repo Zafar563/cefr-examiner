@@ -1,0 +1,50 @@
+{
+  "id": 157,
+  "title": "Cambridge IELTS 15 Academic Speaking Test 3",
+  "description": "Haqiqiy IELTS/CEFR Speaking formati: Rasmiy Cambridge IELTS 15 Test 3 bo‘yicha Part 1 (Kirish va kundalik mavzular), Part 2 (Cue Card taqdimot) va Part 3 (Tahliliy munozara).",
+  "level": "Multi-level (A1-C1)",
+  "duration_minutes": 15,
+  "sections": [
+    {
+      "id": 1571,
+      "type": "speaking",
+      "title": "Speaking Assessment (Parts 1-3)",
+      "instructions": "Ushbu bo‘lim 3 ta qismdan iborat. Har bir qism topshirig‘i bilan tanishib chiqing, tayyor bo‘lgach mikrofon tugmasini bosib ovozingizni yozing va saqlang.",
+      "audio_url": null,
+      "passage_text": null,
+      "order_index": 1,
+      "questions": [
+        {
+          "id": 15701,
+          "question_number": 1,
+          "section_part": 1,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 1: Introduction & Everyday Topics (Speak for 1-2 minutes)\n\n1. Did you learn to swim when you were a child? [Why/why not?]\n2. How often do you go swimming now? [Why/why not?]\n3. What places are there for swimming where you live? [Why?]\n4. Do you think it would be more enjoyable to go swimming outdoors or at an indoor pool? [Why?]",
+          "options": [],
+          "correct_answer": "",
+          "points": 10
+        },
+        {
+          "id": 15702,
+          "question_number": 2,
+          "section_part": 2,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 2: Individual Long Turn / Cue Card (1 minute preparation, 2 minutes speaking)\n\nDescribe a famous business person that you know about.\nYou should say:\n• Who this person is\n• What kind of business this person is involved in\n• What you know about this business person\nAnd explain what you think of this business person.",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        },
+        {
+          "id": 15703,
+          "question_number": 3,
+          "section_part": 3,
+          "question_type": "speaking_prompt",
+          "question_text": "Part 3: Two-way Discussion (Speak for 2-3 minutes)\n\n1. What kinds of people are most famous in your country today?\n2. Why are there so many stories about famous people in the news?\n3. Do you agree or disagree that many young people today want to be famous?\n4. Do you think it is easy for famous people to earn a lot of money?\n5. Why might famous people enjoy having fans?\n6. In what ways could famous people use their influence to do good things in the world?",
+          "options": [],
+          "correct_answer": "",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

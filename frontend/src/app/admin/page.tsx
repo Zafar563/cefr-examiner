@@ -275,49 +275,49 @@ export default function AdminPage() {
       {/* New Test Modal */}
       {showNewTest && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-100">
-            <h3 className="text-lg font-bold text-slate-900">Yangi CEFR Test Yaratish</h3>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl border border-slate-100 dark:border-slate-800">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Yangi CEFR Test Yaratish</h3>
             <form onSubmit={handleCreateTest} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Test Nomi</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Test Nomi</label>
                 <input
                   type="text"
                   required
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   placeholder="Masalan, CEFR Mock Exam #2 (2026 Edition)"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Tavsif</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tavsif</label>
                 <textarea
                   rows={3}
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Test haqida ma'lumot..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Davomiyligi (daqiqa)</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Davomiyligi (daqiqa)</label>
                   <input
                     type="number"
                     value={newDuration}
                     onChange={(e) => setNewDuration(parseInt(e.target.value) || 120)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Daraja</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Daraja</label>
                   <input
                     type="text"
                     value={newLevel}
                     onChange={(e) => setNewLevel(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
                   />
                 </div>
               </div>
@@ -326,7 +326,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => setShowNewTest(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-all"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
                 >
                   Bekor qilish
                 </button>
@@ -467,10 +467,10 @@ export default function AdminPage() {
       ) : (
         <>
           {/* Tests Management List */}
-      <section className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+      <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h2 className="text-lg font-bold text-slate-900">Mavjud Testlar Ro‘yxati</h2>
-          <span className="text-xs text-slate-500 font-semibold bg-slate-100 px-3 py-1 rounded-full">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Mavjud Testlar Ro‘yxati</h2>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
             Jami: {tests.length} ta test
           </span>
         </div>
@@ -504,17 +504,23 @@ export default function AdminPage() {
 
           return (
             <>
-              <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3">
+              <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                 <button
                   onClick={() => setFilterTab('all')}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'all'
-                      ? 'bg-slate-900 text-white shadow-sm'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                      ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >
                   <span>Barchasi</span>
-                  <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-700 text-white">
+                  <span
+                    className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                      filterTab === 'all'
+                        ? 'bg-slate-700 dark:bg-slate-300 text-white dark:text-slate-900'
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                    }`}
+                  >
                     {tests.length}
                   </span>
                 </button>
@@ -524,7 +530,7 @@ export default function AdminPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'listening'
                       ? 'bg-blue-600 text-white shadow-sm'
-                      : 'bg-blue-50 text-blue-700 hover:bg-blue-100/60'
+                      : 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100/60 dark:hover:bg-blue-900/60'
                   }`}
                 >
                   <Headphones className="w-3.5 h-3.5" />
@@ -539,7 +545,7 @@ export default function AdminPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'reading'
                       ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100/60'
+                      : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/60'
                   }`}
                 >
                   <BookOpen className="w-3.5 h-3.5" />
@@ -554,7 +560,7 @@ export default function AdminPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'writing'
                       ? 'bg-orange-600 text-white shadow-sm'
-                      : 'bg-orange-50 text-orange-700 hover:bg-orange-100/60'
+                      : 'bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 hover:bg-orange-100/60 dark:hover:bg-orange-900/60'
                   }`}
                 >
                   <Edit3 className="w-3.5 h-3.5" />
@@ -569,7 +575,7 @@ export default function AdminPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'speaking'
                       ? 'bg-purple-600 text-white shadow-sm'
-                      : 'bg-purple-50 text-purple-700 hover:bg-purple-100/60'
+                      : 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100/60 dark:hover:bg-purple-900/60'
                   }`}
                 >
                   <Mic className="w-3.5 h-3.5" />
@@ -584,7 +590,7 @@ export default function AdminPage() {
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                     filterTab === 'mock'
                       ? 'bg-amber-600 text-white shadow-sm'
-                      : 'bg-amber-50 text-amber-700 hover:bg-amber-100/60'
+                      : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 hover:bg-amber-100/60 dark:hover:bg-amber-900/60'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
@@ -597,7 +603,7 @@ export default function AdminPage() {
 
               <div className="space-y-3">
                 {filteredTests.length === 0 ? (
-                  <div className="py-8 text-center text-slate-400 text-sm">
+                  <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">
                     Ushbu toifada testlar mavjud emas.
                   </div>
                 ) : (
@@ -611,41 +617,41 @@ export default function AdminPage() {
                         key={test.id}
                         className={`p-4 rounded-2xl border transition-all ${
                           selectedTest?.id === test.id
-                            ? 'bg-emerald-50/60 border-emerald-300 ring-2 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white hover:bg-slate-50/80 border-slate-200/80 shadow-xs'
+                            ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700/60 ring-2 ring-emerald-500/20 shadow-xs'
+                            : 'bg-white dark:bg-slate-800/80 hover:bg-slate-50/80 dark:hover:bg-slate-800 border-slate-200/80 dark:border-slate-700/80 shadow-xs'
                         }`}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           <div className="min-w-0 flex-1 space-y-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               {isListening ? (
-                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-blue-100 text-blue-800 flex items-center gap-1">
+                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 flex items-center gap-1">
                                   <Headphones className="w-3 h-3" /> Listening
                                 </span>
                               ) : isReading ? (
-                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
                                   <BookOpen className="w-3 h-3" /> Reading
                                 </span>
                               ) : isWriting ? (
-                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-orange-100 text-orange-800 flex items-center gap-1">
+                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 flex items-center gap-1">
                                   <Edit3 className="w-3 h-3" /> Writing
                                 </span>
                               ) : isSpeaking ? (
-                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-purple-100 text-purple-800 flex items-center gap-1">
+                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 flex items-center gap-1">
                                   <Mic className="w-3 h-3" /> Speaking
                                 </span>
                               ) : (
-                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-amber-100 text-amber-800 flex items-center gap-1">
+                                <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 flex items-center gap-1">
                                   <Sparkles className="w-3 h-3" /> Mock
                                 </span>
                               )}
-                              <span className="font-bold text-slate-900 text-sm sm:text-base">{test.title}</span>
-                              <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-700">
+                              <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{test.title}</span>
+                              <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
                                 {test.level}
                               </span>
                             </div>
-                            <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{test.description}</p>
-                            <span className="text-[11px] text-slate-400 font-medium block">Davomiyligi: {test.duration_minutes} daqiqa</span>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">{test.description}</p>
+                            <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium block">Davomiyligi: {test.duration_minutes} daqiqa</span>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
@@ -658,7 +664,7 @@ export default function AdminPage() {
                             </button>
                             <button
                               onClick={() => handleDeleteTest(test.id)}
-                              className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors shrink-0"
+                              className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors shrink-0"
                               title="Testni o‘chirish"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -677,11 +683,11 @@ export default function AdminPage() {
 
       {/* Selected Test Sections & Questions Inspector */}
       {selectedTest && (
-        <section className="bg-white rounded-2xl border-2 border-emerald-600/40 p-6 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-emerald-600/40 p-6 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <span className="text-xs font-bold uppercase text-emerald-600">Tanlangan Test:</span>
-              <h2 className="text-xl font-extrabold text-slate-900">{selectedTest.title}</h2>
+              <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">Tanlangan Test:</span>
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">{selectedTest.title}</h2>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -694,7 +700,7 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={() => setSelectedTest(null)}
-                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
+                className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-colors whitespace-nowrap shrink-0"
               >
                 Yopish
               </button>
@@ -703,20 +709,20 @@ export default function AdminPage() {
 
           {/* Add Section Form (Modal / Inline) */}
           {showAddSection && (
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+            <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-slate-900">Yangi Bo‘lim (Section) Qo‘shish</h3>
-                <button onClick={() => setShowAddSection(false)} className="text-xs text-slate-400 hover:text-slate-600 font-bold">Bekor qilish</button>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Yangi Bo‘lim (Section) Qo‘shish</h3>
+                <button onClick={() => setShowAddSection(false)} className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-bold">Bekor qilish</button>
               </div>
 
               <form onSubmit={handleCreateSection} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Bo‘lim turi</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bo‘lim turi</label>
                     <select
                       value={sectionType}
                       onChange={(e) => setSectionType(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white font-medium"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-medium"
                     >
                       <option value="reading">📖 Reading (Matn va savollar)</option>
                       <option value="listening">🎧 Listening (Audio eshitish)</option>
@@ -726,35 +732,35 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Bo‘lim Sarlavhasi</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bo‘lim Sarlavhasi</label>
                     <input
                       type="text"
                       required
                       value={sectionTitle}
                       onChange={(e) => setSectionTitle(e.target.value)}
                       placeholder="Masalan, Section 2: Reading Comprehension"
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Ko‘rsatma (Instructions)</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ko‘rsatma (Instructions)</label>
                   <input
                     type="text"
                     value={sectionInstructions}
                     onChange={(e) => setSectionInstructions(e.target.value)}
                     placeholder="Talaba uchun ko‘rsatma..."
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                   />
                 </div>
 
                 {sectionType === 'reading' && (
-                  <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-200 space-y-2">
-                    <label className="block text-xs font-bold text-emerald-950">
+                  <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-2">
+                    <label className="block text-xs font-bold text-emerald-950 dark:text-emerald-200">
                       📖 Reading Passage (Talaba chap tomonda o‘qiydigan matn):
                     </label>
-                    <p className="text-xs text-emerald-800">
+                    <p className="text-xs text-emerald-800 dark:text-emerald-300">
                       Ushbu maydonga kiritilgan matn test topshirishda chap tomonda mustaqil scroll bilan chiqadi.
                     </p>
                     <textarea
@@ -763,23 +769,23 @@ export default function AdminPage() {
                       value={passageText}
                       onChange={(e) => setPassageText(e.target.value)}
                       placeholder="Reading matnini (maqola, insho yoki hikoyani) shu yerga to‘liq joylashtiring..."
-                      className="w-full p-3.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white leading-relaxed font-sans"
+                      className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 leading-relaxed font-sans placeholder:text-slate-400"
                     />
                   </div>
                 )}
 
                 {sectionType === 'listening' && (
-                  <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-200 space-y-3">
-                    <span className="text-xs font-bold text-blue-900 block">Listening Audio Faylini Yuklash</span>
+                  <div className="p-4 bg-blue-50/60 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800 space-y-3">
+                    <span className="text-xs font-bold text-blue-900 dark:text-blue-200 block">Listening Audio Faylini Yuklash</span>
                     <input
                       type="file"
                       accept="audio/*"
                       onChange={handleAudioFileUpload}
-                      className="text-xs text-slate-600"
+                      className="text-xs text-slate-600 dark:text-slate-300"
                     />
-                    {isUploadingAudio && <p className="text-xs text-blue-600 font-semibold">Audio yuklanmoqda...</p>}
+                    {isUploadingAudio && <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Audio yuklanmoqda...</p>}
                     {audioUrl && (
-                      <p className="text-xs text-emerald-700 font-semibold">
+                      <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
                         ✓ Audio saqlandi: <span className="font-mono">{audioUrl}</span>
                       </p>
                     )}
@@ -798,10 +804,10 @@ export default function AdminPage() {
 
           {/* Sections List in the Test */}
           <div className="space-y-6">
-            <h3 className="text-base font-bold text-slate-900">Ushbu Testdagi Bo‘limlar:</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Ushbu Testdagi Bo‘limlar:</h3>
 
             {(!selectedTest.sections || selectedTest.sections.length === 0) ? (
-              <p className="text-xs text-slate-500 py-6 text-center bg-slate-50 rounded-xl">
+              <p className="text-xs text-slate-500 dark:text-slate-400 py-6 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
                 Ushbu testda hali bo‘limlar mavjud emas. Yuqoridagi tugma orqali Reading yoki Listening bo‘limini qo‘shing.
               </p>
             ) : (
@@ -810,18 +816,18 @@ export default function AdminPage() {
                 const questions = sec.questions || [];
 
                 return (
-                  <div key={sec.id} className="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-sm">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                  <div key={sec.id} className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 bg-white dark:bg-slate-800/60 shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-700/60">
                       <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase bg-slate-100 text-slate-700">
+                        <span className="px-2.5 py-1 rounded-md text-xs font-bold uppercase bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
                           {sec.type}
                         </span>
-                        <h4 className="font-bold text-slate-900 text-sm">{sec.title}</h4>
+                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">{sec.title}</h4>
                       </div>
 
                       <button
                         onClick={() => setSelectedSectionIdForQuestion(sec.id)}
-                        className="px-3.5 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 self-start sm:self-auto"
+                        className="px-3.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0 self-start sm:self-auto"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>Savol Qo‘shish</span>
@@ -830,11 +836,11 @@ export default function AdminPage() {
 
                     {/* Reading Passage Preview */}
                     {isReading && (
-                      <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-1">
-                        <span className="text-xs font-bold text-emerald-900 block">
+                      <div className="bg-emerald-50/50 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-1">
+                        <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200 block">
                           📖 Chap tomonda chiqadigan matn (Reading Passage):
                         </span>
-                        <p className="text-xs text-slate-700 line-clamp-3 leading-relaxed">
+                        <p className="text-xs text-slate-700 dark:text-slate-300 line-clamp-3 leading-relaxed">
                           {sec.passage_text || 'Matn kiritilmagan'}
                         </p>
                       </div>
@@ -842,27 +848,27 @@ export default function AdminPage() {
 
                     {/* Questions in Section */}
                     <div className="space-y-3">
-                      <span className="text-xs font-bold text-slate-500 block">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block">
                         O‘ng tomonda chiqadigan savollar ({questions.length} ta):
                       </span>
 
                       {questions.length === 0 ? (
-                        <p className="text-xs text-slate-400 italic">Hali savollar qo‘shilmagan.</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 italic">Hali savollar qo‘shilmagan.</p>
                       ) : (
                         <div className="space-y-2">
                           {questions.map((q, qIdx) => (
-                            <div key={q.id || qIdx} className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-1">
-                              <div className="flex items-center justify-between font-semibold text-slate-900">
+                            <div key={q.id || qIdx} className="p-3 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-700/80 text-xs space-y-1">
+                              <div className="flex items-center justify-between font-semibold text-slate-900 dark:text-slate-100">
                                 <span>#{qIdx + 1}. {q.question_text}</span>
-                                <span className="text-emerald-700">{q.points} ball</span>
+                                <span className="text-emerald-700 dark:text-emerald-400">{q.points} ball</span>
                               </div>
                               {q.options && q.options.length > 0 && (
-                                <div className="text-slate-500 pl-3">
+                                <div className="text-slate-500 dark:text-slate-400 pl-3">
                                   Variantlar: {q.options.join(' | ')}
                                 </div>
                               )}
                               {q.correct_answer && (
-                                <div className="text-emerald-800 font-semibold pl-3">
+                                <div className="text-emerald-800 dark:text-emerald-300 font-semibold pl-3">
                                   To‘g‘ri javob: {q.correct_answer}
                                 </div>
                               )}
@@ -874,14 +880,14 @@ export default function AdminPage() {
 
                     {/* Add Question to this Section Form */}
                     {selectedSectionIdForQuestion === sec.id && (
-                      <div className="mt-4 pt-4 border-t border-slate-200 p-4 bg-slate-50 rounded-xl space-y-4">
+                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/80 p-4 bg-slate-50 dark:bg-slate-900/80 rounded-xl space-y-4">
                         <div className="flex items-center justify-between">
-                          <h5 className="text-xs font-bold text-slate-900 uppercase">
+                          <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase">
                             Yangi Savol Qo‘shish ({sec.title})
                           </h5>
                           <button
                             onClick={() => setSelectedSectionIdForQuestion(null)}
-                            className="text-xs text-slate-400 hover:text-slate-600 font-bold"
+                            className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-bold"
                           >
                             Bekor qilish
                           </button>
@@ -889,82 +895,82 @@ export default function AdminPage() {
 
                         <form onSubmit={handleCreateQuestion} className="space-y-3">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 mb-1">Savol matni:</label>
+                            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Savol matni:</label>
                             <input
                               type="text"
                               required
                               value={newQuestionText}
                               onChange={(e) => setNewQuestionText(e.target.value)}
                               placeholder="Masalan: According to paragraph 1, why was..."
-                              className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white"
+                              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                             />
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-600 mb-1">Variant A:</label>
+                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant A:</label>
                               <input
                                 type="text"
                                 required
                                 value={optA}
                                 onChange={(e) => setOptA(e.target.value)}
                                 placeholder="1-variant matni"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-600 mb-1">Variant B:</label>
+                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant B:</label>
                               <input
                                 type="text"
                                 required
                                 value={optB}
                                 onChange={(e) => setOptB(e.target.value)}
                                 placeholder="2-variant matni"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-600 mb-1">Variant C:</label>
+                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant C:</label>
                               <input
                                 type="text"
                                 value={optC}
                                 onChange={(e) => setOptC(e.target.value)}
                                 placeholder="3-variant matni (ixtiyoriy)"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-600 mb-1">Variant D:</label>
+                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant D:</label>
                               <input
                                 type="text"
                                 value={optD}
                                 onChange={(e) => setOptD(e.target.value)}
                                 placeholder="4-variant matni (ixtiyoriy)"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                               />
                             </div>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                             <div>
-                              <label className="block text-xs font-bold text-emerald-900 mb-1">To‘g‘ri javob (aynan matni):</label>
+                              <label className="block text-xs font-bold text-emerald-900 dark:text-emerald-300 mb-1">To‘g‘ri javob (aynan matni):</label>
                               <input
                                 type="text"
                                 required
                                 value={correctAnswer}
                                 onChange={(e) => setCorrectAnswer(e.target.value)}
                                 placeholder="To‘g‘ri variant matnini shu yerga yozing"
-                                className="w-full px-3 py-2 rounded-xl border border-emerald-300 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-emerald-50/30 font-semibold"
+                                className="w-full px-3 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-emerald-50/30 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200 font-semibold placeholder:text-slate-400"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-bold text-slate-700 mb-1">Beriladigan ball:</label>
+                              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Beriladigan ball:</label>
                               <input
                                 type="number"
                                 min="1"
                                 value={questionPoints}
                                 onChange={(e) => setQuestionPoints(parseInt(e.target.value) || 5)}
-                                className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white"
+                                className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
                               />
                             </div>
                           </div>

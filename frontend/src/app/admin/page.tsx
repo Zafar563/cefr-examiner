@@ -340,6 +340,8 @@ export default function AdminPage() {
             </form>
           </div>
         </div>
+      )}
+
       {/* Role message alert */}
       {roleMessage && (
         <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-sm font-bold flex items-center gap-2 shadow-xs">

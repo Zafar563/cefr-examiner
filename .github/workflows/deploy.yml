@@ -69,71 +69,23 @@ jobs:
           command_timeout: 30m
           script: |
             set -e
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/var/www/cefr-examiner' }}"
+            echo "🚀 [1/3] Server katalogi tekshirilmoqda: $DEPLOY_PATH"
 
-            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
-            if [ -z "$DEPLOY_PATH" ]; then
-              DEPLOY_PATH="/var/www/cefr-examiner"
-            fi
+            git config --global --add safe.directory "$DEPLOY_PATH" || true
 
-            echo "🚀 [1/6] Deploy boshlandi: $DEPLOY_PATH"
-
-            # 1. Loyiha papkasini tekshirish va yaratish
             if [ ! -d "$DEPLOY_PATH/.git" ]; then
               echo "📦 Yangi repozitoriy klonlanmoqda..."
               mkdir -p "$DEPLOY_PATH"
               git clone https://github.com/Zafar563/cefr-examiner.git "$DEPLOY_PATH"
-              cd "$DEPLOY_PATH"
-            else
-              echo "🔄 Mavjud loyiha yangilanmoqda..."
-              cd "$DEPLOY_PATH"
-              git fetch --all --prune
-              git reset --hard origin/main
             fi
 
-            # 2. .env konfiguratsiya faylini sozlash
-            echo "⚙️ [2/6] .env fayli tekshirilmoqda..."
-            ENV_CONTENT='${{ secrets.ENV_FILE }}'
-            if [ -n "$ENV_CONTENT" ]; then
-              echo "$ENV_CONTENT" > .env
-              echo "✅ .env fayli GitHub Secrets orqali muvaffaqiyatli saqlandi."
-            elif [ ! -f .env ]; then
-              if [ -f .env.example ]; then
-                cp .env.example .env
-                echo "⚠️ .env fayli mavjud emas edi, .env.example dan nusxa olindi."
-              fi
-            fi
+            cd "$DEPLOY_PATH"
+            echo "🔄 [2/3] Yangi kod yuklanmoqda..."
+            git fetch origin main
+            git reset --hard origin/main
 
-            # 3. Docker va Docker Compose tekshiruvi
-            echo "🐳 [3/6] Docker muhiti tekshirilmoqda..."
-            if ! command -v docker &> /dev/null; then
-              echo "❌ XATO: Serverda Docker o‘rnatilmagan! Iltimos, serverga Docker o‘rnating."
-              exit 1
-            fi
+            echo "🏗️ [3/3] Deploy skripti ishga tushirilmoqda..."
+            chmod +x scripts/deploy.sh
+            ./scripts/deploy.sh
 
-            # docker compose buyrug'ini aniqlash (v2 'docker compose' yoki v1 'docker-compose')
-            if docker compose version &> /dev/null; then
-              DOCKER_COMPOSE_CMD="docker compose"
-            elif command -v docker-compose &> /dev/null; then
-              DOCKER_COMPOSE_CMD="docker-compose"
-            else
-              echo "❌ XATO: Serverda Docker Compose o‘rnatilmagan!"
-              exit 1
-            fi
-
-            # 4. Konteynerlarni yangidan yig'ish va ishga tushirish
-            echo "🏗️ [4/6] Konteynerlar build qilinib, ishga tushirilmoqda..."
-            $DOCKER_COMPOSE_CMD pull postgres redis || true
-            $DOCKER_COMPOSE_CMD up -d --build --remove-orphans
-
-            # 5. Ish holatini tekshirish
-            echo "🔍 [5/6] Konteynerlar holati tekshirilmoqda..."
-            sleep 5
-            $DOCKER_COMPOSE_CMD ps
-
-            # 6. Eskirgan foydalanilmayotgan Docker qoldiqlarini tozalash
-            echo "🧹 [6/6] Eskirgan Docker qoldiqlari tozalanmoqda..."
-            docker image prune -f || true
-
-            echo "🎉 ========================================================"
-            echo "🎉 CEFR Practice & Assessment Platform muvaffaqiyatli deploy qilindi!"
-            echo "🎉 ========================================================"

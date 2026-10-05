@@ -20,7 +20,6 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState<'student' | 'examiner' | 'admin'>('student');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -31,10 +30,8 @@ function LoginForm() {
 
     try {
       if (isRegister) {
-        const res = await apiRegister(fullName, email, password, role);
-        if (res.user.role === 'admin') router.push('/admin');
-        else if (res.user.role === 'examiner') router.push('/examiner');
-        else router.push('/student');
+        const res = await apiRegister(fullName, email, password, 'student');
+        router.push('/student');
       } else {
         const res = await apiLogin(email, password);
         if (res.user.role === 'admin') router.push('/admin');
@@ -46,13 +43,6 @@ function LoginForm() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const setDemoCredentials = (demoEmail: string, demoRole: 'student' | 'examiner' | 'admin') => {
-    setEmail(demoEmail);
-    setPassword('password123');
-    setIsRegister(false);
-    setError('');
   };
 
   return (
@@ -128,57 +118,14 @@ function LoginForm() {
           />
         </div>
 
-        {isRegister && (
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Rolni tanlang</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value as any)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
-            >
-              <option value="student">Student (O‘quvchi)</option>
-              <option value="examiner">Examiner (O‘qituvchi / Tekshiruvchi)</option>
-              <option value="admin">Admin (Tizim boshqaruvchisi)</option>
-            </select>
-          </div>
-        )}
-
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm shadow-md transition-all disabled:opacity-50 mt-2"
+          className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl text-sm shadow-md transition-all disabled:opacity-50 mt-4"
         >
           {loading ? 'Bajarilmoqda...' : isRegister ? 'Ro‘yxatdan o‘tish' : 'Tizimga kirish'}
         </button>
       </form>
-
-      {/* Demo helper */}
-      <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
-        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-2 text-center">Tayyor Demo hisoblarni tanlash:</p>
-        <div className="flex flex-wrap gap-2 justify-center">
-          <button
-            type="button"
-            onClick={() => setDemoCredentials('student@cefr.uz', 'student')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
-          >
-            Student
-          </button>
-          <button
-            type="button"
-            onClick={() => setDemoCredentials('examiner@cefr.uz', 'examiner')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
-          >
-            Examiner
-          </button>
-          <button
-            type="button"
-            onClick={() => setDemoCredentials('admin@cefr.uz', 'admin')}
-            className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-          >
-            Admin
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

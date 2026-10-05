@@ -10,10 +10,13 @@ import {
   apiCreateSection,
   apiCreateQuestion,
   apiUploadAudio,
+  apiGetUsers,
+  apiUpdateUserRole,
   getCurrentStoredUser,
   Test,
   Section,
   Question,
+  User,
   sortCambridgeTests,
 } from '@/lib/api';
 import {
@@ -29,11 +32,22 @@ import {
   ChevronDown,
   ChevronUp,
   Sparkles,
+  Users,
+  Shield,
+  UserCheck,
+  Search,
 } from 'lucide-react';
 
 export default function AdminPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'tests' | 'users'>('tests');
+  const [users, setUsers] = useState<User[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [userSearch, setUserSearch] = useState('');
+  const [roleUpdatingId, setRoleUpdatingId] = useState<number | null>(null);
+  const [roleMessage, setRoleMessage] = useState<string>('');
+
   const [tests, setTests] = useState<Test[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterTab, setFilterTab] = useState<'all' | 'listening' | 'reading' | 'writing' | 'speaking' | 'mock'>('all');
@@ -77,7 +91,34 @@ export default function AdminPage() {
       return;
     }
     loadTests();
+    loadUsers();
   }, [router]);
+
+  const loadUsers = async () => {
+    setLoadingUsers(true);
+    try {
+      const data = await apiGetUsers();
+      setUsers(Array.isArray(data) ? data : []);
+    } catch (e: any) {
+      console.error('Foydalanuvchilarni yuklashda xatolik:', e);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  const handleUpdateRole = async (userId: number, newRole: 'student' | 'examiner' | 'admin') => {
+    setRoleUpdatingId(userId);
+    try {
+      await apiUpdateUserRole(userId, newRole);
+      setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
+      setRoleMessage(`Foydalanuvchi roli muvaffaqiyatli ${newRole.toUpperCase()} ga o'zgartirildi!`);
+      setTimeout(() => setRoleMessage(''), 3500);
+    } catch (e: any) {
+      alert("Rolni o'zgartirishda xatolik: " + e.message);
+    } finally {
+      setRoleUpdatingId(null);
+    }
+  };
 
   const loadTests = async () => {
     setLoading(true);
@@ -299,9 +340,131 @@ export default function AdminPage() {
             </form>
           </div>
         </div>
+      {/* Role message alert */}
+      {roleMessage && (
+        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-sm font-bold flex items-center gap-2 shadow-xs">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+          {roleMessage}
+        </div>
       )}
 
-      {/* Tests Management List */}
+      {/* Main Tab Navigation */}
+      <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+        <button
+          onClick={() => setActiveTab('tests')}
+          className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${
+            activeTab === 'tests'
+              ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          Testlar Boshqaruvi ({tests.length})
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('users'); loadUsers(); }}
+          className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 ${
+            activeTab === 'users'
+              ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-sm'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+        >
+          <Users className="w-4 h-4" />
+          Foydalanuvchilar va Rollar ({users.length})
+        </button>
+      </div>
+
+      {activeTab === 'users' ? (
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                Ro‘yxatdan O‘tgan Foydalanuvchilar
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Barcha yangi foydalanuvchilar 'student' bo‘lib ro‘yxatdan o‘tadi. Administrator bu yerdan ularning rolini 'examiner' yoki 'admin' ga o‘zgartirishi mumkin.
+              </p>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Qidirish (ism yoki email)..."
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                className="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+          </div>
+
+          {loadingUsers ? (
+            <div className="py-12 text-center text-slate-500 text-xs">Foydalanuvchilar ro‘yxati yuklanmoqda...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">
+                    <th className="py-3 px-3">ID</th>
+                    <th className="py-3 px-3">To‘liq Ism</th>
+                    <th className="py-3 px-3">Email</th>
+                    <th className="py-3 px-3">Ro‘yxatdan O‘tgan</th>
+                    <th className="py-3 px-3">Joriy Rol</th>
+                    <th className="py-3 px-3 text-right">Rolni O‘zgartirish</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {users
+                    .filter((u) => {
+                      const q = userSearch.toLowerCase();
+                      return (u.full_name || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q);
+                    })
+                    .map((u) => (
+                      <tr key={u.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                        <td className="py-3 px-3 font-mono text-slate-400">#{u.id}</td>
+                        <td className="py-3 px-3 font-bold text-slate-900 dark:text-slate-100">{u.full_name || 'Noma‘lum'}</td>
+                        <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{u.email}</td>
+                        <td className="py-3 px-3 text-slate-400">
+                          {u.created_at ? new Date(u.created_at).toLocaleDateString('uz-UZ') : '—'}
+                        </td>
+                        <td className="py-3 px-3">
+                          <span
+                            className={`px-2.5 py-1 rounded-md text-[11px] font-extrabold uppercase ${
+                              u.role === 'admin'
+                                ? 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300'
+                                : u.role === 'examiner'
+                                ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300'
+                                : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                            }`}
+                          >
+                            {u.role === 'admin' ? '⚙️ Admin' : u.role === 'examiner' ? '✍️ Examiner' : '🎓 Student'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <select
+                            value={u.role}
+                            disabled={roleUpdatingId === u.id}
+                            onChange={(e) => handleUpdateRole(u.id, e.target.value as any)}
+                            className="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer disabled:opacity-50"
+                          >
+                            <option value="student">Student (O‘quvchi)</option>
+                            <option value="examiner">Examiner (O‘qituvchi)</option>
+                            <option value="admin">Admin (Boshqaruvchi)</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      ) : (
+        <>
+          {/* Tests Management List */}
       <section className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h2 className="text-lg font-bold text-slate-900">Mavjud Testlar Ro‘yxati</h2>
@@ -819,6 +982,8 @@ export default function AdminPage() {
             )}
           </div>
         </section>
+      )}
+        </>
       )}
     </div>
   );

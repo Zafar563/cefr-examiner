@@ -1,5 +1,23 @@
-const CORE_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
-const MEDIA_API_URL = process.env.NEXT_PUBLIC_MEDIA_URL || 'http://localhost:8000';
+export const getCoreApiUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    // Brauzerda: agar sahifa localhost bo'lmasa, nisbiy manzil (Nginx reverse proxy) ishlatiladi
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      return '';
+    }
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  }
+  return process.env.CORE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://core-backend:8080';
+};
+
+export const getMediaApiUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      return '';
+    }
+    return process.env.NEXT_PUBLIC_MEDIA_URL || 'http://localhost:8000';
+  }
+  return process.env.MEDIA_API_URL || process.env.NEXT_PUBLIC_MEDIA_URL || 'http://media-service:8000';
+};
 
 export interface User {
   id: number;
@@ -151,7 +169,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
 // Auth API
 export const apiLogin = async (email: string, password: string) => {
-  const res = await fetch(`${CORE_API_URL}/api/v1/auth/login`, {
+  const res = await fetch(`${getCoreApiUrl()}/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -167,7 +185,7 @@ export const apiLogin = async (email: string, password: string) => {
 };
 
 export const apiRegister = async (fullName: string, email: string, password: string, role: string = 'student') => {
-  const res = await fetch(`${CORE_API_URL}/api/v1/auth/register`, {
+  const res = await fetch(`${getCoreApiUrl()}/api/v1/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ full_name: fullName, email, password, role }),
@@ -183,13 +201,13 @@ export const apiRegister = async (fullName: string, email: string, password: str
 };
 
 export const apiGetMe = async (): Promise<User> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/auth/me`);
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/auth/me`);
 };
 
 // Tests API
 export const apiGetTests = async (): Promise<Test[]> => {
   try {
-    const res = await fetch(`${CORE_API_URL}/api/v1/tests`);
+    const res = await fetch(`${getCoreApiUrl()}/api/v1/tests`);
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -199,28 +217,28 @@ export const apiGetTests = async (): Promise<Test[]> => {
 };
 
 export const apiGetTestDetails = async (id: number): Promise<Test> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/tests/${id}`);
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/tests/${id}`);
 };
 
 // Session & Test Taking API
 export const apiStartSession = async (testId: number, forceNew: boolean = false): Promise<TestSession> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/tests/${testId}/start?force_new=${forceNew}`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/tests/${testId}/start?force_new=${forceNew}`, {
     method: 'POST',
   });
 };
 
 export const apiStartRandomMock = async (forceNew: boolean = false): Promise<TestSession> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/mock/start?force_new=${forceNew}`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/mock/start?force_new=${forceNew}`, {
     method: 'POST',
   });
 };
 
 export const apiGetSession = async (sessionId: number): Promise<TestSession> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/sessions/${sessionId}`);
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/sessions/${sessionId}`);
 };
 
 export const apiSaveAnswer = async (sessionId: number, questionId: number, answerText: string, audioUrl: string = '') => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/sessions/${sessionId}/answer`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/sessions/${sessionId}/answer`, {
     method: 'POST',
     body: JSON.stringify({
       question_id: questionId,
@@ -231,14 +249,14 @@ export const apiSaveAnswer = async (sessionId: number, questionId: number, answe
 };
 
 export const apiSubmitSession = async (sessionId: number): Promise<TestSession> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/sessions/${sessionId}/submit`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/sessions/${sessionId}/submit`, {
     method: 'POST',
   });
 };
 
 export const apiGetStudentHistory = async (): Promise<TestSession[]> => {
   try {
-    const data = await fetchWithAuth(`${CORE_API_URL}/api/v1/student/history`);
+    const data = await fetchWithAuth(`${getCoreApiUrl()}/api/v1/student/history`);
     return Array.isArray(data) ? data : [];
   } catch (e) {
     return [];
@@ -248,7 +266,7 @@ export const apiGetStudentHistory = async (): Promise<TestSession[]> => {
 // Examiner API
 export const apiGetExaminerSubmissions = async (): Promise<TestSession[]> => {
   try {
-    const data = await fetchWithAuth(`${CORE_API_URL}/api/v1/examiner/submissions`);
+    const data = await fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/submissions`);
     return Array.isArray(data) ? data : [];
   } catch (e) {
     return [];
@@ -256,7 +274,7 @@ export const apiGetExaminerSubmissions = async (): Promise<TestSession[]> => {
 };
 
 export const apiGradeAnswer = async (answerId: number, score: number, feedback: string) => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/examiner/grade`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/grade`, {
     method: 'POST',
     body: JSON.stringify({
       answer_id: answerId,
@@ -268,27 +286,27 @@ export const apiGradeAnswer = async (answerId: number, score: number, feedback: 
 
 // Admin API
 export const apiCreateTest = async (title: string, description: string, level: string, durationMinutes: number): Promise<Test> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/admin/tests`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/tests`, {
     method: 'POST',
     body: JSON.stringify({ title, description, level, duration_minutes: durationMinutes }),
   });
 };
 
 export const apiDeleteTest = async (testId: number) => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/admin/tests/${testId}`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/tests/${testId}`, {
     method: 'DELETE',
   });
 };
 
 export const apiCreateSection = async (testId: number, sectionData: any): Promise<Section> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/admin/tests/${testId}/sections`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/tests/${testId}/sections`, {
     method: 'POST',
     body: JSON.stringify(sectionData),
   });
 };
 
 export const apiCreateQuestion = async (sectionId: number, questionData: any): Promise<Question> => {
-  return fetchWithAuth(`${CORE_API_URL}/api/v1/admin/sections/${sectionId}/questions`, {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/sections/${sectionId}/questions`, {
     method: 'POST',
     body: JSON.stringify(questionData),
   });
@@ -296,10 +314,11 @@ export const apiCreateQuestion = async (sectionId: number, questionData: any): P
 
 // Media Service API
 export const apiUploadAudio = async (blob: Blob, filename: string = 'recording.webm'): Promise<{ url: string; filename: string }> => {
+  const mediaUrl = getMediaApiUrl();
   const formData = new FormData();
   formData.append('file', blob, filename);
 
-  const res = await fetch(`${MEDIA_API_URL}/api/v1/media/upload/audio`, {
+  const res = await fetch(`${mediaUrl}/api/v1/media/upload/audio`, {
     method: 'POST',
     body: formData,
   });
@@ -312,9 +331,21 @@ export const apiUploadAudio = async (blob: Blob, filename: string = 'recording.w
   const data = await res.json();
   // Return streamable URL
   return {
-    url: `${MEDIA_API_URL}${data.url}`,
+    url: `${mediaUrl}${data.url}`,
     filename: data.filename,
   };
+};
+
+// Users management API (Admin only)
+export const apiGetUsers = async (): Promise<User[]> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/users`);
+};
+
+export const apiUpdateUserRole = async (userId: number, role: 'student' | 'examiner' | 'admin') => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/users/${userId}/role`, {
+    method: 'PUT',
+    body: JSON.stringify({ role }),
+  });
 };
 
 /**

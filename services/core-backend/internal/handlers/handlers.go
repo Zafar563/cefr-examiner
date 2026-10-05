@@ -32,14 +32,8 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 
-	role := req.Role
-	if role == "" {
-		role = "student"
-	}
-	if role != "student" && role != "examiner" && role != "admin" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid role"})
-		return
-	}
+	// Yangi ro'yxatdan o'tuvchilar har doim standart 'student' rolini oladi
+	role := "student"
 
 	hash, err := auth.HashPassword(req.Password)
 	if err != nil {
@@ -397,3 +391,42 @@ func (h *Handler) DeleteTest(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Test deleted successfully"})
 }
+
+func (h *Handler) ListUsers(c *gin.Context) {
+	users, err := h.repo.GetAllUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}
+
+func (h *Handler) UpdateUserRole(c *gin.Context) {
+	idStr := c.Param("id")
+	userID, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	var req struct {
+		Role string `json:"role" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role is required"})
+		return
+	}
+
+	if req.Role != "student" && req.Role != "examiner" && req.Role != "admin" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role must be student, examiner, or admin"})
+		return
+	}
+
+	if err := h.repo.UpdateUserRole(userID, req.Role); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Foydalanuvchi roli muvaffaqiyatli yangilandi", "user_id": userID, "role": req.Role})
+}
+

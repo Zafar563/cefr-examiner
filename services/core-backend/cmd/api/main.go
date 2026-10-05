@@ -138,6 +138,8 @@ func main() {
 				adminOnly.DELETE("/tests/:id", h.DeleteTest)
 				adminOnly.POST("/tests/:id/sections", h.CreateSection)
 				adminOnly.POST("/sections/:sectionId/questions", h.CreateQuestion)
+				adminOnly.GET("/users", h.ListUsers)
+				adminOnly.PUT("/users/:id/role", h.UpdateUserRole)
 			}
 		}
 	}

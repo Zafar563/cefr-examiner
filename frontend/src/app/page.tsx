@@ -18,21 +18,9 @@ import {
   Clock,
   Compass,
 } from 'lucide-react';
-import { apiLogin } from '@/lib/api';
 
 export default function HomePage() {
   const router = useRouter();
-
-  const handleQuickLogin = async (email: string, role: string) => {
-    try {
-      await apiLogin(email, 'password123');
-      if (role === 'admin') router.push('/admin');
-      else if (role === 'examiner') router.push('/examiner');
-      else router.push('/student');
-    } catch (e: any) {
-      alert('Kirishda xatolik: ' + e.message);
-    }
-  };
 
   return (
     <div className="space-y-20 py-8">
@@ -61,43 +49,21 @@ export default function HomePage() {
           Cambridge 13 dan 21 gacha bo‘lgan to‘liq akademik Reading, Listening, Writing va Speaking testlari orqali real CEFR darajangizni aniqlang.
         </p>
 
-        {/* Quick Demo Access Card */}
-        <div className="pt-2">
-          <div className="glass-panel p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-lg shadow-slate-200/50 dark:shadow-none max-w-2xl mx-auto">
-            <div className="flex items-center justify-between gap-2 mb-4">
-              <span className="text-xs uppercase font-extrabold text-slate-500 dark:text-slate-400 tracking-wider flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-500" />
-                Bir marta bosish bilan tezkor kirish:
-              </span>
-              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md">
-                Parol talab qilinmaydi
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <button
-                onClick={() => handleQuickLogin('student@cefr.uz', 'student')}
-                className="py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-2xl text-sm font-bold transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.02] flex items-center justify-center gap-2 group"
-              >
-                🎓 Student
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
-              <button
-                onClick={() => handleQuickLogin('examiner@cefr.uz', 'examiner')}
-                className="py-3 px-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-2xl text-sm font-bold transition-all shadow-md shadow-indigo-600/20 hover:scale-[1.02] flex items-center justify-center gap-2 group"
-              >
-                ✍️ Examiner
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
-              <button
-                onClick={() => handleQuickLogin('admin@cefr.uz', 'admin')}
-                className="py-3 px-4 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-900 hover:to-black text-white rounded-2xl text-sm font-bold transition-all shadow-md shadow-slate-900/20 hover:scale-[1.02] flex items-center justify-center gap-2 group"
-              >
-                ⚙️ Admin
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
-            </div>
-          </div>
+        {/* Real User Call to Action Buttons */}
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto">
+          <Link
+            href="/student"
+            className="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-2xl text-sm font-bold transition-all shadow-lg shadow-emerald-600/25 hover:scale-[1.02] flex items-center justify-center gap-2 group"
+          >
+            🎓 Test Topshirishni Boshlash
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+          <Link
+            href="/login"
+            className="w-full sm:w-auto px-7 py-3.5 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2"
+          >
+            Tizimga Kirish
+          </Link>
         </div>
 
         {/* Live Metrics Bar */}

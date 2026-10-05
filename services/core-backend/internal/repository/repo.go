@@ -56,6 +56,39 @@ func (r *Repository) GetUserByID(id int) (*models.User, error) {
 	return &u, nil
 }
 
+func (r *Repository) GetAllUsers() ([]models.User, error) {
+	query := `SELECT id, email, full_name, role, created_at FROM users ORDER BY id ASC`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var u models.User
+		if err := rows.Scan(&u.ID, &u.Email, &u.FullName, &u.Role, &u.CreatedAt); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
+}
+
+func (r *Repository) UpdateUserRole(userID int, newRole string) error {
+	query := `UPDATE users SET role = $1 WHERE id = $2`
+	res, err := r.db.Exec(query, newRole, userID)
+	if err != nil {
+		return err
+	}
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		return fmt.Errorf("foydalanuvchi topilmadi")
+	}
+	return nil
+}
+
+
 // Test operations
 func (r *Repository) GetActiveTests() ([]models.Test, error) {
 	query := `SELECT id, title, description, level, duration_minutes, is_active, created_at 

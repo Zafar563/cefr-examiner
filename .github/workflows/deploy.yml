@@ -1,0 +1,139 @@
+name: CI/CD Pipeline & Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Majburiy qayta deploy qilish'
+        required: false
+        default: 'false'
+        type: boolean
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  # 1-BOSQICH: Kodni tekshirish va yig'ilishini sinovdan o'tkazish (CI)
+  build-check:
+    name: Build & Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodni yuklab olish
+        uses: actions/checkout@v4
+
+      - name: Go muhitini sozlash
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: services/core-backend/go.sum
+
+      - name: Go Backend yig'ilishini tekshirish
+        run: |
+          cd services/core-backend
+          go mod download
+          CGO_ENABLED=0 GOOS=linux go build -v -o /dev/null ./cmd/api
+
+      - name: Node.js muhitini sozlash
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Frontend Next.js yig'ilishini tekshirish
+        run: |
+          cd frontend
+          npm ci
+          NEXT_TELEMETRY_DISABLED=1 npm run build
+
+  # 2-BOSQICH: Serverga SSH orqali avtomatik deploy qilish (CD)
+  deploy:
+    name: Deploy to Production Server
+    runs-on: ubuntu-latest
+    needs: build-check
+    steps:
+      - name: Serverga ulanish va yangilash
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.SERVER_PORT || 22 }}
+          script_stop: true
+          command_timeout: 30m
+          script: |
+            set -e
+
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
+            if [ -z "$DEPLOY_PATH" ]; then
+              DEPLOY_PATH="/var/www/cefr-examiner"
+            fi
+
+            echo "🚀 [1/6] Deploy boshlandi: $DEPLOY_PATH"
+
+            # 1. Loyiha papkasini tekshirish va yaratish
+            if [ ! -d "$DEPLOY_PATH/.git" ]; then
+              echo "📦 Yangi repozitoriy klonlanmoqda..."
+              mkdir -p "$DEPLOY_PATH"
+              git clone https://github.com/Zafar563/cefr-examiner.git "$DEPLOY_PATH"
+              cd "$DEPLOY_PATH"
+            else
+              echo "🔄 Mavjud loyiha yangilanmoqda..."
+              cd "$DEPLOY_PATH"
+              git fetch --all --prune
+              git reset --hard origin/main
+            fi
+
+            # 2. .env konfiguratsiya faylini sozlash
+            echo "⚙️ [2/6] .env fayli tekshirilmoqda..."
+            ENV_CONTENT='${{ secrets.ENV_FILE }}'
+            if [ -n "$ENV_CONTENT" ]; then
+              echo "$ENV_CONTENT" > .env
+              echo "✅ .env fayli GitHub Secrets orqali muvaffaqiyatli saqlandi."
+            elif [ ! -f .env ]; then
+              if [ -f .env.example ]; then
+                cp .env.example .env
+                echo "⚠️ .env fayli mavjud emas edi, .env.example dan nusxa olindi."
+              fi
+            fi
+
+            # 3. Docker va Docker Compose tekshiruvi
+            echo "🐳 [3/6] Docker muhiti tekshirilmoqda..."
+            if ! command -v docker &> /dev/null; then
+              echo "❌ XATO: Serverda Docker o‘rnatilmagan! Iltimos, serverga Docker o‘rnating."
+              exit 1
+            fi
+
+            # docker compose buyrug'ini aniqlash (v2 'docker compose' yoki v1 'docker-compose')
+            if docker compose version &> /dev/null; then
+              DOCKER_COMPOSE_CMD="docker compose"
+            elif command -v docker-compose &> /dev/null; then
+              DOCKER_COMPOSE_CMD="docker-compose"
+            else
+              echo "❌ XATO: Serverda Docker Compose o‘rnatilmagan!"
+              exit 1
+            fi
+
+            # 4. Konteynerlarni yangidan yig'ish va ishga tushirish
+            echo "🏗️ [4/6] Konteynerlar build qilinib, ishga tushirilmoqda..."
+            $DOCKER_COMPOSE_CMD pull postgres redis || true
+            $DOCKER_COMPOSE_CMD up -d --build --remove-orphans
+
+            # 5. Ish holatini tekshirish
+            echo "🔍 [5/6] Konteynerlar holati tekshirilmoqda..."
+            sleep 5
+            $DOCKER_COMPOSE_CMD ps
+
+            # 6. Eskirgan foydalanilmayotgan Docker qoldiqlarini tozalash
+            echo "🧹 [6/6] Eskirgan Docker qoldiqlari tozalanmoqda..."
+            docker image prune -f || true
+
+            echo "🎉 ========================================================"
+            echo "🎉 CEFR Practice & Assessment Platform muvaffaqiyatli deploy qilindi!"
+            echo "🎉 ========================================================"

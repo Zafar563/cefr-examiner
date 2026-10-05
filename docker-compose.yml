@@ -72,13 +72,16 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+        NEXT_PUBLIC_MEDIA_URL: ${NEXT_PUBLIC_MEDIA_URL:-http://localhost:8000}
     container_name: cefr_frontend
     restart: always
     ports:
       - "${PORT_FRONTEND:-3000}:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
-      - NEXT_PUBLIC_MEDIA_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+      - NEXT_PUBLIC_MEDIA_URL=${NEXT_PUBLIC_MEDIA_URL:-http://localhost:8000}
     depends_on:
       - core-backend
       - media-service

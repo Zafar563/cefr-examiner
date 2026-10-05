@@ -74,3 +74,11 @@ $$ \text{Umumiy Foiz} = \frac{\text{To'plangan Ballar Yig'indisi}}{\text{Maksima
 
 - **Reading & Listening:** O‘quvchi testni yakunlashi (Submit) bilan avtomatik tekshirilib, ballar zudlik bilan chiqadi.
 - **Writing & Speaking:** Examiner paneliga tushadi. Examiner baholagach, umumiy ball qayta hisoblanadi va talabaning shaxsiy kabinetida yakuniy **CEFR darajasi (A1–C1)** yangilanadi.
+
+---
+
+## 🚀 Serverga Deploy (GitHub Actions CI/CD)
+
+Loyiha GitHub Actions orqali masofaviy VPS serverga to'liq avtomatik deploy bo'lish uchun sozlangan.
+To'liq ko'rsatmalar, SSH kalitlarni ulash va serverni tayyorlash uchun [DEPLOYMENT_GUIDE.md](file:///c:/Users/User/Desktop/cefr-examiner/DEPLOYMENT_GUIDE.md) qo'llanmasiga qarang.
+

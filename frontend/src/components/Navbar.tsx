@@ -1,23 +1,28 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
-  ChevronDown,
   LogOut,
-  User as UserIcon,
   Menu,
   X,
   Settings,
   CheckSquare,
+  Headphones,
+  BookOpen,
+  Mic,
+  PenTool,
+  Sparkles,
+  Home as HomeIcon,
 } from 'lucide-react';
 import { getCurrentStoredUser, removeToken, User } from '@/lib/api';
 import ThemeToggle from '@/components/ThemeToggle';
 
-export default function Navbar() {
+function NavbarContent() {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -27,9 +32,8 @@ export default function Navbar() {
     setUser(getCurrentStoredUser());
     setMobileMenuOpen(false);
     setAccountMenuOpen(false);
-  }, [pathname]);
+  }, [pathname, searchParams]);
 
-  // Close account menu on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (accountRef.current && !accountRef.current.contains(event.target as Node)) {
@@ -47,7 +51,67 @@ export default function Navbar() {
     router.push('/login');
   };
 
-  const cambridgeBooks = [21, 20, 19, 18, 17, 16, 15, 14, 13];
+  // Determine active tab
+  const isStudentPage = pathname === '/student';
+  const currentTab = isStudentPage ? (searchParams.get('tab') || 'listening') : null;
+  const isHome = pathname === '/';
+
+  const navItems = [
+    {
+      id: 'home',
+      label: 'Home',
+      href: '/',
+      icon: HomeIcon,
+      isActive: isHome,
+      activeClass: 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 font-extrabold ring-1 ring-indigo-500/20 shadow-xs',
+      hoverClass: 'hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/30',
+    },
+    {
+      id: 'listening',
+      label: 'Listening',
+      href: '/student?tab=listening',
+      icon: Headphones,
+      isActive: currentTab === 'listening',
+      activeClass: 'bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-extrabold ring-1 ring-blue-500/20 shadow-xs',
+      hoverClass: 'hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/30',
+    },
+    {
+      id: 'reading',
+      label: 'Reading',
+      href: '/student?tab=reading',
+      icon: BookOpen,
+      isActive: currentTab === 'reading',
+      activeClass: 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-extrabold ring-1 ring-emerald-500/20 shadow-xs',
+      hoverClass: 'hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30',
+    },
+    {
+      id: 'speaking',
+      label: 'Speaking',
+      href: '/student?tab=speaking',
+      icon: Mic,
+      isActive: currentTab === 'speaking',
+      activeClass: 'bg-purple-50 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 font-extrabold ring-1 ring-purple-500/20 shadow-xs',
+      hoverClass: 'hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-950/30',
+    },
+    {
+      id: 'writing',
+      label: 'Writing',
+      href: '/student?tab=writing',
+      icon: PenTool,
+      isActive: currentTab === 'writing',
+      activeClass: 'bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 font-extrabold ring-1 ring-amber-500/20 shadow-xs',
+      hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30',
+    },
+    {
+      id: 'mock',
+      label: 'Full Mock',
+      href: '/student?tab=mock',
+      icon: Sparkles,
+      isActive: currentTab === 'mock',
+      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 font-extrabold ring-1 ring-rose-500/20 shadow-xs',
+      hoverClass: 'hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
+    },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#0f1422]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/80 transition-colors">
@@ -62,287 +126,40 @@ export default function Navbar() {
               IELTS <span className="text-indigo-600 dark:text-indigo-400">MATERIALS</span>
             </span>
             <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-wider hidden sm:block">
-              CEFR & Cambridge Multi-Level
+              CEFR Practice Platform
             </span>
           </div>
         </Link>
 
-        {/* Center: Desktop Navigation Links with Clean Dropdowns Matching ieltsmaterials.uz */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-sm font-bold text-slate-700 dark:text-slate-200">
-          {/* Home Dropdown */}
-          <div className="relative group">
-            <Link
-              href="/"
-              className={`px-3 py-2.5 rounded-lg transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 ${
-                pathname === '/' ? 'text-indigo-600 dark:text-indigo-400' : ''
-              }`}
-            >
-              <span>Home</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-48 bg-white dark:bg-[#161822] border-t-2 border-indigo-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-2 space-y-1">
-                <Link
-                  href="/"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/student"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All Practice Tests
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Listening Dropdown (Blue accent) */}
-          <div className="relative group">
-            <Link
-              href="/student?tab=listening"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
-            >
-              <span>Listening</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-blue-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1">
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All
-                </Link>
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Section 1
-                </Link>
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Section 2
-                </Link>
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Section 3
-                </Link>
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Section 4
-                </Link>
-                <Link
-                  href="/student?tab=listening"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Full Listening
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Reading Dropdown (Emerald accent) */}
-          <div className="relative group">
-            <Link
-              href="/student?tab=reading"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-emerald-600 dark:hover:text-emerald-400 flex items-center gap-1"
-            >
-              <span>Reading</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-emerald-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1">
-                <Link
-                  href="/student?tab=reading"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All
-                </Link>
-                <Link
-                  href="/student?tab=reading"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Passage 1
-                </Link>
-                <Link
-                  href="/student?tab=reading"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Passage 2
-                </Link>
-                <Link
-                  href="/student?tab=reading"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Passage 3
-                </Link>
-                <Link
-                  href="/student?tab=reading"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Full Reading
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Speaking Dropdown (Purple accent) */}
-          <div className="relative group">
-            <Link
-              href="/student?tab=speaking"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1"
-            >
-              <span>Speaking</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-purple-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1">
-                <Link
-                  href="/student?tab=speaking"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All
-                </Link>
-                <Link
-                  href="/student?tab=speaking"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Part 1
-                </Link>
-                <Link
-                  href="/student?tab=speaking"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Part 2
-                </Link>
-                <Link
-                  href="/student?tab=speaking"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Part 3
-                </Link>
-                <Link
-                  href="/student?tab=speaking"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Full Speaking
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Writing Dropdown (Amber accent) */}
-          <div className="relative group">
-            <Link
-              href="/student?tab=writing"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-amber-600 dark:hover:text-amber-400 flex items-center gap-1"
-            >
-              <span>Writing</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-amber-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1">
-                <Link
-                  href="/student?tab=writing"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All
-                </Link>
-                <Link
-                  href="/student?tab=writing"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Task 1
-                </Link>
-                <Link
-                  href="/student?tab=writing"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Task 2
-                </Link>
-                <Link
-                  href="/student?tab=writing"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Full Writing
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Mock Dropdown (Rose accent) */}
-          <div className="relative group">
-            <Link
-              href="/student?tab=mock"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-rose-600 dark:hover:text-rose-400 flex items-center gap-1"
-            >
-              <span>Mock</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </Link>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-rose-600 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1">
-                <Link
-                  href="/student?tab=mock"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All
-                </Link>
-                <Link
-                  href="/student?tab=mock"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Full Mock Exam
-                </Link>
-                <Link
-                  href="/student?tab=mock"
-                  className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  Timed Simulation
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Books Dropdown (Slate accent) */}
-          <div className="relative group">
-            <button className="px-3 py-2.5 rounded-lg transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 cursor-pointer">
-              <span>Books</span>
-              <span className="text-[10px] opacity-75">▾</span>
-            </button>
-            <div className="absolute left-0 top-full pt-0 opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-150 z-50">
-              <div className="w-52 bg-white dark:bg-[#161822] border-t-2 border-slate-900 dark:border-indigo-500 border-x border-b border-slate-200 dark:border-slate-800 rounded-b-xl shadow-xl py-3 space-y-1 max-h-[360px] overflow-y-auto">
-                <Link
-                  href="/student?book=all"
-                  className="block px-5 py-1.5 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  All Books
-                </Link>
-                {cambridgeBooks.map((b) => (
-                  <Link
-                    key={b}
-                    href={`/student?book=${b}`}
-                    className="block px-5 py-1.5 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/70 dark:hover:bg-slate-800/60 transition-colors"
-                  >
-                    Cambridge {b}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* Center: Desktop Navigation Tabs */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`px-3.5 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  item.isActive
+                    ? item.activeClass
+                    : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                }`}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
 
           {/* Admin & Examiner quick links */}
           {user?.role === 'admin' && (
             <Link
               href="/admin"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-purple-600 flex items-center gap-1 text-purple-700 dark:text-purple-400 font-bold"
+              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 ${
+                pathname === '/admin'
+                  ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 ring-1 ring-purple-500/20'
+                  : 'text-purple-700 dark:text-purple-400 hover:bg-purple-50/50'
+              }`}
             >
               <Settings className="w-3.5 h-3.5" />
               <span>Admin</span>
@@ -352,7 +169,11 @@ export default function Navbar() {
           {user?.role === 'examiner' && (
             <Link
               href="/examiner"
-              className="px-3 py-2.5 rounded-lg transition-colors hover:text-indigo-600 flex items-center gap-1 text-indigo-700 dark:text-indigo-400 font-bold"
+              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 ${
+                pathname === '/examiner'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/20'
+                  : 'text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50/50'
+              }`}
             >
               <CheckSquare className="w-3.5 h-3.5" />
               <span>Examiner</span>
@@ -424,7 +245,7 @@ export default function Navbar() {
 
                       <button
                         onClick={handleLogout}
-                        className="w-full p-2 rounded-xl text-left hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center gap-2 transition-colors pt-2 border-t border-slate-200 dark:border-slate-800"
+                        className="w-full p-2 rounded-xl text-left hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center gap-2 transition-colors pt-2 border-t border-slate-200 dark:border-slate-800 cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Tizimdan Chiqish</span>
@@ -458,69 +279,60 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 space-y-3 animate-in slide-in-from-top-2 duration-200">
           <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-center text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
-            >
-              Home
-            </Link>
-            <Link
-              href="/student?tab=listening"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-center text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800"
-            >
-              🎧 Listening
-            </Link>
-            <Link
-              href="/student?tab=reading"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-center text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800"
-            >
-              📖 Reading
-            </Link>
-            <Link
-              href="/student?tab=speaking"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-center text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800"
-            >
-              🎙️ Speaking
-            </Link>
-            <Link
-              href="/student?tab=writing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-center text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800"
-            >
-              ✍️ Writing
-            </Link>
-            <Link
-              href="/student?tab=mock"
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-center text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800"
-            >
-              🏆 Full Mock
-            </Link>
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`p-2.5 rounded-xl text-center border flex items-center justify-center gap-1.5 transition-all ${
+                    item.isActive
+                      ? item.activeClass
+                      : `bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${item.hoverClass}`
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="pt-2">
-            <span className="text-[11px] font-bold text-slate-500 uppercase block mb-1.5">
-              Cambridge Kitoblari
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {cambridgeBooks.map((b) => (
+          {user && (user.role === 'admin' || user.role === 'examiner') && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs font-bold">
+              {user.role === 'admin' && (
                 <Link
-                  key={b}
-                  href={`/student?book=${b}`}
+                  href="/admin"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:border-indigo-400"
+                  className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-center text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 flex items-center justify-center gap-1.5"
                 >
-                  Book {b}
+                  <Settings className="w-4 h-4" />
+                  <span>Admin</span>
                 </Link>
-              ))}
+              )}
+              {user.role === 'examiner' && (
+                <Link
+                  href="/examiner"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-center text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 flex items-center justify-center gap-1.5"
+                >
+                  <CheckSquare className="w-4 h-4" />
+                  <span>Examiner</span>
+                </Link>
+              )}
             </div>
-          </div>
+          )}
         </div>
       )}
     </header>
+  );
+}
+
+export default function Navbar() {
+  return (
+    <Suspense fallback={<div className="h-18 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f1422]" />}>
+      <NavbarContent />
+    </Suspense>
   );
 }

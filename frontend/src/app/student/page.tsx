@@ -65,6 +65,10 @@ export default function StudentDashboard() {
       if (bookParam) {
         setSelectedBook(bookParam);
       }
+      const sectionParam = params.get('section');
+      if (sectionParam) {
+        setSearchQuery(sectionParam);
+      }
     }
     loadData();
   }, [router]);

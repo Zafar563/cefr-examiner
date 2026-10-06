@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   apiGetTests,
   apiGetStudentHistory,
@@ -34,8 +34,9 @@ import {
   RotateCcw,
 } from 'lucide-react';
 
-export default function StudentDashboard() {
+function StudentDashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [tests, setTests] = useState<Test[]>([]);
   const [history, setHistory] = useState<TestSession[]>([]);
@@ -55,23 +56,28 @@ export default function StudentDashboard() {
       router.push('/login');
       return;
     }
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get('tab') || params.get('filter');
-      const bookParam = params.get('book');
-      if (tabParam && ['listening', 'reading', 'writing', 'speaking', 'mock'].includes(tabParam)) {
-        setActiveTab(tabParam as any);
-      }
-      if (bookParam) {
-        setSelectedBook(bookParam);
-      }
-      const sectionParam = params.get('section');
-      if (sectionParam) {
-        setSearchQuery(sectionParam);
-      }
-    }
     loadData();
   }, [router]);
+
+  useEffect(() => {
+    if (!searchParams) return;
+    const tabParam = searchParams.get('tab') || searchParams.get('filter');
+    const bookParam = searchParams.get('book');
+    const sectionParam = searchParams.get('section');
+    if (tabParam && ['listening', 'reading', 'writing', 'speaking', 'mock'].includes(tabParam)) {
+      setActiveTab(tabParam as any);
+    }
+    if (bookParam) {
+      setSelectedBook(bookParam);
+    } else {
+      setSelectedBook('all');
+    }
+    if (sectionParam) {
+      setSearchQuery(sectionParam);
+    } else {
+      setSearchQuery('');
+    }
+  }, [searchParams]);
 
   const loadData = async () => {
     setLoading(true);
@@ -605,22 +611,22 @@ export default function StudentDashboard() {
               {activeTab === 'listening' ? (
                 <>
                   <Headphones className="w-6 h-6 text-blue-600" />
-                  <span>Listening Testlari (Cambridge 13–21)</span>
+                  <span>Listening Testlari</span>
                 </>
               ) : activeTab === 'reading' ? (
                 <>
                   <BookOpen className="w-6 h-6 text-emerald-600" />
-                  <span>Reading Testlari (Cambridge 13–21)</span>
+                  <span>Reading Testlari</span>
                 </>
               ) : activeTab === 'speaking' ? (
                 <>
                   <Mic className="w-6 h-6 text-purple-600" />
-                  <span>Speaking Testlari (Cambridge 13–21)</span>
+                  <span>Speaking Testlari</span>
                 </>
               ) : activeTab === 'writing' ? (
                 <>
                   <PenTool className="w-6 h-6 text-amber-600" />
-                  <span>Writing Testlari (Cambridge 13–21)</span>
+                  <span>Writing Testlari</span>
                 </>
               ) : (
                 <>
@@ -753,7 +759,7 @@ export default function StudentDashboard() {
                   Tasodifiy To‘liq Mock Imtihon
                 </h2>
                 <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                  Cambridge 13–21 to‘plamlaridan tasodifiy Listening (40 savol), Reading (40 savol), Writing (Task 1 & 2) va Speaking (3 qism) bitta to‘liq imtihonga jamlanadi.
+                  Barcha modullar bo‘yicha tasodifiy Listening (40 savol), Reading (40 savol), Writing (Task 1 & 2) va Speaking (3 qism) bitta to‘liq imtihonga jamlanadi.
                 </p>
 
                 <div className="pt-3 flex flex-wrap items-center gap-3">
@@ -924,5 +930,20 @@ export default function StudentDashboard() {
         )}
       </section>
     </div>
+  );
+}
+
+export default function StudentDashboard() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-24 text-center">
+          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 dark:text-slate-400 font-semibold text-sm">Yuklanmoqda...</p>
+        </div>
+      }
+    >
+      <StudentDashboardContent />
+    </Suspense>
   );
 }

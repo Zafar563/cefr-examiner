@@ -116,25 +116,25 @@ export default function Navbar() {
                   All
                 </Link>
                 <Link
-                  href="/student?tab=listening&section=Section 1"
+                  href="/student?tab=listening"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Section 1
                 </Link>
                 <Link
-                  href="/student?tab=listening&section=Section 2"
+                  href="/student?tab=listening"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Section 2
                 </Link>
                 <Link
-                  href="/student?tab=listening&section=Section 3"
+                  href="/student?tab=listening"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Section 3
                 </Link>
                 <Link
-                  href="/student?tab=listening&section=Section 4"
+                  href="/student?tab=listening"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Section 4
@@ -167,19 +167,19 @@ export default function Navbar() {
                   All
                 </Link>
                 <Link
-                  href="/student?tab=reading&section=Passage 1"
+                  href="/student?tab=reading"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Passage 1
                 </Link>
                 <Link
-                  href="/student?tab=reading&section=Passage 2"
+                  href="/student?tab=reading"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Passage 2
                 </Link>
                 <Link
-                  href="/student?tab=reading&section=Passage 3"
+                  href="/student?tab=reading"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Passage 3
@@ -212,19 +212,19 @@ export default function Navbar() {
                   All
                 </Link>
                 <Link
-                  href="/student?tab=speaking&section=Part 1"
+                  href="/student?tab=speaking"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Part 1
                 </Link>
                 <Link
-                  href="/student?tab=speaking&section=Part 2"
+                  href="/student?tab=speaking"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Part 2
                 </Link>
                 <Link
-                  href="/student?tab=speaking&section=Part 3"
+                  href="/student?tab=speaking"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Part 3
@@ -257,13 +257,13 @@ export default function Navbar() {
                   All
                 </Link>
                 <Link
-                  href="/student?tab=writing&section=Task 1"
+                  href="/student?tab=writing"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Task 1
                 </Link>
                 <Link
-                  href="/student?tab=writing&section=Task 2"
+                  href="/student?tab=writing"
                   className="block px-5 py-2 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/70 dark:hover:bg-slate-800/60 transition-colors"
                 >
                   Task 2

@@ -55,6 +55,17 @@ export default function StudentDashboard() {
       router.push('/login');
       return;
     }
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab') || params.get('filter');
+      const bookParam = params.get('book');
+      if (tabParam && ['all', 'listening', 'reading', 'writing', 'speaking', 'mock'].includes(tabParam)) {
+        setActiveTab(tabParam as any);
+      }
+      if (bookParam) {
+        setSelectedBook(bookParam);
+      }
+    }
     loadData();
   }, [router]);
 

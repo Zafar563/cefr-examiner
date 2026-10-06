@@ -7,17 +7,9 @@ import {
   BookOpen,
   Mic,
   Edit3,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Award,
-  Clock,
-  Layers,
 } from 'lucide-react';
 
 export default function HomePage() {
-  const cambridgeBooks = [13, 14, 15, 16, 17, 18, 19, 20, 21];
-
   return (
     <div className="space-y-12 sm:space-y-16 py-6 sm:py-10 max-w-6xl mx-auto">
       {/* 1. Hero Header Pill */}
@@ -172,76 +164,6 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 3. Full Mock Exam Banner (All 4 Modules Combined) */}
-      <section className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl border border-indigo-900/60 p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-        <div className="flex items-center gap-5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-rose-500 text-slate-950 flex items-center justify-center font-bold text-xl shadow-md shrink-0">
-            <Sparkles className="w-7 h-7" />
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-black uppercase tracking-wider border border-amber-400/30">
-                Full Simulation
-              </span>
-              <span className="text-xs font-bold text-slate-400">165 daqiqa</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              To‘liq Cambridge & CEFR Mock Imtihoni
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-              Listening, Reading, Writing va Speaking bitta uzluksiz sessiyada. Rasmiy CEFR darajasi (B1–C1) va IELTS band ballingizni aniqlang.
-            </p>
-          </div>
-        </div>
-
-        <Link
-          href="/student?tab=mock"
-          className="px-7 py-3.5 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white rounded-full font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-lg shadow-rose-900/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 whitespace-nowrap shrink-0"
-        >
-          <span>START FULL MOCK</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </section>
-
-      {/* 4. Cambridge Books Quick Selector (Cambridge 13 to 21) */}
-      <section className="space-y-3 text-center">
-        <div className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          Cambridge IELTS Seriyalari (13 dan 21 gacha)
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
-          {cambridgeBooks.map((b) => (
-            <Link
-              key={b}
-              href={`/student?book=${b}`}
-              className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white border border-slate-200 dark:border-slate-800 text-xs font-extrabold text-slate-700 dark:text-slate-200 transition-colors shadow-xs"
-            >
-              Book {b}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. Minimal Band Score & CEFR Matrix */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-purple-200 dark:border-purple-900/50 text-center shadow-xs">
-          <div className="text-2xl font-black text-purple-600 dark:text-purple-400">C1 Level</div>
-          <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">IELTS 7.5 – 9.0</div>
-          <p className="text-[11px] text-slate-500 mt-1">Mustaqil professional muloqot va oliy akademik daraja</p>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 text-center shadow-xs">
-          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">B2 Level</div>
-          <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">IELTS 5.5 – 6.5</div>
-          <p className="text-[11px] text-slate-500 mt-1">Universitetlarga kirish va rasmiy grant talabi</p>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center shadow-xs">
-          <div className="text-2xl font-black text-blue-600 dark:text-blue-400">B1 Level</div>
-          <div className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">IELTS 4.0 – 5.0</div>
-          <p className="text-[11px] text-slate-500 mt-1">O‘rta daraja, kundalik muloqot va erkin suhbat</p>
         </div>
       </section>
     </div>

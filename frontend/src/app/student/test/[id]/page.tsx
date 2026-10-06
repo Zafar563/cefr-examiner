@@ -413,6 +413,18 @@ export default function TestTakingPage() {
       const testData = await apiGetTestDetails(sess.test_id);
       setTest(testData);
 
+      // Check if target section was requested in URL query
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const secParam = urlParams.get('section');
+        if (secParam !== null) {
+          const secIdx = parseInt(secParam, 10);
+          if (!isNaN(secIdx) && secIdx >= 0 && secIdx < (testData.sections?.length || 0)) {
+            setCurrentSectionIndex(secIdx);
+          }
+        }
+      }
+
       // Prepopulate existing answers
       const map: Record<number, { text: string; audioUrl: string }> = {};
       if (Array.isArray(sess.answers)) {

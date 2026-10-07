@@ -15,6 +15,7 @@ import {
   PenTool,
   Sparkles,
   Home as HomeIcon,
+  User as UserIcon,
 } from 'lucide-react';
 import { getCurrentStoredUser, removeToken, User } from '@/lib/api';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -214,6 +215,15 @@ function NavbarContent() {
 
                     <div className="space-y-1 text-xs font-bold text-slate-700 dark:text-slate-200">
                       <Link
+                        href="/profile"
+                        onClick={() => setAccountMenuOpen(false)}
+                        className="p-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 text-[#8b2323] dark:text-rose-400 flex items-center gap-2 transition-colors font-extrabold"
+                      >
+                        <UserIcon className="w-4 h-4 shrink-0" />
+                        <span>Mening Profilim (Account)</span>
+                      </Link>
+
+                      <Link
                         href="/student"
                         onClick={() => setAccountMenuOpen(false)}
                         className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2 transition-colors"
@@ -298,6 +308,26 @@ function NavbarContent() {
               );
             })}
           </div>
+
+          {user && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-xs font-bold">
+              <Link
+                href="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex-1 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-center text-[#8b2323] dark:text-rose-400 border border-rose-200/80 dark:border-rose-800 flex items-center justify-center gap-1.5"
+              >
+                <UserIcon className="w-4 h-4" />
+                <span>Mening Profilim</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Chiqish</span>
+              </button>
+            </div>
+          )}
 
           {user && (user.role === 'admin' || user.role === 'examiner') && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs font-bold">

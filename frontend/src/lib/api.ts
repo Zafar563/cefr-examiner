@@ -25,6 +25,11 @@ export interface User {
   full_name: string;
   role: 'student' | 'examiner' | 'admin';
   created_at?: string;
+  username?: string;
+  phone_number?: string;
+  date_of_birth?: string;
+  gender?: string;
+  avatar_url?: string;
 }
 
 export interface Question {

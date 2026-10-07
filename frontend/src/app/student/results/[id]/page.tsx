@@ -190,10 +190,10 @@ export default function TestResultPage() {
         return (
           <>
             {!isFinal && !isListeningTest && !isReadingTest && (
-              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 text-amber-600" />
+              <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 text-xs sm:text-sm flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
                 <div>
-                  <strong>Eslatma:</strong> Reading va Listening bo‘limlari avtomatik hisoblandi. Writing va Speaking javoblaringiz Examiner (tekshiruvchi o‘qituvchi) tomonidan tekshirilmoqda. O‘qituvchi baholagach, yakuniy ballingiz yangilanadi.
+                  <strong>Eslatma:</strong> Barcha modullar avtomatlashtirilgan baholash tizimi tomonidan tekshirilib hisoblanmoqda.
                 </div>
               </div>
             )}
@@ -387,7 +387,7 @@ export default function TestResultPage() {
 
                     {ans.examiner_feedback && (
                       <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Examiner izohi: </span>
+                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Tekshiruv tahlili: </span>
                         <span className="text-slate-700 dark:text-slate-300">{ans.examiner_feedback}</span>
                       </div>
                     )}

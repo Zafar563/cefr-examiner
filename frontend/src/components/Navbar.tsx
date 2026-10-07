@@ -156,7 +156,7 @@ function NavbarContent() {
             );
           })}
 
-          {/* Admin & Examiner quick links */}
+          {/* Admin quick links */}
           {user?.role === 'admin' && (
             <Link
               href="/admin"
@@ -168,20 +168,6 @@ function NavbarContent() {
             >
               <Settings className="w-4 h-4" />
               <span>Admin</span>
-            </Link>
-          )}
-
-          {user?.role === 'examiner' && (
-            <Link
-              href="/examiner"
-              className={`px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
-                pathname === '/examiner'
-                  ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/20'
-                  : 'text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50/50'
-              }`}
-            >
-              <CheckSquare className="w-4 h-4" />
-              <span>Examiner</span>
             </Link>
           )}
         </nav>
@@ -243,17 +229,6 @@ function NavbarContent() {
                         >
                           <Settings className="w-4 h-4" />
                           <span>Admin Boshqaruv</span>
-                        </Link>
-                      )}
-
-                      {user.role === 'examiner' && (
-                        <Link
-                          href="/examiner"
-                          onClick={() => setAccountMenuOpen(false)}
-                          className="p-2 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-950/40 flex items-center gap-2 text-indigo-700 dark:text-indigo-300 transition-colors"
-                        >
-                          <CheckSquare className="w-4 h-4" />
-                          <span>Examiner Tekshirish</span>
                         </Link>
                       )}
 

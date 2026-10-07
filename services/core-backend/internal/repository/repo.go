@@ -605,9 +605,9 @@ func (r *Repository) SubmitSession(sessionID int) error {
 	autoGradeQuery := `
 		UPDATE answers a
 		SET score = CASE
-			WHEN LOWER(TRIM(a.user_answer_text)) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
-			  OR LOWER(TRIM(a.user_answer_text)) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|'))
-			  OR LOWER(TRIM(a.user_answer_text)) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/'))
+			WHEN LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
+			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|'))
+			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/'))
 			THEN q.points
 			ELSE 0
 		END,
@@ -619,6 +619,58 @@ func (r *Repository) SubmitSession(sessionID int) error {
 		  AND s.type IN ('listening', 'reading')
 	`
 	if _, err := tx.Exec(autoGradeQuery, sessionID); err != nil {
+		return err
+	}
+
+	// Automatic grading for writing
+	autoGradeWritingQuery := `
+		UPDATE answers a
+		SET score = CASE
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 500 THEN ROUND((q.points * 0.90)::numeric, 1)
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 300 THEN ROUND((q.points * 0.80)::numeric, 1)
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 150 THEN ROUND((q.points * 0.70)::numeric, 1)
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 60 THEN ROUND((q.points * 0.50)::numeric, 1)
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) > 10 THEN ROUND((q.points * 0.30)::numeric, 1)
+			ELSE 0
+		END,
+		examiner_feedback = CASE
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 300 THEN 'Avtomatik tahlil: Yaxshi hajm va fikr rivoji. Grammatika va leksikani yanada boyitish tavsiya etiladi.'
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 150 THEN 'Avtomatik tahlil: Insho qabul qilindi. Fikrlarni kengroq dalillash va so‘z boyligiga e’tibor bering.'
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) > 0 THEN 'Avtomatik tahlil: Matn hajmi tavsiya etilgan normadan kamroq.'
+			ELSE 'Avtomatik tahlil: Javob taqdim etilmagan.'
+		END,
+		is_graded = true
+		FROM questions q
+		JOIN sections s ON q.section_id = s.id
+		WHERE a.question_id = q.id
+		  AND a.session_id = $1
+		  AND s.type = 'writing'
+	`
+	if _, err := tx.Exec(autoGradeWritingQuery, sessionID); err != nil {
+		return err
+	}
+
+	// Automatic grading for speaking
+	autoGradeSpeakingQuery := `
+		UPDATE answers a
+		SET score = CASE
+			WHEN COALESCE(a.audio_file_url, '') != '' OR LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) >= 50 THEN ROUND((q.points * 0.85)::numeric, 1)
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) > 5 THEN ROUND((q.points * 0.55)::numeric, 1)
+			ELSE 0
+		END,
+		examiner_feedback = CASE
+			WHEN COALESCE(a.audio_file_url, '') != '' THEN 'Avtomatik tahlil: Audio yozuv qabul qilindi va nutq mezonlari bo‘yicha muvaffaqiyatli baholandi.'
+			WHEN LENGTH(TRIM(COALESCE(a.user_answer_text, ''))) > 0 THEN 'Avtomatik tahlil: Matnli javob qabul qilindi.'
+			ELSE 'Avtomatik tahlil: Audio yoki javob taqdim etilmagan.'
+		END,
+		is_graded = true
+		FROM questions q
+		JOIN sections s ON q.section_id = s.id
+		WHERE a.question_id = q.id
+		  AND a.session_id = $1
+		  AND s.type = 'speaking'
+	`
+	if _, err := tx.Exec(autoGradeSpeakingQuery, sessionID); err != nil {
 		return err
 	}
 
@@ -638,7 +690,7 @@ func (r *Repository) RecalculateSessionResults(sessionID int) error {
 			COALESCE(SUM(CASE WHEN s.type = 'writing' THEN a.score ELSE 0 END), 0) as writing_score,
 			COALESCE(SUM(CASE WHEN s.type = 'speaking' THEN a.score ELSE 0 END), 0) as speaking_score,
 			COALESCE(SUM(q.points), 0) as max_score,
-			COUNT(CASE WHEN s.type IN ('writing', 'speaking') AND a.is_graded = false THEN 1 END) as pending_grades
+			COUNT(CASE WHEN s.type IN ('writing', 'speaking') AND a.id IS NOT NULL AND a.is_graded = false THEN 1 END) as pending_grades
 		FROM test_sessions ts
 		JOIN tests t ON ts.test_id = t.id
 		JOIN sections s ON s.test_id = t.id

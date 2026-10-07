@@ -46,7 +46,6 @@ function StudentDashboardContent() {
 
   // Filters - default to 'listening' strictly (no mixed 144 tests dump)
   const [activeTab, setActiveTab] = useState<'listening' | 'reading' | 'writing' | 'speaking' | 'mock'>('listening');
-  const [selectedBook, setSelectedBook] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
@@ -62,15 +61,11 @@ function StudentDashboardContent() {
   useEffect(() => {
     if (!searchParams) return;
     const tabParam = searchParams.get('tab') || searchParams.get('filter');
-    const bookParam = searchParams.get('book');
     const sectionParam = searchParams.get('section');
     if (tabParam && ['listening', 'reading', 'writing', 'speaking', 'mock'].includes(tabParam)) {
       setActiveTab(tabParam as any);
-    }
-    if (bookParam) {
-      setSelectedBook(bookParam);
-    } else {
-      setSelectedBook('all');
+    } else if (!tabParam) {
+      setActiveTab('listening');
     }
     if (sectionParam) {
       setSearchQuery(sectionParam);
@@ -157,11 +152,6 @@ function StudentDashboardContent() {
 
   const filteredTests = useMemo(() => {
     return sortedTests.filter((t) => {
-      // Book filter
-      if (selectedBook !== 'all') {
-        const meta = getTestMeta(t.title);
-        if (meta.bookNum !== selectedBook) return false;
-      }
       // Search filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -172,7 +162,7 @@ function StudentDashboardContent() {
       }
       return true;
     });
-  }, [sortedTests, selectedBook, searchQuery]);
+  }, [sortedTests, searchQuery]);
 
   const listeningTests = useMemo(
     () => filteredTests.filter((t) => !t.title.toLowerCase().includes('mock') && t.title.toLowerCase().includes('listening')),
@@ -563,41 +553,6 @@ function StudentDashboardContent() {
             )}
           </div>
         </div>
-
-        {/* Cambridge Books Filter Row */}
-        {activeTab !== 'mock' && (
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 mr-1 shrink-0">
-              Kitob:
-            </span>
-            <button
-              onClick={() => setSelectedBook('all')}
-              className={`px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                selectedBook === 'all'
-                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:text-indigo-600'
-              }`}
-            >
-              Barchasi
-            </button>
-            {[13, 14, 15, 16, 17, 18, 19, 20, 21].map((book) => {
-              const isSelected = selectedBook === String(book);
-              return (
-                <button
-                  key={book}
-                  onClick={() => setSelectedBook(String(book))}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:text-indigo-600'
-                  }`}
-                >
-                  Book {book}
-                </button>
-              );
-            })}
-          </div>
-        )}
       </section>
 
       {/* 3. Filtered Tests Grid (Renders ONLY the active tab category) */}

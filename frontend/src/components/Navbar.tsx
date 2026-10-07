@@ -123,12 +123,17 @@ function NavbarContent() {
             <img
               src="/logo.png"
               alt="CEFR MATERIALS"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain dark:hidden"
+            />
+            <img
+              src="/logo-dark.png"
+              alt="CEFR MATERIALS"
+              className="w-full h-full object-contain hidden dark:block"
             />
           </div>
           <div className="flex flex-col">
             <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white uppercase leading-tight">
-              CEFR <span className="text-emerald-600 dark:text-emerald-400">MATERIALS</span>
+              CEFR <span className="text-emerald-600 dark:text-amber-400">MATERIALS</span>
             </span>
             <span className="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5 hidden sm:block">
               Practice & Assessment
@@ -308,28 +313,16 @@ function NavbarContent() {
             </div>
           )}
 
-          {user && (user.role === 'admin' || user.role === 'examiner') && (
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs font-bold">
-              {user.role === 'admin' && (
-                <Link
-                  href="/admin"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-center text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 flex items-center justify-center gap-1.5"
-                >
-                  <Settings className="w-4 h-4" />
-                  <span>Admin</span>
-                </Link>
-              )}
-              {user.role === 'examiner' && (
-                <Link
-                  href="/examiner"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-center text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 flex items-center justify-center gap-1.5"
-                >
-                  <CheckSquare className="w-4 h-4" />
-                  <span>Examiner</span>
-                </Link>
-              )}
+          {user && user.role === 'admin' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 gap-2 text-xs font-bold">
+              <Link
+                href="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-center text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 flex items-center justify-center gap-1.5"
+              >
+                <Settings className="w-4 h-4" />
+                <span>Admin</span>
+              </Link>
             </div>
           )}
         </div>

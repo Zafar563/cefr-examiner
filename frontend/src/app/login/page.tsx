@@ -48,15 +48,20 @@ function LoginForm() {
   return (
     <div className="max-w-md mx-auto my-10 p-6 sm:p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
       <div className="flex flex-col items-center justify-center text-center mb-6">
-        <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 p-1.5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700/60 mb-2.5 flex items-center justify-center">
+        <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 p-1.5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700/60 mb-2.5 flex items-center justify-center overflow-hidden">
           <img
             src="/logo.png"
             alt="CEFR MATERIALS"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain dark:hidden"
+          />
+          <img
+            src="/logo-dark.png"
+            alt="CEFR MATERIALS"
+            className="w-full h-full object-contain hidden dark:block"
           />
         </div>
         <h1 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
-          CEFR <span className="text-emerald-600 dark:text-emerald-400">MATERIALS</span>
+          CEFR <span className="text-emerald-600 dark:text-amber-400">MATERIALS</span>
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
           Mock Test va Tayyorgarlik Platformasi

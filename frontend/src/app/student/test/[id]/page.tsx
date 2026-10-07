@@ -40,6 +40,34 @@ interface IeltsReadingSectionProps {
   className?: string;
 }
 
+function normalizeInstructionsHtml(rawHtml: string): string {
+  if (!rawHtml) return '';
+  let html = rawHtml;
+
+  // 1. Remove empty question items from scraping that create awkward vertical gaps
+  html = html.replace(/<div class="ielts-(?:listening|reading)-question-item">\s*<\/div>/gi, '');
+
+  // 2. Ensure matching table rows have data-qnum and clean radio names
+  html = html.replace(/<tr[^>]*class="[^"]*ielts-listening-question-item[^"]*"[^>]*>[\s\S]*?<\/tr>/gi, (row) => {
+    const qnumMatch =
+      row.match(/id="ielts-listening-question-number-(\d+)"/) ||
+      row.match(/class="[^"]*ielts-q-badge[^"]*">(\d+)<\/strong>/) ||
+      row.match(/data-qnum="(\d+)"/);
+    if (!qnumMatch) return row;
+    const qn = qnumMatch[1];
+    return row.replace(/<input\s+type="radio"[^>]*>/gi, (radio) => {
+      let r = radio;
+      if (!r.includes('data-qnum=')) {
+        r = r.replace(/<input\s+/i, `<input data-qnum="${qn}" `);
+      }
+      r = r.replace(/name="[^"]*"/i, `name="question_${qn}"`);
+      return r;
+    });
+  });
+
+  return html;
+}
+
 const IeltsReadingSection = React.memo(
   React.forwardRef<HTMLDivElement, IeltsReadingSectionProps>(function IeltsReadingSection(
     { instructionsHtml, qnumToQuestionId, initialAnswers, onSaveAnswer, onAnswerUpdated, className },
@@ -60,6 +88,8 @@ const IeltsReadingSection = React.memo(
 
     const debounceTimersRef = useRef<Record<number, NodeJS.Timeout>>({});
 
+    const sanitizedHtml = useMemo(() => normalizeInstructionsHtml(instructionsHtml), [instructionsHtml]);
+
     const setRefs = (node: HTMLDivElement | null) => {
       localRef.current = node;
       if (typeof ref === 'function') {
@@ -69,10 +99,37 @@ const IeltsReadingSection = React.memo(
       }
     };
 
-    // Pre-fill answers whenever instructionsHtml changes
+    // Pre-fill answers whenever sanitizedHtml changes
     useEffect(() => {
       const container = localRef.current;
       if (!container) return;
+
+      // Wrap any unwrapped tables in responsive containers
+      const tables = container.querySelectorAll<HTMLTableElement>('table');
+      tables.forEach((tbl) => {
+        if (!tbl.parentElement?.classList.contains('overflow-x-auto')) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'overflow-x-auto my-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs';
+          tbl.parentNode?.insertBefore(wrapper, tbl);
+          wrapper.appendChild(tbl);
+        }
+      });
+
+      // Ensure matching table rows have data-qnum set on radios
+      const matchingRows = container.querySelectorAll<HTMLTableRowElement>('tr.ielts-listening-question-item');
+      matchingRows.forEach((row) => {
+        const badge = row.querySelector('.ielts-q-badge, [id*="question-number"]');
+        const qnum = badge?.textContent?.trim() || badge?.id?.match(/\d+/)?.[0];
+        if (qnum) {
+          const radios = row.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+          radios.forEach((r) => {
+            if (!r.getAttribute('data-qnum')) {
+              r.setAttribute('data-qnum', qnum);
+              r.name = `question_${qnum}`;
+            }
+          });
+        }
+      });
 
       const qmap = qmapRef.current;
       const answers = answersRef.current;
@@ -103,7 +160,7 @@ const IeltsReadingSection = React.memo(
         }
       });
 
-      // 3. Radio inputs
+      // 3. Radio inputs (including matching table radios)
       const radios = container.querySelectorAll<HTMLInputElement>('input[type="radio"][data-qnum]');
       radios.forEach((radio) => {
         const qnum = Number(radio.getAttribute('data-qnum'));
@@ -124,7 +181,7 @@ const IeltsReadingSection = React.memo(
         });
         cb.checked = answersForGroup.includes(cb.value);
       });
-    }, [instructionsHtml]);
+    }, [sanitizedHtml]);
 
     // Attach native DOM event listeners
     useEffect(() => {
@@ -206,6 +263,23 @@ const IeltsReadingSection = React.memo(
               updateRef.current?.(qId, radio.value);
             }
           }
+          return;
+        }
+
+        // Click on matching table option cell
+        const matchingCell = target.closest<HTMLTableCellElement>('.ielts-listening-matching-option-cell, .ielts-reading-matching-table td');
+        if (matchingCell) {
+          const radio = matchingCell.querySelector<HTMLInputElement>('input[type="radio"]');
+          if (radio && !radio.checked) {
+            radio.checked = true;
+            const qnum = Number(radio.getAttribute('data-qnum'));
+            const qId = qmapRef.current[qnum];
+            if (qId) {
+              saveRef.current(qId, radio.value);
+              updateRef.current?.(qId, radio.value);
+            }
+          }
+          return;
         }
       };
 
@@ -282,7 +356,7 @@ const IeltsReadingSection = React.memo(
       <div
         ref={setRefs}
         className={className || "bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:sticky lg:top-40 max-h-[70vh] overflow-y-auto"}
-        dangerouslySetInnerHTML={{ __html: instructionsHtml }}
+        dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
       />
     );
   }),
@@ -314,6 +388,7 @@ export default function TestTakingPage() {
 
   // Listening state: audio play limiter (max 2 plays)
   const [audioPlaysLeft, setAudioPlaysLeft] = useState<Record<number, number>>({});
+  const [hasStartedCurrentPlay, setHasStartedCurrentPlay] = useState<Record<number, boolean>>({});
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -518,7 +593,7 @@ export default function TestTakingPage() {
   // Listening Audio Player functions
   const playAudioWithLimit = (sectionId: number, audioUrl: string) => {
     const remaining = audioPlaysLeft[sectionId] !== undefined ? audioPlaysLeft[sectionId] : 2;
-    if (remaining <= 0) {
+    if (remaining <= 0 && !isPlayingAudio) {
       alert('Ushbu audio eshitish limiti (2 marta) tugadi!');
       return;
     }
@@ -532,15 +607,17 @@ export default function TestTakingPage() {
           .play()
           .then(() => {
             setIsPlayingAudio(true);
-            setAudioPlaysLeft((prev) => ({
-              ...prev,
-              [sectionId]: remaining - 1,
-            }));
+            if (!hasStartedCurrentPlay[sectionId]) {
+              setAudioPlaysLeft((prev) => ({
+                ...prev,
+                [sectionId]: Math.max(0, remaining - 1),
+              }));
+              setHasStartedCurrentPlay((prev) => ({ ...prev, [sectionId]: true }));
+            }
           })
           .catch((err) => {
             console.warn('Audio play error:', err);
             setIsPlayingAudio(true);
-            setAudioPlaysLeft((prev) => ({ ...prev, [sectionId]: remaining - 1 }));
           });
       }
     }
@@ -744,13 +821,37 @@ export default function TestTakingPage() {
       {currentSection ? (
         <div className="space-y-6">
           {/* Section Instructions Card */}
-          <div className="bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div
+            className={`border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+              currentSection.type === 'listening'
+                ? 'bg-blue-50/70 dark:bg-blue-950/40 border-blue-200/80 dark:border-blue-800/80'
+                : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200/80 dark:border-emerald-800/80'
+            }`}
+          >
             <div>
-              <h2 className="text-base font-bold text-emerald-950 dark:text-emerald-200 flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+              <h2
+                className={`text-base font-bold flex items-center gap-2 ${
+                  currentSection.type === 'listening'
+                    ? 'text-blue-950 dark:text-blue-200'
+                    : 'text-emerald-950 dark:text-emerald-200'
+                }`}
+              >
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    currentSection.type === 'listening'
+                      ? 'bg-blue-600 dark:bg-blue-400'
+                      : 'bg-emerald-600 dark:bg-emerald-400'
+                  }`}
+                ></span>
                 {currentSection.title}
               </h2>
-              <p className="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 mt-1 leading-relaxed">
+              <p
+                className={`text-xs sm:text-sm mt-1 leading-relaxed ${
+                  currentSection.type === 'listening'
+                    ? 'text-blue-800 dark:text-blue-300'
+                    : 'text-emerald-800 dark:text-emerald-300'
+                }`}
+              >
                 {currentSection.instructions?.includes('ielts-')
                   ? currentSection.type === 'listening'
                     ? 'Audio trekni tinglang va barcha topshiriqlarni bajaring. Barcha javoblaringiz avtomatik saqlanadi.'
@@ -759,7 +860,13 @@ export default function TestTakingPage() {
               </p>
             </div>
             {currentSection.instructions?.includes('ielts-') && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 text-xs font-bold whitespace-nowrap self-start sm:self-auto">
+              <span
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap self-start sm:self-auto ${
+                  currentSection.type === 'listening'
+                    ? 'bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200'
+                    : 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200'
+                }`}
+              >
                 {currentSection.type === 'listening' ? <Headphones className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
                 {currentSection.type === 'listening' ? 'IELTS Academic Listening' : 'IELTS Academic Reading'}
               </span>
@@ -784,6 +891,13 @@ export default function TestTakingPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
+                  {isPlayingAudio && (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                      Audioni tinglang...
+                    </div>
+                  )}
+
                   <div className="text-right">
                     <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">Qolgan imkoniyat:</span>
                     <span className="text-sm font-bold text-blue-700 dark:text-blue-400">
@@ -797,7 +911,10 @@ export default function TestTakingPage() {
                   <audio
                     ref={audioRef}
                     src={currentSection.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}
-                    onEnded={() => setIsPlayingAudio(false)}
+                    onEnded={() => {
+                      setIsPlayingAudio(false);
+                      setHasStartedCurrentPlay((prev) => ({ ...prev, [currentSection.id]: false }));
+                    }}
                     className="hidden"
                   />
 
@@ -813,7 +930,7 @@ export default function TestTakingPage() {
                       audioPlaysLeft[currentSection.id] <= 0 &&
                       !isPlayingAudio
                     }
-                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2"
+                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer"
                   >
                     {isPlayingAudio ? (
                       <>
@@ -821,7 +938,7 @@ export default function TestTakingPage() {
                       </>
                     ) : (
                       <>
-                        <Play className="w-4 h-4" /> Eshitish
+                        <Play className="w-4 h-4" /> Tinglash
                       </>
                     )}
                   </button>

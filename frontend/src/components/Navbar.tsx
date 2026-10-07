@@ -119,15 +119,19 @@ function NavbarContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
         {/* Left: Brand Logo & Title */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-md ring-2 ring-white dark:ring-slate-800 transition-transform group-hover:scale-105">
-            🎓
+          <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 p-1 shadow-md ring-2 ring-slate-100 dark:ring-slate-700/60 transition-transform group-hover:scale-105 flex items-center justify-center overflow-hidden">
+            <img
+              src="/logo.png"
+              alt="CEFR MATERIALS"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="flex flex-col">
             <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
-              IELTS <span className="text-indigo-600 dark:text-indigo-400">MATERIALS</span>
+              CEFR <span className="text-emerald-600 dark:text-emerald-400">MATERIALS</span>
             </span>
             <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-wider hidden sm:block">
-              CEFR Practice Platform
+              Practice & Assessment
             </span>
           </div>
         </Link>

@@ -3,8 +3,8 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
-  title: 'CEFR Practice & Assessment Platform (Mock Test Tizimi)',
-  description: 'Reading, Listening, Writing va Speaking bo‘yicha to‘liq CEFR imtihonini topshirish va darajani aniqlash platformasi.',
+  title: 'CEFR MATERIALS — Imtihon va Mock Test Platformasi',
+  description: 'CEFR Listening, Reading, Writing va Speaking bo‘yicha to‘liq tayyorgarlik va baholash platformasi.',
 };
 
 export default function RootLayout({
@@ -37,7 +37,7 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
-          <p>© 2026 CEFR Practice & Assessment Platform. Barcha huquqlar himoyalangan.</p>
+          <p>© 2026 CEFR MATERIALS. Barcha huquqlar himoyalangan.</p>
         </footer>
       </body>
     </html>

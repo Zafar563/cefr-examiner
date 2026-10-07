@@ -37,7 +37,11 @@ fi
 
 echo "🐳 [2/4] Konteynerlar build qilinib, ishga tushirilmoqda..."
 $COMPOSE_CMD pull postgres redis || true
-$COMPOSE_CMD up -d --build --remove-orphans
+if ! $COMPOSE_CMD up -d --build --remove-orphans; then
+  echo "⚠️ Birinchi urinishda to‘qnashuv yoki xatolik yuz berdi, 5 soniya kutib qayta urinilmoqda..."
+  sleep 5
+  $COMPOSE_CMD up -d --build --remove-orphans
+fi
 
 echo "🔍 [3/4] Konteynerlar holati tekshirilmoqda..."
 sleep 5

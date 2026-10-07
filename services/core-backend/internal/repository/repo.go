@@ -1,9 +1,12 @@
 package repository
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -678,8 +681,114 @@ func (r *Repository) SubmitSession(sessionID int) error {
 		return err
 	}
 
-	// Calculate and update preliminary results
+	// Launch background AI evaluation with Gemini via media-service
+	go r.runAIAssessment(sessionID)
+
+	// Calculate and update preliminary results immediately
 	return r.RecalculateSessionResults(sessionID)
+}
+
+type aiGradeResponse struct {
+	Score     float64 `json:"score"`
+	CefrLevel string  `json:"cefr_level"`
+	Feedback  string  `json:"feedback"`
+}
+
+func (r *Repository) runAIAssessment(sessionID int) {
+	mediaURL := os.Getenv("MEDIA_SERVICE_URL")
+	if mediaURL == "" {
+		mediaURL = "http://media-service:8000"
+	}
+	client := &http.Client{Timeout: 60 * time.Second}
+
+	// 1. Process writing answers with Gemini AI
+	writingRows, err := r.db.Query(`
+		SELECT a.id, COALESCE(q.question_text, ''), COALESCE(a.user_answer_text, ''), q.points
+		FROM answers a
+		JOIN questions q ON a.question_id = q.id
+		JOIN sections s ON q.section_id = s.id
+		WHERE a.session_id = $1 AND s.type = 'writing' AND a.user_answer_text IS NOT NULL AND a.user_answer_text != ''
+	`, sessionID)
+	if err == nil {
+		type wItem struct {
+			id     int
+			prompt string
+			text   string
+			points float64
+		}
+		var wItems []wItem
+		for writingRows.Next() {
+			var item wItem
+			if err := writingRows.Scan(&item.id, &item.prompt, &item.text, &item.points); err == nil {
+				wItems = append(wItems, item)
+			}
+		}
+		writingRows.Close()
+
+		for _, item := range wItems {
+			reqBody, _ := json.Marshal(map[string]interface{}{
+				"question_prompt": item.prompt,
+				"essay_text":      item.text,
+				"max_points":      item.points,
+			})
+			resp, err := client.Post(mediaURL+"/api/v1/ai/grade-writing", "application/json", bytes.NewBuffer(reqBody))
+			if err == nil && resp.StatusCode == http.StatusOK {
+				var aiResp aiGradeResponse
+				if err := json.NewDecoder(resp.Body).Decode(&aiResp); err == nil && aiResp.Score > 0 {
+					fb := fmt.Sprintf("AI Tahlili (CEFR %s): %s", aiResp.CefrLevel, aiResp.Feedback)
+					_, _ = r.db.Exec(`UPDATE answers SET score = $1, examiner_feedback = $2, is_graded = true WHERE id = $3`, aiResp.Score, fb, item.id)
+				}
+				resp.Body.Close()
+			}
+		}
+	}
+
+	// 2. Process speaking answers with Gemini AI
+	speakingRows, err := r.db.Query(`
+		SELECT a.id, COALESCE(q.question_text, ''), COALESCE(a.audio_file_url, ''), COALESCE(a.user_answer_text, ''), q.points
+		FROM answers a
+		JOIN questions q ON a.question_id = q.id
+		JOIN sections s ON q.section_id = s.id
+		WHERE a.session_id = $1 AND s.type = 'speaking' AND ((a.audio_file_url IS NOT NULL AND a.audio_file_url != '') OR (a.user_answer_text IS NOT NULL AND a.user_answer_text != ''))
+	`, sessionID)
+	if err == nil {
+		type sItem struct {
+			id       int
+			prompt   string
+			audioURL string
+			text     string
+			points   float64
+		}
+		var sItems []sItem
+		for speakingRows.Next() {
+			var item sItem
+			if err := speakingRows.Scan(&item.id, &item.prompt, &item.audioURL, &item.text, &item.points); err == nil {
+				sItems = append(sItems, item)
+			}
+		}
+		speakingRows.Close()
+
+		for _, item := range sItems {
+			reqBody, _ := json.Marshal(map[string]interface{}{
+				"question_prompt":  item.prompt,
+				"audio_file_url":   item.audioURL,
+				"user_answer_text": item.text,
+				"max_points":       item.points,
+			})
+			resp, err := client.Post(mediaURL+"/api/v1/ai/grade-speaking", "application/json", bytes.NewBuffer(reqBody))
+			if err == nil && resp.StatusCode == http.StatusOK {
+				var aiResp aiGradeResponse
+				if err := json.NewDecoder(resp.Body).Decode(&aiResp); err == nil && aiResp.Score > 0 {
+					fb := fmt.Sprintf("AI Tahlili (CEFR %s): %s", aiResp.CefrLevel, aiResp.Feedback)
+					_, _ = r.db.Exec(`UPDATE answers SET score = $1, examiner_feedback = $2, is_graded = true WHERE id = $3`, aiResp.Score, fb, item.id)
+				}
+				resp.Body.Close()
+			}
+		}
+	}
+
+	// 3. Recalculate and update final session results
+	_ = r.RecalculateSessionResults(sessionID)
 }
 
 func (r *Repository) RecalculateSessionResults(sessionID int) error {

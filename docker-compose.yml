@@ -65,6 +65,8 @@ services:
     environment:
       - STORAGE_DIR=/app/storage/uploads
       - PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.8-flash}
     volumes:
       - shared_media:/app/storage/uploads
 

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import upload
+from app.routers import upload, ai_grade
 from app.core.config import settings
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="CEFR Platformasi uchun Audio qabul qilish, saqlash va streaming mikroservisi",
+    description="CEFR Platformasi uchun Audio qabul qilish, saqlash, streaming va AI baholash mikroservisi",
     version="1.0.0"
 )
 
@@ -20,6 +20,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(upload.router)
+app.include_router(ai_grade.router)
 
 @app.get("/health")
 async def health_check():

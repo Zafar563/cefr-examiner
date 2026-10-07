@@ -269,9 +269,9 @@ function StudentDashboardContent() {
                 <span>{typeLabel}</span>
               </span>
 
-              {meta.book && (
+              {meta.bookNum && (
                 <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-slate-900 dark:bg-slate-800 text-white shadow-xs">
-                  {meta.book}
+                  Book {meta.bookNum}
                 </span>
               )}
 
@@ -295,22 +295,12 @@ function StudentDashboardContent() {
           </div>
 
           {/* Test Title */}
-          <h3 className={`text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-2 ${titleHoverClass} transition-colors`}>
+          <h3 className={`text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-1.5 ${titleHoverClass} transition-colors`}>
             {test.title}
           </h3>
 
-          {/* Description */}
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed line-clamp-2">
-            {test.description}
-          </p>
-
           {/* Individual Section / Passage Practice Options */}
-          <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-400">
-              <span>Alohida bo‘lim / topshiriq:</span>
-              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">Mustaqil ishlash</span>
-            </div>
-
+          <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
               {isReading ? (
                 <>
@@ -528,9 +518,6 @@ function StudentDashboardContent() {
                 </>
               )}
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Istalgan testni tanlang yoki uning ichidagi alohida bir bo‘lim (Passage / Section) ni mustaqil ishlang.
-            </p>
           </div>
 
           {/* Search Box */}

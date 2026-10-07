@@ -190,11 +190,9 @@ export default function TestResultPage() {
         return (
           <>
             {!isFinal && !isListeningTest && !isReadingTest && (
-              <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 text-xs sm:text-sm flex items-center gap-3">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
-                <div>
-                  <strong>Eslatma:</strong> Barcha modullar avtomatlashtirilgan baholash tizimi tomonidan tekshirilib hisoblanmoqda.
-                </div>
+              <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 text-xs sm:text-sm flex items-center gap-2.5 font-bold">
+                <AlertCircle className="w-4.5 h-4.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+                <span>Tekshirilmoqda</span>
               </div>
             )}
 

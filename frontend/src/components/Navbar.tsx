@@ -116,10 +116,10 @@ function NavbarContent() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#0f1422]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/80 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Left: Brand Logo & Title */}
-        <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 p-1 shadow-md ring-2 ring-slate-100 dark:ring-slate-700/60 transition-transform group-hover:scale-105 flex items-center justify-center overflow-hidden">
+        <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
+          <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 p-1 shadow-md ring-2 ring-slate-200 dark:ring-slate-700 transition-transform group-hover:scale-105 flex items-center justify-center overflow-hidden">
             <img
               src="/logo.png"
               alt="CEFR MATERIALS"
@@ -127,30 +127,30 @@ function NavbarContent() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white uppercase leading-tight">
               CEFR <span className="text-emerald-600 dark:text-emerald-400">MATERIALS</span>
             </span>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-wider hidden sm:block">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5 hidden sm:block">
               Practice & Assessment
             </span>
           </div>
         </Link>
 
         {/* Center: Desktop Navigation Tabs */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 text-sm font-bold text-slate-700 dark:text-slate-200">
+        <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-base font-bold text-slate-700 dark:text-slate-200">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
               <Link
                 key={item.id}
                 href={item.href}
-                className={`px-3.5 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-2 cursor-pointer ${
                   item.isActive
                     ? item.activeClass
                     : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
+                <Icon className="w-4.5 h-4.5 shrink-0" />
                 <span>{item.label}</span>
               </Link>
             );
@@ -160,13 +160,13 @@ function NavbarContent() {
           {user?.role === 'admin' && (
             <Link
               href="/admin"
-              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/admin'
                   ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 ring-1 ring-purple-500/20'
                   : 'text-purple-700 dark:text-purple-400 hover:bg-purple-50/50'
               }`}
             >
-              <Settings className="w-3.5 h-3.5" />
+              <Settings className="w-4 h-4" />
               <span>Admin</span>
             </Link>
           )}
@@ -174,13 +174,13 @@ function NavbarContent() {
           {user?.role === 'examiner' && (
             <Link
               href="/examiner"
-              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
                 pathname === '/examiner'
                   ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/20'
                   : 'text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50/50'
               }`}
             >
-              <CheckSquare className="w-3.5 h-3.5" />
+              <CheckSquare className="w-4 h-4" />
               <span>Examiner</span>
             </Link>
           )}
@@ -196,10 +196,10 @@ function NavbarContent() {
               <div>
                 <button
                   onClick={() => setAccountMenuOpen(!accountMenuOpen)}
-                  className="bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider px-5 py-2.5 rounded-full shadow-md shadow-slate-900/10 flex items-center gap-2 transition-all cursor-pointer"
+                  className="bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 active:scale-95 text-white font-black text-xs sm:text-sm uppercase tracking-wider px-6 py-2.5 rounded-full shadow-md shadow-slate-900/10 flex items-center gap-2 transition-all cursor-pointer"
                 >
                   <span>ACCOUNT</span>
-                  <span className="text-[10px] opacity-75">▾</span>
+                  <span className="text-xs opacity-75">▾</span>
                 </button>
 
                 {/* Account Popover Menu */}
@@ -271,7 +271,7 @@ function NavbarContent() {
             ) : (
               <Link
                 href="/login"
-                className="bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider px-6 py-2.5 rounded-full shadow-md shadow-slate-900/10 transition-all inline-block"
+                className="bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 active:scale-95 text-white font-black text-xs sm:text-sm uppercase tracking-wider px-6 py-2.5 rounded-full shadow-md shadow-slate-900/10 transition-all inline-block"
               >
                 ACCOUNT
               </Link>

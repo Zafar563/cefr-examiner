@@ -36,7 +36,7 @@ export default function RootLayout({
         <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
           {children}
         </main>
-        <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400 transition-colors duration-200">
+        <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-sm font-semibold text-slate-500 dark:text-slate-400 transition-colors duration-200">
           <p>© 2026 CEFR MATERIALS. Barcha huquqlar himoyalangan.</p>
         </footer>
       </body>

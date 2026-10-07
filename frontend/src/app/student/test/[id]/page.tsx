@@ -677,15 +677,15 @@ export default function TestTakingPage() {
   return (
     <div className="space-y-6 pb-20">
       {/* Top Test Header Bar */}
-      <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-16 z-40 transition-all">
+      <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-20 z-40 transition-all">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white line-clamp-1">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white line-clamp-1">
               {test.title}
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              CEFR & IELTS Academic Standard Examination
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              CEFR Examination Standard
             </p>
           </div>
 

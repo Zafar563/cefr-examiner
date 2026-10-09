@@ -129,17 +129,17 @@ html.dark body,
 
 .ielts-reading-container {
   color: #1e293b;
-  font-size: 0.925rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
 
-.ielts-reading-container h2.ielts-reading-question-section-heading {
-  font-size: 1.15rem;
-  font-weight: 700;
+.ielts-reading-question-section-heading {
+  font-size: 1.25rem;
+  font-weight: 800;
   color: #0f172a;
   margin-top: 1.75rem;
   margin-bottom: 0.75rem;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
   border-bottom: 2px solid #e2e8f0;
   display: flex;
   align-items: center;
@@ -152,27 +152,28 @@ html.dark body,
 
 .ielts-reading-question-section-content {
   color: #334155;
-  margin-bottom: 1.25rem;
-  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  line-height: 1.75;
+  font-size: 1rem;
 }
 
 .ielts-reading-question-section-content p {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.75rem;
 }
 
 .ielts-reading-question-section-content strong:not(.ielts-q-badge):not(.ielts-reading-question-number) {
   color: #0f172a;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .ielts-reading-question-section-content ul {
   list-style-type: disc;
   padding-left: 1.5rem;
-  margin: 0.6rem 0 1.2rem 0;
+  margin: 0.75rem 0 1.25rem 0;
 }
 
 .ielts-reading-question-section-content li {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.65rem;
   line-height: 1.8;
   color: #1e293b;
 }
@@ -189,12 +190,12 @@ html.dark body,
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-width: 26px !important;
-  height: 26px !important;
-  padding: 0 6px !important;
-  font-size: 0.75rem !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  padding: 0 7px !important;
+  font-size: 0.85rem !important;
   font-weight: 800 !important;
-  border-radius: 5px !important;
+  border-radius: 6px !important;
   background-color: #0f172a !important;
   color: #ffffff !important;
   flex-shrink: 0 !important;
@@ -209,22 +210,22 @@ html.dark body,
 .ielts-inline-input-wrap {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   vertical-align: middle;
   margin: 0 4px;
 }
 
 .ielts-inline-input {
   display: inline-block;
-  width: 140px;
-  height: 32px;
-  padding: 0 10px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  width: 155px;
+  height: 38px;
+  padding: 0 12px;
+  font-size: 1rem;
+  font-weight: 600;
   color: #0f172a;
   background-color: #f8fafc;
   border: 1.5px solid #cbd5e1;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.15s ease-in-out;
 }
 
@@ -238,7 +239,7 @@ html.dark body,
 .ielts-inline-input.answered {
   border-color: #10b981;
   background-color: #f0fdf4;
-  font-weight: 600;
+  font-weight: 700;
   color: #065f46;
 }
 
@@ -252,15 +253,15 @@ html.dark body,
 }
 
 .ielts-inline-select {
-  height: 32px;
-  max-width: 220px;
-  padding: 0 8px;
-  font-size: 0.8125rem;
+  height: 38px;
+  max-width: 240px;
+  padding: 0 10px;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #0f172a;
   background-color: #f8fafc;
   border: 1.5px solid #cbd5e1;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -283,17 +284,17 @@ html.dark body,
   background-color: #f8fafc;
   border: 1.5px dashed #94a3b8;
   border-radius: 12px;
-  padding: 12px 16px;
-  margin: 12px 0 16px 0;
+  padding: 14px 18px;
+  margin: 14px 0 18px 0;
 }
 
 .options-dnd-panel-title {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .dnd-card {
@@ -302,11 +303,11 @@ html.dark body,
   gap: 6px;
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 5px 10px;
+  border-radius: 8px;
+  padding: 6px 12px;
   margin: 3px 4px;
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   color: #1e293b;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
@@ -315,9 +316,9 @@ html.dark body,
 .ielts-standalone-q {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -328,15 +329,15 @@ html.dark body,
 .ielts-q-header {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .ielts-q-title {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   color: #1e293b;
-  line-height: 1.55;
+  line-height: 1.6;
   flex: 1;
 }
 
@@ -344,21 +345,21 @@ html.dark body,
 .ielts-checkbox-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-left: 34px;
+  gap: 10px;
+  margin-left: 38px;
 }
 
 .ielts-radio-btn,
 .ielts-checkbox-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 8px 16px;
   border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: #f8fafc;
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #334155;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -390,8 +391,8 @@ html.dark body,
 .ielts-radio-btn input[type="radio"],
 .ielts-checkbox-btn input[type="checkbox"] {
   accent-color: #059669;
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
   cursor: pointer;
 }
 
@@ -400,8 +401,8 @@ html.dark body,
 .ielts-listening-matching-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 12px 0 18px 0;
-  font-size: 0.875rem;
+  margin: 14px 0 20px 0;
+  font-size: 0.95rem;
   background-color: #ffffff;
 }
 
@@ -410,7 +411,7 @@ html.dark body,
 .ielts-listening-matching-table th,
 .ielts-listening-matching-table td {
   border: 1px solid #cbd5e1;
-  padding: 9px 12px;
+  padding: 10px 14px;
   text-align: left;
   vertical-align: middle;
 }

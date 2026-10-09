@@ -88,10 +88,10 @@ export default function ReadingPassageHighlighter({
       const paragraphs = raw.split(/\n\s*\n/).filter(Boolean);
       if (paragraphs.length > 1) {
         containerRef.current.innerHTML = paragraphs
-          .map((p) => `<p class="mb-4 leading-relaxed">${p.replace(/\n/g, '<br/>')}</p>`)
+          .map((p) => `<p class="mb-5 leading-[1.85] text-[16px] sm:text-[17px] text-slate-800 dark:text-slate-200">${p.replace(/\n/g, '<br/>')}</p>`)
           .join('');
       } else {
-        containerRef.current.innerHTML = `<p class="leading-relaxed">${raw.replace(/\n/g, '<br/>')}</p>`;
+        containerRef.current.innerHTML = `<p class="leading-[1.85] text-[16px] sm:text-[17px] text-slate-800 dark:text-slate-200">${raw.replace(/\n/g, '<br/>')}</p>`;
       }
     }
     updateHighlightCount();
@@ -325,7 +325,7 @@ export default function ReadingPassageHighlighter({
       {/* Scrollable Passage Body */}
       <div
         ref={scrollWrapperRef}
-        className="relative max-h-[72vh] overflow-y-auto pr-2 scrollbar-thin select-text"
+        className="relative max-h-[76vh] overflow-y-auto pr-2 scrollbar-thin select-text"
         onMouseUp={handleSelection}
         onTouchEnd={handleSelection}
         onClick={handlePassageClick}
@@ -333,7 +333,7 @@ export default function ReadingPassageHighlighter({
         {/* Text Container */}
         <div
           ref={containerRef}
-          className="text-slate-800 dark:text-slate-200 text-sm leading-relaxed space-y-3 font-normal"
+          className="text-slate-800 dark:text-slate-200 text-base sm:text-[17px] leading-[1.85] space-y-4 font-normal"
         />
       </div>
 

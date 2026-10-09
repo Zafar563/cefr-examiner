@@ -14,7 +14,7 @@ import {
 
 export default function HomePage() {
   return (
-    <div className="space-y-16 sm:space-y-20 py-6 sm:py-12 max-w-[1700px] mx-auto px-2 sm:px-4">
+    <div className="space-y-16 sm:space-y-20 py-6 sm:py-12 w-full mx-auto px-2 sm:px-4">
       {/* 1. Hero Header Section */}
       <section className="text-center space-y-5 pt-2 sm:pt-4">
         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-800 shadow-xs">

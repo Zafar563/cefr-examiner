@@ -64,8 +64,8 @@ function NavbarContent() {
       href: '/',
       icon: HomeIcon,
       isActive: isHome,
-      activeClass: 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 font-extrabold ring-1 ring-indigo-500/20 shadow-xs',
-      hoverClass: 'hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/30',
+      activeClass: 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-extrabold ring-1 ring-slate-300 dark:ring-slate-700 shadow-xs',
+      hoverClass: 'hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60',
     },
     {
       id: 'listening',
@@ -73,8 +73,8 @@ function NavbarContent() {
       href: '/student?tab=listening',
       icon: Headphones,
       isActive: currentTab === 'listening',
-      activeClass: 'bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-extrabold ring-1 ring-blue-500/20 shadow-xs',
-      hoverClass: 'hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/30',
+      activeClass: 'bg-teal-50 dark:bg-teal-950/70 text-[#0a4e5e] dark:text-teal-400 font-extrabold ring-1 ring-teal-500/30 shadow-xs',
+      hoverClass: 'hover:text-[#0a4e5e] dark:hover:text-teal-400 hover:bg-teal-50/50 dark:hover:bg-teal-950/30',
     },
     {
       id: 'reading',
@@ -82,8 +82,8 @@ function NavbarContent() {
       href: '/student?tab=reading',
       icon: BookOpen,
       isActive: currentTab === 'reading',
-      activeClass: 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-extrabold ring-1 ring-emerald-500/20 shadow-xs',
-      hoverClass: 'hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30',
+      activeClass: 'bg-emerald-50 dark:bg-emerald-950/70 text-[#047857] dark:text-emerald-400 font-extrabold ring-1 ring-emerald-500/30 shadow-xs',
+      hoverClass: 'hover:text-[#047857] dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30',
     },
     {
       id: 'speaking',
@@ -91,8 +91,8 @@ function NavbarContent() {
       href: '/student?tab=speaking',
       icon: Mic,
       isActive: currentTab === 'speaking',
-      activeClass: 'bg-purple-50 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 font-extrabold ring-1 ring-purple-500/20 shadow-xs',
-      hoverClass: 'hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-950/30',
+      activeClass: 'bg-purple-50 dark:bg-purple-950/70 text-[#6d28d9] dark:text-purple-400 font-extrabold ring-1 ring-purple-500/30 shadow-xs',
+      hoverClass: 'hover:text-[#6d28d9] dark:hover:text-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-950/30',
     },
     {
       id: 'writing',
@@ -100,8 +100,8 @@ function NavbarContent() {
       href: '/student?tab=writing',
       icon: PenTool,
       isActive: currentTab === 'writing',
-      activeClass: 'bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 font-extrabold ring-1 ring-amber-500/20 shadow-xs',
-      hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30',
+      activeClass: 'bg-fuchsia-50 dark:bg-fuchsia-950/70 text-[#7a2259] dark:text-fuchsia-300 font-extrabold ring-1 ring-fuchsia-500/30 shadow-xs',
+      hoverClass: 'hover:text-[#7a2259] dark:hover:text-fuchsia-300 hover:bg-fuchsia-50/50 dark:hover:bg-fuchsia-950/30',
     },
     {
       id: 'mock',
@@ -109,8 +109,8 @@ function NavbarContent() {
       href: '/student?tab=mock',
       icon: Sparkles,
       isActive: currentTab === 'mock',
-      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 font-extrabold ring-1 ring-rose-500/20 shadow-xs',
-      hoverClass: 'hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
+      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-rose-700 dark:text-rose-400 font-extrabold ring-1 ring-rose-500/30 shadow-xs',
+      hoverClass: 'hover:text-rose-700 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
     },
   ];
 

@@ -490,7 +490,6 @@ function StudentDashboardContent() {
             </div>
           )}
         </div>
-        </div>
 
         {/* Start / Continue / Retake Full Test Button */}
         <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800">

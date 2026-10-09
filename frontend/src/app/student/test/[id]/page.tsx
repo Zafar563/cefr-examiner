@@ -366,6 +366,26 @@ const IeltsReadingSection = React.memo(
   }
 );
 
+function getSectionShortLabel(sec: Section, index: number): string {
+  if (sec.type === 'listening') {
+    const m = sec.title?.match(/(?:Part|Section)\s*(\d+)/i);
+    return m ? `Section ${m[1]}` : `Section ${index + 1}`;
+  }
+  if (sec.type === 'reading') {
+    const m = sec.title?.match(/(?:Passage|Part)\s*(\d+)/i);
+    return m ? `Passage ${m[1]}` : `Passage ${index + 1}`;
+  }
+  if (sec.type === 'writing') {
+    const m = sec.title?.match(/(?:Task|Part)\s*(\d+)/i);
+    return m ? `Task ${m[1]}` : `Task ${index + 1}`;
+  }
+  if (sec.type === 'speaking') {
+    const m = sec.title?.match(/(?:Part|Section)\s*(\d+)/i);
+    return m ? `Part ${m[1]}` : `Part ${index + 1}`;
+  }
+  return sec.title || `Section ${index + 1}`;
+}
+
 export default function TestTakingPage() {
   const params = useParams();
   const router = useRouter();
@@ -378,6 +398,7 @@ export default function TestTakingPage() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [targetSectionFilter, setTargetSectionFilter] = useState<number | null>(null);
 
   // Answers state mapped by questionId -> { text: string, audioUrl: string }
   const [answersMap, setAnswersMap] = useState<Record<number, { text: string; audioUrl: string }>>({});
@@ -461,6 +482,17 @@ export default function TestTakingPage() {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const secParam = urlParams.get('section');
+      if (secParam !== null) {
+        const secIdx = parseInt(secParam, 10);
+        if (!isNaN(secIdx) && secIdx >= 0) {
+          setTargetSectionFilter(secIdx);
+          setCurrentSectionIndex(secIdx);
+        }
+      }
+    }
     if (!isNaN(sessionId) && sessionId > 0) {
       loadTestSession(sessionId);
     } else {
@@ -496,6 +528,7 @@ export default function TestTakingPage() {
           const secIdx = parseInt(secParam, 10);
           if (!isNaN(secIdx) && secIdx >= 0 && secIdx < (testData.sections?.length || 0)) {
             setCurrentSectionIndex(secIdx);
+            setTargetSectionFilter(secIdx);
           }
         }
       }
@@ -792,12 +825,16 @@ export default function TestTakingPage() {
 
         {/* Section Navigation Tabs */}
         <div className="flex gap-2 overflow-x-auto pt-3 mt-3 border-t border-slate-200/70 dark:border-slate-800">
-          {sections.map((sec, idx) => {
+          {(targetSectionFilter !== null && sections[targetSectionFilter]
+            ? [{ sec: sections[targetSectionFilter], idx: targetSectionFilter }]
+            : sections.map((sec, idx) => ({ sec, idx }))
+          ).map(({ sec, idx }) => {
             const isSelected = idx === currentSectionIndex;
             let icon = <BookOpen className="w-4 h-4" />;
             if (sec.type === 'listening') icon = <Headphones className="w-4 h-4" />;
             if (sec.type === 'writing') icon = <Edit3 className="w-4 h-4" />;
             if (sec.type === 'speaking') icon = <Mic className="w-4 h-4" />;
+            const tabLabel = getSectionShortLabel(sec, idx);
 
             return (
               <button
@@ -810,7 +847,7 @@ export default function TestTakingPage() {
                 }`}
               >
                 {icon}
-                <span>{sec.title}</span>
+                <span>{tabLabel}</span>
               </button>
             );
           })}
@@ -820,58 +857,20 @@ export default function TestTakingPage() {
       {/* Main Section Content Area */}
       {currentSection ? (
         <div className="space-y-6">
-          {/* Section Instructions Card */}
-          <div
-            className={`border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-              currentSection.type === 'listening'
-                ? 'bg-blue-50/70 dark:bg-blue-950/40 border-blue-200/80 dark:border-blue-800/80'
-                : 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200/80 dark:border-emerald-800/80'
-            }`}
-          >
-            <div>
-              <h2
-                className={`text-base font-bold flex items-center gap-2 ${
-                  currentSection.type === 'listening'
-                    ? 'text-blue-950 dark:text-blue-200'
-                    : 'text-emerald-950 dark:text-emerald-200'
-                }`}
-              >
-                <span
-                  className={`w-2.5 h-2.5 rounded-full ${
-                    currentSection.type === 'listening'
-                      ? 'bg-blue-600 dark:bg-blue-400'
-                      : 'bg-emerald-600 dark:bg-emerald-400'
-                  }`}
-                ></span>
-                {currentSection.title}
-              </h2>
-              <p
-                className={`text-xs sm:text-sm mt-1 leading-relaxed ${
-                  currentSection.type === 'listening'
-                    ? 'text-blue-800 dark:text-blue-300'
-                    : 'text-emerald-800 dark:text-emerald-300'
-                }`}
-              >
-                {currentSection.instructions?.includes('ielts-')
-                  ? currentSection.type === 'listening'
-                    ? 'Audio trekni tinglang va barcha topshiriqlarni bajaring. Barcha javoblaringiz avtomatik saqlanadi.'
-                    : 'Matnni diqqat bilan o‘qing va o‘ng tarafdagi barcha topshiriqlarni bajaring. Barcha javoblaringiz avtomatik saqlanadi.'
-                  : currentSection.instructions}
-              </p>
+          {/* Section Instructions Card (only if custom non-IELTS instructions exist) */}
+          {!currentSection.instructions?.includes('ielts-') && currentSection.instructions && (
+            <div className="border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700">
+              <div>
+                <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                  {currentSection.title}
+                </h2>
+                <p className="text-xs sm:text-sm mt-1 text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {currentSection.instructions}
+                </p>
+              </div>
             </div>
-            {currentSection.instructions?.includes('ielts-') && (
-              <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap self-start sm:self-auto ${
-                  currentSection.type === 'listening'
-                    ? 'bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200'
-                    : 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200'
-                }`}
-              >
-                {currentSection.type === 'listening' ? <Headphones className="w-3.5 h-3.5" /> : <BookOpen className="w-3.5 h-3.5" />}
-                {currentSection.type === 'listening' ? 'IELTS Academic Listening' : 'IELTS Academic Reading'}
-              </span>
-            )}
-          </div>
+          )}
 
           {/* 1. LISTENING SECTION */}
           {currentSection.type === 'listening' && (
@@ -1354,28 +1353,48 @@ export default function TestTakingPage() {
 
           {/* Bottom Section Navigator */}
           <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
-            <button
-              onClick={() => handleSectionChange(Math.max(0, currentSectionIndex - 1))}
-              disabled={currentSectionIndex === 0}
-              className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 transition-all flex items-center gap-1.5"
-            >
-              <ChevronLeft className="w-4 h-4" /> Oldingi bo‘lim
-            </button>
+            {targetSectionFilter !== null ? (
+              <>
+                <button
+                  onClick={() => router.push('/student')}
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Bosh sahifaga qaytish
+                </button>
 
-            {currentSectionIndex < sections.length - 1 ? (
-              <button
-                onClick={() => handleSectionChange(Math.min(sections.length - 1, currentSectionIndex + 1))}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-              >
-                Keyingi bo‘lim <ChevronRight className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={() => setShowSubmitModal(true)}
+                  className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+                >
+                  Bo‘limni Yakunlash <Send className="w-4 h-4" />
+                </button>
+              </>
             ) : (
-              <button
-                onClick={() => setShowSubmitModal(true)}
-                className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-              >
-                Testni Yakunlash <Send className="w-4 h-4" />
-              </button>
+              <>
+                <button
+                  onClick={() => handleSectionChange(Math.max(0, currentSectionIndex - 1))}
+                  disabled={currentSectionIndex === 0}
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 transition-all flex items-center gap-1.5"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Oldingi bo‘lim
+                </button>
+
+                {currentSectionIndex < sections.length - 1 ? (
+                  <button
+                    onClick={() => handleSectionChange(Math.min(sections.length - 1, currentSectionIndex + 1))}
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+                  >
+                    Keyingi bo‘lim <ChevronRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowSubmitModal(true)}
+                    className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+                  >
+                    Testni Yakunlash <Send className="w-4 h-4" />
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>

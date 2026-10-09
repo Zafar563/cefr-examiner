@@ -1397,7 +1397,7 @@ export default function TestTakingPage() {
               Imtihonni topshirishni tasdiqlaysizmi?
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 text-center leading-relaxed">
-              Reading va Listening natijalari avtomatik hisoblanadi. Writing va Speaking javoblaringiz esa tekshirish uchun o‘qituvchiga yuboriladi.
+              Barcha kiritilgan javoblaringiz avtomatik tekshirilib baholanadi.
             </p>
 
             <div className="flex gap-2 pt-2">

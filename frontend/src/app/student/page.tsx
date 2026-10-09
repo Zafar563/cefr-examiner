@@ -573,7 +573,7 @@ function StudentDashboardContent() {
   };
 
   return (
-    <div className="space-y-8 py-6 max-w-7xl mx-auto px-2 sm:px-4">
+    <div className="space-y-8 py-6 max-w-[1700px] mx-auto px-2 sm:px-4">
       {/* 1. Header Section: If Listening, render the Real Exam Materials Hero Banner matching mockup */}
       {activeTab === 'listening' ? (
         <section className="space-y-5">
@@ -806,7 +806,7 @@ function StudentDashboardContent() {
               <p className="text-xs text-slate-400 mt-1">Filtr parametrlarini o‘zgartirib ko‘ring.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {displayedListeningTests.map((t) => renderTestCard(t))}
             </div>
           )
@@ -817,7 +817,7 @@ function StudentDashboardContent() {
               <p className="text-xs text-slate-400 mt-1">Filtr parametrlarini o‘zgartirib ko‘ring.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {readingTests.map((t) => renderTestCard(t))}
             </div>
           )
@@ -828,7 +828,7 @@ function StudentDashboardContent() {
               <p className="text-xs text-slate-400 mt-1">Filtr parametrlarini o‘zgartirib ko‘ring.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {speakingTests.map((t) => renderTestCard(t))}
             </div>
           )
@@ -839,7 +839,7 @@ function StudentDashboardContent() {
               <p className="text-xs text-slate-400 mt-1">Filtr parametrlarini o‘zgartirib ko‘ring.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {writingTests.map((t) => renderTestCard(t))}
             </div>
           )

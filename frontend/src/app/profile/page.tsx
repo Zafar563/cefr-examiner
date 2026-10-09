@@ -170,7 +170,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 sm:py-8 space-y-6">
+    <div className="max-w-[1700px] mx-auto py-6 sm:py-8 space-y-6">
       <div className="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
         {/* ======================================================== */}
         {/* LEFT SIDEBAR NAVIGATION CARD */}

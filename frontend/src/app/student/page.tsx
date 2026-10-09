@@ -375,125 +375,121 @@ function StudentDashboardContent() {
           </h3>
 
           {/* Individual Section / Passage Practice Options */}
-          <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {isReading ? (
-                <>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 0)}
-                    disabled={startingTestId === test.id}
-                    className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
-                  >
-                    Passage 1
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 1)}
-                    disabled={startingTestId === test.id}
-                    className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
-                  >
-                    Passage 2
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 2)}
-                    disabled={startingTestId === test.id}
-                    className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
-                  >
-                    Passage 3
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false)}
-                    disabled={startingTestId === test.id}
-                    className="py-2 px-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
-                  >
-                    To‘liq (1–3)
-                  </button>
-                </>
-              ) : isListening ? (
-                <>
-                  {[
-                    { sec: 0, label: 'Section 1', qRange: '1–10', num: '1' },
-                    { sec: 1, label: 'Section 2', qRange: '11–20', num: '2' },
-                    { sec: 2, label: 'Section 3', qRange: '21–30', num: '3' },
-                    { sec: 3, label: 'Section 4', qRange: '31–40', num: '4' },
-                  ].map((s) => {
-                    const isSelectedSection = listeningSectionFilter === s.num;
-                    return (
+          {(!isListening || !['1', '2', '3', '4'].includes(listeningSectionFilter)) && (
+            <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {isReading ? (
+                  <>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 0)}
+                      disabled={startingTestId === test.id}
+                      className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
+                    >
+                      Passage 1
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 1)}
+                      disabled={startingTestId === test.id}
+                      className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
+                    >
+                      Passage 2
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 2)}
+                      disabled={startingTestId === test.id}
+                      className="py-2 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold transition-all border border-emerald-200/60 dark:border-emerald-800 text-center cursor-pointer"
+                    >
+                      Passage 3
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false)}
+                      disabled={startingTestId === test.id}
+                      className="py-2 px-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
+                    >
+                      To‘liq (1–3)
+                    </button>
+                  </>
+                ) : isListening ? (
+                  <>
+                    {[
+                      { sec: 0, label: 'Section 1', qRange: '1–10', num: '1' },
+                      { sec: 1, label: 'Section 2', qRange: '11–20', num: '2' },
+                      { sec: 2, label: 'Section 3', qRange: '21–30', num: '3' },
+                      { sec: 3, label: 'Section 4', qRange: '31–40', num: '4' },
+                    ].map((s) => (
                       <button
                         key={s.sec}
                         onClick={() => handleStartTest(test.id, hasCompleted, s.sec)}
                         disabled={startingTestId === test.id}
-                        className={`py-2 px-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer flex flex-col items-center justify-center gap-0.5 ${
-                          isSelectedSection
-                            ? 'bg-blue-600 text-white border-blue-500 shadow-md ring-2 ring-blue-400/50'
-                            : 'bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-600 hover:text-white text-blue-800 dark:text-blue-300 border-blue-200/60 dark:border-blue-800'
-                        }`}
+                        className="py-2 px-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer flex flex-col items-center justify-center gap-0.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-600 hover:text-white text-blue-800 dark:text-blue-300 border-blue-200/60 dark:border-blue-800"
                       >
                         <span>{s.label}</span>
-                        <span className={`text-[10px] ${isSelectedSection ? 'text-blue-100' : 'text-blue-600 dark:text-blue-400 opacity-75'}`}>
+                        <span className="text-[10px] text-blue-600 dark:text-blue-400 opacity-75">
                           Q {s.qRange}
                         </span>
                       </button>
-                    );
-                  })}
-                </>
-              ) : isSpeaking ? (
-                <>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 0)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
-                  >
-                    Part 1
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 1)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
-                  >
-                    Part 2
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 2)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
-                  >
-                    Part 3
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
-                  >
-                    To‘liq
-                  </button>
-                </>
-              ) : isWriting ? (
-                <>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 0)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-600 hover:text-white text-orange-800 dark:text-orange-300 text-xs font-bold transition-all border border-orange-200/60 dark:border-orange-800 text-center cursor-pointer"
-                  >
-                    Task 1
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false, 1)}
-                    disabled={startingTestId === test.id}
-                    className="py-1.5 px-2 rounded-xl bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-600 hover:text-white text-orange-800 dark:text-orange-300 text-xs font-bold transition-all border border-orange-200/60 dark:border-orange-800 text-center cursor-pointer"
-                  >
-                    Task 2
-                  </button>
-                  <button
-                    onClick={() => handleStartTest(test.id, false)}
-                    disabled={startingTestId === test.id}
-                    className="col-span-2 py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
-                  >
-                    To‘liq (Task 1 + 2)
-                  </button>
-                </>
-              ) : null}
+                    ))}
+                  </>
+                ) : isSpeaking ? (
+                  <>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 0)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
+                    >
+                      Part 1
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 1)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
+                    >
+                      Part 2
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 2)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-800 dark:text-purple-300 text-xs font-bold transition-all border border-purple-200/60 dark:border-purple-800 text-center cursor-pointer"
+                    >
+                      Part 3
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
+                    >
+                      To‘liq
+                    </button>
+                  </>
+                ) : isWriting ? (
+                  <>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 0)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-600 hover:text-white text-orange-800 dark:text-orange-300 text-xs font-bold transition-all border border-orange-200/60 dark:border-orange-800 text-center cursor-pointer"
+                    >
+                      Task 1
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false, 1)}
+                      disabled={startingTestId === test.id}
+                      className="py-1.5 px-2 rounded-xl bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-600 hover:text-white text-orange-800 dark:text-orange-300 text-xs font-bold transition-all border border-orange-200/60 dark:border-orange-800 text-center cursor-pointer"
+                    >
+                      Task 2
+                    </button>
+                    <button
+                      onClick={() => handleStartTest(test.id, false)}
+                      disabled={startingTestId === test.id}
+                      className="col-span-2 py-1.5 px-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 text-center cursor-pointer"
+                    >
+                      To‘liq (Task 1 + 2)
+                    </button>
+                  </>
+                ) : null}
+              </div>
             </div>
-          </div>
+          )}
+        </div>
         </div>
 
         {/* Start / Continue / Retake Full Test Button */}
@@ -543,17 +539,7 @@ function StudentDashboardContent() {
               ) : (
                 <>
                   <Play className="w-4 h-4 fill-current" />
-                  <span>
-                    Section {listeningSectionFilter} ni Boshlash (Savollar{' '}
-                    {listeningSectionFilter === '1'
-                      ? '1–10'
-                      : listeningSectionFilter === '2'
-                      ? '11–20'
-                      : listeningSectionFilter === '3'
-                      ? '21–30'
-                      : '31–40'}
-                    )
-                  </span>
+                  <span>Section {listeningSectionFilter}</span>
                   <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                 </>
               )}
@@ -706,26 +692,6 @@ function StudentDashboardContent() {
             </div>
           </div>
 
-          {/* Section Filter Status Bar when specific section is active */}
-          {['1', '2', '3', '4'].includes(listeningSectionFilter) && (
-            <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs sm:text-sm text-blue-900 dark:text-blue-200 font-bold">
-              <div className="flex items-center gap-2">
-                <Headphones className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
-                <span>
-                  {listeningSectionFilter === '1' && 'Section 1 rejimi faol: Savollar 1–10 (Kundalik ijtimoiy muloqot, forma/jadval to‘ldirish)'}
-                  {listeningSectionFilter === '2' && 'Section 2 rejimi faol: Savollar 11–20 (Ijtimoiy monolog, xarita/reja va ko‘p tanlovli)'}
-                  {listeningSectionFilter === '3' && 'Section 3 rejimi faol: Savollar 21–30 (Akademik muhokama/suhbat, moslashtirish va MCQ)'}
-                  {listeningSectionFilter === '4' && 'Section 4 rejimi faol: Savollar 31–40 (Akademik ma’ruza, konspekt/xulosa to‘ldirish)'}
-                </span>
-              </div>
-              <button
-                onClick={() => setListeningSectionFilter('full')}
-                className="text-blue-600 dark:text-cyan-400 hover:underline text-xs shrink-0 cursor-pointer ml-2"
-              >
-                To‘liq testga qaytish
-              </button>
-            </div>
-          )}
 
           {/* Quick Cambridge Book & Search Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">

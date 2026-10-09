@@ -115,7 +115,7 @@ function NavbarContent() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#0f1422]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/80 transition-colors">
+    <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#182235]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/80 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Left: Brand Logo & Title */}
         <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
@@ -195,7 +195,7 @@ function NavbarContent() {
 
                 {/* Account Popover Menu */}
                 {accountMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-[#161822] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 space-y-3 z-50 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 space-y-3 z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="pb-3 border-b border-slate-200/80 dark:border-slate-800">
                       <div className="font-extrabold text-sm text-slate-900 dark:text-white truncate">
                         {user.full_name || 'Foydalanuvchi'}
@@ -333,7 +333,7 @@ function NavbarContent() {
 
 export default function Navbar() {
   return (
-    <Suspense fallback={<div className="h-18 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f1422]" />}>
+    <Suspense fallback={<div className="h-18 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#182235]" />}>
       <NavbarContent />
     </Suspense>
   );

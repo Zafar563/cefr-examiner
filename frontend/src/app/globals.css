@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 248, 250, 252;
-  --background-end-rgb: 241, 245, 249;
+  --foreground-rgb: 30, 41, 59;
+  --background-start-rgb: 241, 244, 249;
+  --background-end-rgb: 235, 240, 246;
 }
 
 .dark {
   --foreground-rgb: 241, 245, 249;
-  --background-start-rgb: 15, 23, 42;
-  --background-end-rgb: 2, 6, 23;
+  --background-start-rgb: 20, 28, 43;
+  --background-end-rgb: 14, 20, 32;
   color-scheme: dark;
 }
 
@@ -22,7 +22,7 @@ html {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #f8fafc;
+  background-color: #f1f4f9;
   min-height: 100vh;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,8 +32,8 @@ body {
 
 html.dark body,
 .dark body {
-  background-color: #0b0f19;
-  color: #f8fafc;
+  background-color: #141c2b;
+  color: #f1f5f9;
 }
 
 /* Custom modern scrollbars */
@@ -53,13 +53,13 @@ html.dark body,
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #141c2b;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #2c3b54;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #3e5170;
 }
 
 /* Glassmorphism & Modern UI utilities */
@@ -71,20 +71,20 @@ html.dark body,
 }
 
 .dark .glass-panel {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(51, 65, 85, 0.7);
+  background: rgba(30, 41, 59, 0.88);
+  border: 1px solid rgba(44, 59, 84, 0.8);
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(241, 244, 249, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.8);
 }
 
 .dark .glass-nav {
-  background: rgba(11, 15, 25, 0.92);
-  border-bottom: 1px solid rgba(51, 65, 85, 0.65);
+  background: rgba(24, 34, 53, 0.94);
+  border-bottom: 1px solid rgba(44, 59, 84, 0.7);
 }
 
 .card-modern {
@@ -95,8 +95,8 @@ html.dark body,
 }
 
 .dark .card-modern {
-  background: #111827;
-  border-color: #1f2937;
+  background: #1e293b;
+  border-color: #26344d;
 }
 
 .card-modern:hover {
@@ -106,8 +106,8 @@ html.dark body,
 }
 
 .dark .card-modern:hover {
-  border-color: #374151;
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
+  border-color: #38bdf8;
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
 }
 
 .badge-glow-emerald {
@@ -549,7 +549,7 @@ html.dark body,
 }
 
 /* ==========================================================================
-   Dark Mode: IELTS Reading & Interactive Components
+   Dark Mode: IELTS Reading & Interactive Components (Nordic Slate Palette)
    ========================================================================== */
 
 .dark .ielts-reading-container {
@@ -557,8 +557,8 @@ html.dark body,
 }
 
 .dark .ielts-reading-container h2.ielts-reading-question-section-heading {
-  color: #f8fafc;
-  border-bottom-color: #334155;
+  color: #f1f5f9;
+  border-bottom-color: #2c3b54;
 }
 
 .dark .ielts-reading-question-section-content {
@@ -586,53 +586,53 @@ html.dark body,
 .dark .ielts-reading-question-section-content strong.ielts-reading-question-number,
 .dark .ielts-q-badge,
 .dark .ielts-reading-question-number {
-  background-color: #059669 !important;
+  background-color: #0284c7 !important;
   color: #ffffff !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Inline text input in Dark Mode */
 .dark .ielts-inline-input {
-  background-color: #1e293b;
-  border-color: #475569;
-  color: #f8fafc;
+  background-color: #182235;
+  border-color: #2c3b54;
+  color: #f1f5f9;
 }
 
 .dark .ielts-inline-input:focus {
-  background-color: #0f172a;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  background-color: #141c2b;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
 }
 
 .dark .ielts-inline-input.answered {
-  border-color: #10b981;
-  background-color: #064e3b;
-  color: #a7f3d0;
+  border-color: #0284c7;
+  background-color: rgba(2, 132, 199, 0.22);
+  color: #bae6fd;
 }
 
 /* Inline select dropdown in Dark Mode */
 .dark .ielts-inline-select {
-  background-color: #1e293b;
-  border-color: #475569;
-  color: #f8fafc;
+  background-color: #182235;
+  border-color: #2c3b54;
+  color: #f1f5f9;
 }
 
 .dark .ielts-inline-select:focus {
-  background-color: #0f172a;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  background-color: #141c2b;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
 }
 
 .dark .ielts-inline-select.answered {
-  border-color: #10b981;
-  background-color: #064e3b;
-  color: #a7f3d0;
+  border-color: #0284c7;
+  background-color: rgba(2, 132, 199, 0.22);
+  color: #bae6fd;
 }
 
 /* Word bank panel (DND options) in Dark Mode */
 .dark .options-dnd-panel {
-  background-color: rgba(30, 41, 59, 0.7);
-  border-color: #475569;
+  background-color: rgba(24, 34, 53, 0.85);
+  border-color: #2c3b54;
 }
 
 .dark .options-dnd-panel-title {
@@ -640,19 +640,19 @@ html.dark body,
 }
 
 .dark .dnd-card {
-  background-color: #0f172a;
-  border-color: #334155;
+  background-color: #1e293b;
+  border-color: #2c3b54;
   color: #e2e8f0;
 }
 
 /* Standalone Question Cards in Dark Mode */
 .dark .ielts-standalone-q {
-  background-color: #111827;
-  border-color: #1f2937;
+  background-color: #1e293b;
+  border-color: #26344d;
 }
 
 .dark .ielts-standalone-q:hover {
-  border-color: #374151;
+  border-color: #38bdf8;
 }
 
 .dark .ielts-q-title {
@@ -661,38 +661,38 @@ html.dark body,
 
 .dark .ielts-radio-btn,
 .dark .ielts-checkbox-btn {
-  border-color: #334155;
-  background-color: #1e293b;
+  border-color: #2c3b54;
+  background-color: #182235;
   color: #cbd5e1;
 }
 
 .dark .ielts-radio-btn:hover,
 .dark .ielts-checkbox-btn:hover {
-  border-color: #10b981;
-  background-color: rgba(6, 78, 59, 0.4);
-  color: #a7f3d0;
+  border-color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #7dd3fc;
 }
 
 .dark .ielts-radio-btn:has(input:checked),
 .dark .ielts-checkbox-btn:has(input:checked) {
-  border-color: #10b981;
-  background-color: #064e3b;
-  color: #a7f3d0;
-  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.25);
+  border-color: #38bdf8;
+  background-color: rgba(2, 132, 199, 0.28);
+  color: #e0f2fe;
+  box-shadow: 0 1px 4px rgba(56, 189, 248, 0.25);
 }
 
 /* Matching tables in Dark Mode */
 .dark .ielts-reading-matching-table,
 .dark .ielts-listening-matching-table {
-  background-color: #0f172a;
-  border-color: #334155;
+  background-color: #162030;
+  border-color: #2c3b54;
 }
 
 .dark .ielts-reading-matching-table th,
 .dark .ielts-reading-matching-table td,
 .dark .ielts-listening-matching-table th,
 .dark .ielts-listening-matching-table td {
-  border-color: #334155;
+  border-color: #2c3b54;
 }
 
 .dark .ielts-reading-matching-table th,
@@ -707,33 +707,33 @@ html.dark body,
 }
 
 .dark .ielts-listening-matching-question-cell {
-  color: #f8fafc;
+  color: #f1f5f9;
 }
 
 .dark .ielts-listening-matching-option-cell:hover {
-  background-color: rgba(30, 58, 138, 0.25);
+  background-color: rgba(56, 189, 248, 0.14);
 }
 
 .dark .ielts-listening-matching-option-cell:has(input:checked) {
-  background-color: rgba(30, 58, 138, 0.45);
+  background-color: rgba(2, 132, 199, 0.35);
 }
 
 .dark .ielts-listening-matching-option-cell input[type="radio"] {
-  accent-color: #3b82f6;
+  accent-color: #38bdf8;
 }
 
 /* Styled General Tables in Dark Mode */
 .dark .ielts-reading-container table:not(.ielts-reading-matching-table):not(.ielts-listening-matching-table),
 .dark .ielts-styled-table {
-  background-color: #0f172a !important;
-  border-color: #334155 !important;
+  background-color: #162030 !important;
+  border-color: #2c3b54 !important;
 }
 
 .dark .ielts-reading-container table:not(.ielts-reading-matching-table):not(.ielts-listening-matching-table) th,
 .dark .ielts-reading-container table:not(.ielts-reading-matching-table):not(.ielts-listening-matching-table) td,
 .dark .ielts-styled-table th,
 .dark .ielts-styled-table td {
-  border-color: #334155 !important;
+  border-color: #2c3b54 !important;
   color: #cbd5e1 !important;
 }
 
@@ -742,22 +742,22 @@ html.dark body,
 .dark .ielts-styled-table tr:first-child th,
 .dark .ielts-styled-table tr:first-child td {
   background-color: #1e293b !important;
-  color: #f8fafc !important;
+  color: #f1f5f9 !important;
 }
 
 /* Listening transcript subhead in Dark Mode */
 .dark .ielts-listening-transcript-subhead {
-  color: #60a5fa;
-  background-color: rgba(30, 58, 138, 0.35);
-  border-left-color: #3b82f6;
+  color: #38bdf8;
+  background-color: rgba(2, 132, 199, 0.18);
+  border-left-color: #38bdf8;
 }
 
 /* Images in Dark Mode */
 .dark .ielts-reading-container img,
 .dark .ielts-listening-container img {
-  border-color: #334155;
-  background-color: #1e293b;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-color: #2c3b54;
+  background-color: #182235;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 

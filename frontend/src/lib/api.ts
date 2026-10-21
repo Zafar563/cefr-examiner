@@ -4,7 +4,11 @@ export const getCoreApiUrl = (): string => {
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       return '';
     }
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (apiUrl && !apiUrl.includes(':8080')) {
+      return apiUrl;
+    }
+    return 'http://localhost:8088';
   }
   return process.env.CORE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://core-backend:8080';
 };
@@ -166,6 +170,12 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
   const res = await fetch(url, { ...options, headers });
   if (!res.ok) {
+    if (res.status === 401) {
+      removeToken();
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+        window.location.href = '/login?expired=1';
+      }
+    }
     const errorData = await res.json().catch(() => ({ error: 'Kutilmagan xatolik yuz berdi' }));
     throw new Error(errorData.error || errorData.detail || 'So‘rov bajarilmadi');
   }

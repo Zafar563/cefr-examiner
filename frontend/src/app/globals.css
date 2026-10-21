@@ -134,7 +134,7 @@ html.dark body,
 }
 
 .ielts-reading-question-section-heading {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: #0f172a;
   margin-top: 1.75rem;
@@ -153,12 +153,13 @@ html.dark body,
 .ielts-reading-question-section-content {
   color: #334155;
   margin-bottom: 1.5rem;
-  line-height: 1.75;
-  font-size: 1rem;
+  line-height: 1.85;
+  font-size: 1.125rem;
 }
 
 .ielts-reading-question-section-content p {
   margin-bottom: 0.75rem;
+  font-size: 1.125rem;
 }
 
 .ielts-reading-question-section-content strong:not(.ielts-q-badge):not(.ielts-reading-question-number) {
@@ -174,8 +175,9 @@ html.dark body,
 
 .ielts-reading-question-section-content li {
   margin-bottom: 0.65rem;
-  line-height: 1.8;
+  line-height: 1.85;
   color: #1e293b;
+  font-size: 1.125rem;
 }
 
 /* Question Badges [1], [2], ... - Always high contrast white on dark */
@@ -190,10 +192,10 @@ html.dark body,
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  min-width: 28px !important;
-  height: 28px !important;
-  padding: 0 7px !important;
-  font-size: 0.85rem !important;
+  min-width: 32px !important;
+  height: 30px !important;
+  padding: 0 8px !important;
+  font-size: 0.95rem !important;
   font-weight: 800 !important;
   border-radius: 6px !important;
   background-color: #0f172a !important;
@@ -217,10 +219,10 @@ html.dark body,
 
 .ielts-inline-input {
   display: inline-block;
-  width: 155px;
-  height: 38px;
-  padding: 0 12px;
-  font-size: 1rem;
+  width: 170px;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #0f172a;
   background-color: #f8fafc;
@@ -243,143 +245,541 @@ html.dark body,
   color: #065f46;
 }
 
-/* Inline select dropdown */
-.ielts-inline-select-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  vertical-align: middle;
-  margin: 0 4px;
+/* DND Dropzone & Slot (replaces inline select dropdown) */
+select.ielts-inline-select {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  z-index: -10 !important;
 }
 
-.ielts-inline-select {
-  height: 38px;
-  max-width: 240px;
-  padding: 0 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #0f172a;
+.ielts-inline-select-wrap,
+.ielts-dnd-slot-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  vertical-align: middle;
+  margin: 2px 4px;
+}
+
+.ielts-dnd-dropzone {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  min-width: 150px;
+  max-width: 100%;
+  padding: 4px 12px;
   background-color: #f8fafc;
-  border: 1.5px solid #cbd5e1;
+  border: 2px dashed #94a3b8;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
+  user-select: none;
+  position: relative;
+  font-size: 1.05rem;
 }
 
-.ielts-inline-select:focus {
-  outline: none;
-  border-color: #059669;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+.ielts-dnd-dropzone:hover {
+  border-color: #0284c7;
+  background-color: #f0f9ff;
 }
 
-.ielts-inline-select.answered {
-  border-color: #10b981;
-  background-color: #f0fdf4;
-  color: #065f46;
+.ielts-dnd-dropzone.dnd-drop-active {
+  border-color: #0284c7 !important;
+  border-style: solid !important;
+  background-color: #e0f2fe !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
+  transform: scale(1.02);
 }
 
-/* Word bank panel (DND options) */
-.options-dnd-panel {
-  background-color: #f8fafc;
-  border: 1.5px dashed #94a3b8;
-  border-radius: 12px;
-  padding: 14px 18px;
-  margin: 14px 0 18px 0;
-}
-
-.options-dnd-panel-title {
-  font-size: 0.85rem;
-  font-weight: 800;
+.ielts-dnd-placeholder {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-style: italic;
+  pointer-events: none;
+}
+
+.dnd-dashed-box {
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.ielts-dnd-dropzone.has-value {
+  border-style: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.ielts-dnd-placed-card {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1.5px solid #0284c7;
+  border-radius: 6px;
+  padding: 4px 12px;
+  color: #0369a1;
+  font-weight: 700;
+  font-size: 1.02rem;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.15);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.ielts-dnd-placed-card:hover {
+  border-color: #2563eb;
+  background-color: #f0f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.ielts-dnd-placed-card:active,
+.ielts-dnd-placed-card.is-dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+  transform: scale(0.96);
+}
+
+.ielts-dnd-placed-card.is-card-selected {
+  border-color: #2563eb;
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  box-shadow: 0 0 0 2.5px rgba(37, 99, 235, 0.35);
+}
+
+/* Long DND answer (Matching sentence endings, multi-word phrases) - wraps to next line */
+.ielts-dnd-slot-wrap.has-long-value {
+  display: contents !important;
+}
+
+.ielts-dnd-dropzone.has-long-value {
+  display: flex !important;
+  clear: both !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 44px;
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  margin-left: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  box-sizing: border-box;
+}
+
+.ielts-dnd-dropzone.has-long-value .ielts-dnd-placed-card {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  padding: 10px 16px !important;
+  border-radius: 8px;
+  white-space: normal !important;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.ielts-dnd-dropzone.has-long-value .ielts-dnd-card-text {
+  flex: 1 1 auto;
+  white-space: normal !important;
+  word-break: break-word;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.options-dnd-panel.dnd-panel-hover {
+  border-color: #0284c7 !important;
+  background-color: #e0f2fe !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
+}
+
+/* Dark mode for DND Dropzones */
+.dark select.ielts-inline-select {
+  display: none !important;
+}
+
+.dark .ielts-dnd-dropzone {
+  background-color: #0f172a;
+  border-color: #475569;
+}
+
+.dark .ielts-dnd-dropzone:hover {
+  border-color: #38bdf8;
+  background-color: rgba(12, 74, 110, 0.2);
+}
+
+.dark .ielts-dnd-dropzone.dnd-drop-active {
+  border-color: #38bdf8 !important;
+  background-color: #0c4a6e !important;
+}
+
+.dark .ielts-dnd-placeholder {
+  color: #64748b;
+}
+
+.dark .ielts-dnd-dropzone.has-value {
+  border-style: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.dark .ielts-dnd-placed-card {
+  background-color: #0c4a6e;
+  border-color: #0284c7;
+  color: #e0f2fe;
+}
+
+.dark .ielts-dnd-remove-btn {
+  background-color: #082f49;
+  color: #38bdf8;
+}
+
+.dark .ielts-dnd-remove-btn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Word bank panel (DND options & Heading panel) */
+.options-dnd-panel,
+.heading-dnd-panel,
+.dnd-panel {
+  background-color: #fafafa;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 10px 0 1.5rem 0;
+}
+
+.options-dnd-panel-title,
+.dnd-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.dnd-panel-instruction {
+  font-size: 13px;
+  font-style: italic;
+  color: #475569;
   margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.dnd-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .dnd-card {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 6px 12px;
-  margin: 3px 4px;
-  font-size: 0.9rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #1e293b;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: opacity 0.15s, background-color 0.15s, border-color 0.15s;
+}
+
+.dnd-card:hover {
+  border-color: #4285f4;
+  background-color: #f8faff;
+  box-shadow: 0 1px 3px rgba(66, 133, 244, 0.15);
+}
+
+.dnd-card:active,
+.dnd-card.is-dragging,
+.dnd-card.dnd-card-dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}
+
+.dnd-label {
+  min-width: 20px;
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.dnd-text {
   font-weight: 600;
   color: #1e293b;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Standalone Question Cards (MCQ, True/False/Not Given) */
-.ielts-standalone-q {
+.dnd-card.dnd-card-selected,
+.dnd-card.is-card-selected {
+  background-color: #e8f0fe !important;
+  border-color: #4285f4 !important;
+  outline: 2px solid #4285f4 !important;
+  color: #1d4ed8;
+}
+
+.dnd-card.dnd-card-used,
+.dnd-card.is-used {
+  opacity: 0.4 !important;
+  pointer-events: none !important;
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  cursor: default !important;
+  box-shadow: none !important;
+}
+
+/* Heading Drop Zone (above paragraphs in passage) */
+.heading-drop-zone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  border: 2px dashed gray;
+  border-radius: 4px;
+  padding: 6px 12px;
+  min-height: 42px;
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 16px 18px;
-  margin-bottom: 14px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+  user-select: none;
 }
 
-.ielts-standalone-q:hover {
-  border-color: #cbd5e1;
+.heading-drop-zone:hover {
+  border-color: #4285f4;
+  background-color: #f8faff;
+}
+
+.heading-drop-zone.dnd-drop-zone-over,
+.heading-drop-zone.dnd-drop-active {
+  background-color: #e8f0fe !important;
+  border-color: #4285f4 !important;
+  border-style: solid !important;
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25) !important;
+}
+
+.heading-drop-zone.dnd-drop-zone-filled {
+  border: 2px solid #4285f4;
+  border-style: solid;
+  background-color: #f8faff;
+  cursor: grab;
+}
+
+.heading-drop-zone.dnd-drop-zone-filled:active {
+  cursor: grabbing;
+}
+
+.ielts-reading-question-item:has(.heading-drop-zone) {
+  margin-bottom: 6px;
+}
+
+.dnd-drop-placeholder {
+  font-style: italic;
+  font-size: 13px;
+  color: rgb(80, 80, 80);
+  line-height: 1.5;
+  user-select: none;
+}
+
+.dnd-drop-value {
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.5;
+}
+
+.ielts-inline-select-wrap.dnd-drop-active,
+.ielts-inline-select.dnd-drop-active {
+  border-color: #0284c7 !important;
+  background-color: #e0f2fe !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.3) !important;
+  transform: scale(1.02);
+}
+
+.dark .options-dnd-panel,
+.dark .heading-dnd-panel,
+.dark .dnd-panel {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.dark .dnd-panel-title {
+  color: #f8fafc;
+}
+
+.dark .dnd-panel-instruction {
+  color: #94a3b8;
+}
+
+.dark .dnd-card {
+  background-color: #0f172a;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+.dark .dnd-card:hover {
+  border-color: #38bdf8;
+  background-color: #1e293b;
+  color: #38bdf8;
+}
+
+.dark .dnd-label {
+  color: #38bdf8;
+}
+
+.dark .dnd-text {
+  color: #f1f5f9;
+}
+
+.dark .heading-drop-zone {
+  background-color: #1e293b/70;
+  border-color: #64748b;
+}
+
+.dark .heading-drop-zone.dnd-drop-zone-filled {
+  border-color: #38bdf8;
+  background-color: #0f172a;
+}
+
+.dark .dnd-drop-placeholder {
+  color: #94a3b8;
+}
+
+.dark .dnd-drop-value {
+  color: #38bdf8;
+}
+
+.dark .dnd-card.is-card-selected,
+.dark .dnd-card.dnd-card-selected {
+  background-color: #0c4a6e;
+  border-color: #38bdf8;
+  color: #bae6fd;
+}
+
+.dark .dnd-card.is-used {
+  opacity: 0.45;
+  background-color: #0f172a;
+  border-color: #1e293b;
+  color: #64748b;
+}
+
+.ielts-standalone-q {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 10px 0 !important;
+  margin-bottom: 14px !important;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ielts-standalone-q.active-q {
+  border-left: 3px solid #f59e0b !important;
+  padding-left: 10px !important;
+}
+
+.ielts-standalone-q.active-q .ielts-q-badge,
+.ielts-standalone-q.active-q .ielts-reading-question-number {
+  border: 1.5px solid #f59e0b !important;
+  border-radius: 4px !important;
+  color: #b45309 !important;
+  background-color: #fffbeb !important;
+  padding: 1px 5px !important;
 }
 
 .ielts-q-header {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
 .ielts-q-title {
-  font-size: 1rem;
+  font-size: 1.075rem;
   font-weight: 600;
   color: #1e293b;
-  line-height: 1.6;
+  line-height: 1.65;
   flex: 1;
 }
 
-.ielts-radio-group,
+.ielts-radio-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
 .ielts-checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-left: 38px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  margin-left: 0 !important;
+  width: 100% !important;
 }
 
 .ielts-radio-btn,
 .ielts-checkbox-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  background-color: #f8fafc;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  user-select: none;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 12px !important;
+  padding: 9px 14px !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px !important;
+  background-color: transparent !important;
+  font-size: 1.075rem !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  user-select: none !important;
+}
+
+.dark .ielts-radio-btn,
+.dark .ielts-checkbox-btn {
+  color: #e2e8f0 !important;
 }
 
 .ielts-radio-btn:hover,
 .ielts-checkbox-btn:hover {
-  border-color: #10b981;
-  background-color: #f0fdf4;
-  color: #065f46;
+  background-color: #f1f5f9 !important;
 }
 
+.dark .ielts-radio-btn:hover,
+.dark .ielts-checkbox-btn:hover {
+  background-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+/* Selected option: LIGHTBLUE background as requested by user */
 .ielts-radio-btn:has(input:checked),
-.ielts-checkbox-btn:has(input:checked) {
-  border-color: #059669;
-  background-color: #ecfdf5;
-  color: #065f46;
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.15);
+.ielts-checkbox-btn:has(input:checked),
+.ielts-radio-btn.is-selected,
+.ielts-checkbox-btn.is-selected {
+  border-color: transparent !important;
+  background-color: #e8f0fe !important;
+  color: #1e3a8a !important;
+  font-weight: 600 !important;
+}
+
+.dark .ielts-radio-btn:has(input:checked),
+.dark .ielts-checkbox-btn:has(input:checked),
+.dark .ielts-radio-btn.is-selected,
+.dark .ielts-checkbox-btn.is-selected {
+  background-color: rgba(30, 58, 138, 0.45) !important;
+  color: #bfdbfe !important;
 }
 
 .ielts-radio-btn strong,
@@ -387,13 +787,13 @@ html.dark body,
   color: inherit !important;
 }
 
-
 .ielts-radio-btn input[type="radio"],
 .ielts-checkbox-btn input[type="checkbox"] {
-  accent-color: #059669;
-  width: 17px;
-  height: 17px;
-  cursor: pointer;
+  accent-color: #2563eb !important;
+  width: 17px !important;
+  height: 17px !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
 }
 
 /* Matching tables (Reading & Listening) */
@@ -411,7 +811,8 @@ html.dark body,
 .ielts-listening-matching-table th,
 .ielts-listening-matching-table td {
   border: 1px solid #cbd5e1;
-  padding: 10px 14px;
+  padding: 12px 16px;
+  font-size: 1.05rem;
   text-align: left;
   vertical-align: middle;
 }
@@ -472,7 +873,7 @@ html.dark body,
   width: 100% !important;
   border-collapse: collapse !important;
   margin: 12px 0 18px 0 !important;
-  font-size: 0.875rem !important;
+  font-size: 1rem !important;
   background-color: #ffffff;
 }
 
@@ -481,9 +882,9 @@ html.dark body,
 .ielts-styled-table th,
 .ielts-styled-table td {
   border: 1px solid #cbd5e1 !important;
-  padding: 10px 14px !important;
+  padding: 11px 15px !important;
   vertical-align: top !important;
-  line-height: 1.6 !important;
+  line-height: 1.65 !important;
 }
 
 .ielts-reading-container table:not(.ielts-reading-matching-table):not(.ielts-listening-matching-table) tr:first-child th,

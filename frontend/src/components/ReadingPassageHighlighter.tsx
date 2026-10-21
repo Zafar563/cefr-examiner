@@ -325,7 +325,7 @@ export default function ReadingPassageHighlighter({
       {/* Scrollable Passage Body */}
       <div
         ref={scrollWrapperRef}
-        className="relative max-h-[76vh] overflow-y-auto pr-2 scrollbar-thin select-text"
+        className="relative flex-1 overflow-y-auto pr-2 scrollbar-thin select-text"
         onMouseUp={handleSelection}
         onTouchEnd={handleSelection}
         onClick={handlePassageClick}

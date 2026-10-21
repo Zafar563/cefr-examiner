@@ -30,7 +30,12 @@ import {
   RotateCcw,
   Shuffle,
   Play,
+  Filter,
 } from 'lucide-react';
+import {
+  IeltsQuestionCategory,
+  getQuestionCategory,
+} from '@/lib/questionTypes';
 
 // Format card title to match ieltsmaterials: e.g. "Writing Full 15", "Listening Full 19"
 const getCardDisplayTitle = (test: Test): string => {
@@ -327,6 +332,7 @@ function StudentDashboardContent() {
   // Listening Section Filter: 'all' | '1' | '2' | '3' | '4' | 'full'
   const [listeningSectionFilter, setListeningSectionFilter] = useState<'all' | '1' | '2' | '3' | '4' | 'full'>('full');
   const [selectedBook, setSelectedBook] = useState<string>('all');
+  const [selectedQuestionType, setSelectedQuestionType] = useState<IeltsQuestionCategory>('all');
 
   useEffect(() => {
     setMounted(true);
@@ -358,9 +364,10 @@ function StudentDashboardContent() {
     }
   }, [searchParams]);
 
-  // Reset selectedBook when activeTab changes
+  // Reset selectedBook and selectedQuestionType when activeTab changes
   useEffect(() => {
     setSelectedBook('all');
+    setSelectedQuestionType('all');
   }, [activeTab]);
 
   const loadData = async () => {
@@ -510,15 +517,47 @@ function StudentDashboardContent() {
     return Array.from(books).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
   }, [currentCategoryTests]);
 
+  const testContainsQuestionType = (test: Test, category: IeltsQuestionCategory): boolean => {
+    if (category === 'all') return true;
+
+    if (test.sections && Array.isArray(test.sections)) {
+      for (const sec of test.sections) {
+        if (sec.questions && Array.isArray(sec.questions)) {
+          for (const q of sec.questions) {
+            if (getQuestionCategory(q) === category) return true;
+          }
+        }
+        const inst = (sec.instructions || '').toLowerCase();
+        if (category === 'true_false_not_given' && (inst.includes('true') && inst.includes('false') && inst.includes('not given'))) return true;
+        if (category === 'yes_no_not_given' && (inst.includes('yes') && inst.includes('no') && inst.includes('not given'))) return true;
+        if (category === 'multiple_choice' && (inst.includes('multiple choice') || inst.includes('choose the correct letter'))) return true;
+        if (category === 'completion' && (inst.includes('complete the') || inst.includes('one word only') || inst.includes('fill in') || inst.includes('summary'))) return true;
+        if (category === 'matching' && (inst.includes('match') || inst.includes('heading'))) return true;
+      }
+    }
+
+    const desc = (test.description || '').toLowerCase();
+    if (category === 'true_false_not_given' && (desc.includes('true/false') || desc.includes('true, false'))) return true;
+    if (category === 'yes_no_not_given' && (desc.includes('yes/no') || desc.includes('yes, no'))) return true;
+    if (category === 'multiple_choice' && desc.includes('multiple choice')) return true;
+    if (category === 'completion' && (desc.includes('completion') || desc.includes('summary') || desc.includes('blank'))) return true;
+    if (category === 'matching' && desc.includes('matching')) return true;
+
+    return false;
+  };
+
   const displayedTests = useMemo(() => {
     return currentCategoryTests.filter((t) => {
       if (selectedBook !== 'all') {
         const meta = getTestMeta(t.title);
         if (meta.bookNum !== selectedBook) return false;
       }
+      if (selectedQuestionType !== 'all') {
+        if (!testContainsQuestionType(t, selectedQuestionType)) return false;
+      }
       return true;
     });
-  }, [currentCategoryTests, selectedBook]);
+  }, [currentCategoryTests, selectedBook, selectedQuestionType]);
 
   const handlePickRandomTest = () => {
     const pool = displayedTests.length > 0 ? displayedTests : currentCategoryTests;
@@ -839,6 +878,37 @@ function StudentDashboardContent() {
               </button>
             )}
           </div>
+        </div>
+
+        {/* Row of Question Type Filters (Before starting test) */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none flex-wrap border-t border-slate-100 dark:border-slate-800">
+          <span className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0 mr-1 flex items-center gap-1.5">
+            <Filter className="w-3.5 h-3.5" />
+            <span>SAVOL TURI:</span>
+          </span>
+          {[
+            { id: 'all', label: 'Barchasi' },
+            { id: 'true_false_not_given', label: 'True / False / NG' },
+            { id: 'yes_no_not_given', label: 'Yes / No / NG' },
+            { id: 'multiple_choice', label: 'Multiple Choice' },
+            { id: 'completion', label: 'Completion / Blanks' },
+            { id: 'matching', label: 'Matching' },
+          ].map((cat) => {
+            const isSelected = selectedQuestionType === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedQuestionType(cat.id as any)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                  isSelected
+                    ? 'bg-emerald-600 text-white shadow-xs ring-1 ring-emerald-500'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </section>
 

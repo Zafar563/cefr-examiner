@@ -36,7 +36,18 @@ import {
   Shield,
   UserCheck,
   Search,
+  CheckSquare,
+  Scale,
+  Image as ImageIcon,
+  Filter,
+  Layers,
+  Upload,
 } from 'lucide-react';
+import {
+  IELTS_QUESTION_CATEGORIES,
+  IeltsQuestionCategory,
+  getQuestionCategory,
+} from '@/lib/questionTypes';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -71,16 +82,31 @@ export default function AdminPage() {
   const [audioUrl, setAudioUrl] = useState('');
   const [isUploadingAudio, setIsUploadingAudio] = useState(false);
 
-  // New question form
+  // Universal IELTS Question Constructor States
   const [selectedSectionIdForQuestion, setSelectedSectionIdForQuestion] = useState<number | null>(null);
-  const [newQuestionType, setNewQuestionType] = useState('single_choice');
+  const [questionCategory, setQuestionCategory] = useState<IeltsQuestionCategory>('multiple_choice');
   const [newQuestionText, setNewQuestionText] = useState('');
-  const [optA, setOptA] = useState('');
-  const [optB, setOptB] = useState('');
-  const [optC, setOptC] = useState('');
-  const [optD, setOptD] = useState('');
+  const [questionPoints, setQuestionPoints] = useState(1);
   const [correctAnswer, setCorrectAnswer] = useState('');
-  const [questionPoints, setQuestionPoints] = useState(5);
+
+  // Multiple Choice (A, B, C, D)
+  const [mcOptions, setMcOptions] = useState<string[]>(['', '', '', '']);
+
+  // Multiple Selection (Choose 2/3)
+  const [multiOptions, setMultiOptions] = useState<string[]>(['', '', '', '', '']);
+  const [multiCorrectAnswers, setMultiCorrectAnswers] = useState<string[]>([]);
+
+  // Matching (Headings / Features)
+  const [matchingOptions, setMatchingOptions] = useState<string[]>([
+    'i. ',
+    'ii. ',
+    'iii. ',
+    'iv. ',
+  ]);
+
+  // Writing Task Image
+  const [writingImageUrl, setWritingImageUrl] = useState('');
+  const [isUploadingWritingImg, setIsUploadingWritingImg] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -210,29 +236,118 @@ export default function AdminPage() {
     }
   };
 
+  const handleWritingImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingWritingImg(true);
+    try {
+      const res = await apiUploadAudio(file, file.name);
+      setWritingImageUrl(res.url);
+      alert('Rasm muvaffaqiyatli yuklandi!');
+    } catch (e: any) {
+      alert('Rasm yuklashda xatolik: ' + e.message);
+    } finally {
+      setIsUploadingWritingImg(false);
+    }
+  };
+
   const handleCreateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSectionIdForQuestion) return;
 
-    const options = [optA, optB, optC, optD].filter((o) => o.trim() !== '');
+    let questionType: 'single_choice' | 'multiple_choice' | 'text_input' | 'essay' | 'speaking_prompt' = 'single_choice';
+    let options: string[] = [];
+    let finalCorrectAnswer = correctAnswer.trim();
+
+    switch (questionCategory) {
+      case 'multiple_choice':
+        questionType = 'single_choice';
+        options = mcOptions.map((o) => o.trim()).filter(Boolean);
+        if (!finalCorrectAnswer && options.length > 0) {
+          finalCorrectAnswer = options[0];
+        }
+        break;
+
+      case 'multiple_selection':
+        questionType = 'multiple_choice';
+        options = multiOptions.map((o) => o.trim()).filter(Boolean);
+        finalCorrectAnswer = multiCorrectAnswers.join(', ');
+        if (!finalCorrectAnswer) {
+          alert('Iltimos, kamida bitta to‘g‘ri javob variantini belgilang!');
+          return;
+        }
+        break;
+
+      case 'true_false_not_given':
+        questionType = 'single_choice';
+        options = ['TRUE', 'FALSE', 'NOT GIVEN'];
+        if (!finalCorrectAnswer) finalCorrectAnswer = 'TRUE';
+        break;
+
+      case 'yes_no_not_given':
+        questionType = 'single_choice';
+        options = ['YES', 'NO', 'NOT GIVEN'];
+        if (!finalCorrectAnswer) finalCorrectAnswer = 'YES';
+        break;
+
+      case 'completion':
+        questionType = 'text_input';
+        options = [];
+        if (!finalCorrectAnswer) {
+          alert('Iltimos, to‘g‘ri javob so‘zini kiriting!');
+          return;
+        }
+        break;
+
+      case 'matching':
+        questionType = 'single_choice';
+        options = matchingOptions.map((o) => o.trim()).filter(Boolean);
+        if (!finalCorrectAnswer && options.length > 0) {
+          finalCorrectAnswer = options[0].split('.')[0].trim();
+        }
+        break;
+
+      case 'essay':
+        questionType = 'essay';
+        options = writingImageUrl.trim() ? [writingImageUrl.trim()] : [];
+        finalCorrectAnswer = '';
+        break;
+
+      case 'speaking':
+        questionType = 'speaking_prompt';
+        options = [];
+        finalCorrectAnswer = '';
+        break;
+
+      default:
+        questionType = 'single_choice';
+        options = mcOptions.filter(Boolean);
+        break;
+    }
 
     try {
+      const sec = selectedTest?.sections?.find((s) => s.id === selectedSectionIdForQuestion);
+      const nextOrder = (sec?.questions?.length || 0) + 1;
+
       await apiCreateQuestion(selectedSectionIdForQuestion, {
-        question_type: newQuestionType,
+        question_type: questionType,
         question_text: newQuestionText,
         options,
-        correct_answer: correctAnswer,
+        correct_answer: finalCorrectAnswer,
         points: questionPoints,
-        order_index: 1,
+        order_index: nextOrder,
       });
-      alert('Savol muvaffaqiyatli qo‘shildi!');
+
+      alert('Yangi IELTS savoli muvaffaqiyatli qo‘shildi!');
       setSelectedSectionIdForQuestion(null);
       setNewQuestionText('');
-      setOptA('');
-      setOptB('');
-      setOptC('');
-      setOptD('');
+      setMcOptions(['', '', '', '']);
+      setMultiOptions(['', '', '', '', '']);
+      setMultiCorrectAnswers([]);
+      setMatchingOptions(['i. ', 'ii. ', 'iii. ', 'iv. ']);
+      setWritingImageUrl('');
       setCorrectAnswer('');
+      setQuestionPoints(1);
       if (selectedTest) {
         handleSelectTest(selectedTest.id);
       }
@@ -878,109 +993,380 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    {/* Add Question to this Section Form */}
+                    {/* Universal IELTS Question Constructor */}
                     {selectedSectionIdForQuestion === sec.id && (
-                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/80 p-4 bg-slate-50 dark:bg-slate-900/80 rounded-xl space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase">
-                            Yangi Savol Qo‘shish ({sec.title})
-                          </h5>
+                      <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/80 p-5 bg-slate-50 dark:bg-slate-900/80 rounded-2xl space-y-5 border border-slate-200/80 dark:border-slate-700/60 shadow-sm">
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-700">
+                          <div>
+                            <h5 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase flex items-center gap-2">
+                              <Sparkles className="w-4 h-4 text-emerald-600" />
+                              <span>Universal IELTS Savol Konstruktori</span>
+                            </h5>
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                              Bo‘lim: <span className="font-bold">{sec.title}</span>
+                            </p>
+                          </div>
                           <button
+                            type="button"
                             onClick={() => setSelectedSectionIdForQuestion(null)}
-                            className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-bold"
+                            className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-bold px-2 py-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                           >
                             Bekor qilish
                           </button>
                         </div>
 
-                        <form onSubmit={handleCreateQuestion} className="space-y-3">
+                        <form onSubmit={handleCreateQuestion} className="space-y-4">
+                          {/* Step 1: Choose Question Category */}
+                          <div className="space-y-1.5">
+                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                              1. IELTS Savol Turini Tanlang:
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                              {[
+                                { id: 'multiple_choice', label: '🔘 Multiple Choice', sub: 'Yakka tanlov (A, B, C, D)' },
+                                { id: 'multiple_selection', label: '☑️ Choose 2 / 3', sub: 'Ko‘p tanlov (A–E)' },
+                                { id: 'true_false_not_given', label: '⚖️ True/False/NG', sub: 'Faktik ma’lumot' },
+                                { id: 'yes_no_not_given', label: '⚖️ Yes/No/NG', sub: 'Muallif qarashi' },
+                                { id: 'completion', label: '✍️ Completion', sub: 'Bo‘sh o‘rin to‘ldirish' },
+                                { id: 'matching', label: '📋 Matching', sub: 'Sarlavha/xususiyat' },
+                                { id: 'essay', label: '📝 Writing Task', sub: 'Task 1 yoki Task 2' },
+                                { id: 'speaking', label: '🎙️ Speaking Prompt', sub: 'Part 1, 2 yoki 3' },
+                              ].map((cat) => {
+                                const isSel = questionCategory === cat.id;
+                                return (
+                                  <button
+                                    key={cat.id}
+                                    type="button"
+                                    onClick={() => {
+                                      setQuestionCategory(cat.id as any);
+                                      if (cat.id === 'true_false_not_given') setCorrectAnswer('TRUE');
+                                      if (cat.id === 'yes_no_not_given') setCorrectAnswer('YES');
+                                    }}
+                                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                                      isSel
+                                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 ring-2 ring-emerald-500/20'
+                                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750'
+                                    }`}
+                                  >
+                                    <div className={`text-xs font-bold ${isSel ? 'text-emerald-800 dark:text-emerald-300' : 'text-slate-800 dark:text-slate-200'}`}>
+                                      {cat.label}
+                                    </div>
+                                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 font-medium">
+                                      {cat.sub}
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Step 2: Question Text / Instructions */}
                           <div>
-                            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Savol matni:</label>
-                            <input
-                              type="text"
+                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                              2. Savol Matni yoki Ko‘rsatma:
+                            </label>
+                            <textarea
                               required
+                              rows={questionCategory === 'essay' || questionCategory === 'speaking' ? 4 : 2}
                               value={newQuestionText}
                               onChange={(e) => setNewQuestionText(e.target.value)}
-                              placeholder="Masalan: According to paragraph 1, why was..."
-                              className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+                              placeholder={
+                                questionCategory === 'multiple_choice'
+                                  ? 'Masalan: What is the main reason why researchers visited the valley?'
+                                  : questionCategory === 'true_false_not_given'
+                                  ? 'Masalan: The trees were originally planted to prevent soil erosion.'
+                                  : questionCategory === 'completion'
+                                  ? 'Masalan: In 1985, the government established a new ___ to oversee nature reserves.'
+                                  : questionCategory === 'matching'
+                                  ? 'Masalan: Paragraph A'
+                                  : questionCategory === 'essay'
+                                  ? 'Masalan: WRITING TASK 2: Some people believe that universities should focus on practical skills. Discuss both views...'
+                                  : 'Masalan: Part 2: Describe a website you find useful. You should say: what it is, how often you use it...'
+                              }
+                              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                             />
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <div>
-                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant A:</label>
-                              <input
-                                type="text"
-                                required
-                                value={optA}
-                                onChange={(e) => setOptA(e.target.value)}
-                                placeholder="1-variant matni"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant B:</label>
-                              <input
-                                type="text"
-                                required
-                                value={optB}
-                                onChange={(e) => setOptB(e.target.value)}
-                                placeholder="2-variant matni"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant C:</label>
-                              <input
-                                type="text"
-                                value={optC}
-                                onChange={(e) => setOptC(e.target.value)}
-                                placeholder="3-variant matni (ixtiyoriy)"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Variant D:</label>
-                              <input
-                                type="text"
-                                value={optD}
-                                onChange={(e) => setOptD(e.target.value)}
-                                placeholder="4-variant matni (ixtiyoriy)"
-                                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
-                              />
-                            </div>
-                          </div>
+                          {/* Step 3: Dynamic Category-Specific Inputs */}
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                            <div>
-                              <label className="block text-xs font-bold text-emerald-900 dark:text-emerald-300 mb-1">To‘g‘ri javob (aynan matni):</label>
+                          {/* A. Multiple Choice (A, B, C, D) */}
+                          {questionCategory === 'multiple_choice' && (
+                            <div className="space-y-2.5 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                                Variantlar va To‘g‘ri Javob (Radio orqali belgilang):
+                              </span>
+                              {['A', 'B', 'C', 'D'].map((letter, idx) => {
+                                const optVal = mcOptions[idx];
+                                const isCorrect = correctAnswer === optVal && optVal.trim() !== '';
+                                return (
+                                  <div key={letter} className="flex items-center gap-2">
+                                    <input
+                                      type="radio"
+                                      name="mc_correct_radio"
+                                      checked={isCorrect}
+                                      onChange={() => setCorrectAnswer(optVal)}
+                                      title="Ushbu variantni to‘g‘ri javob deb belgilash"
+                                      className="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
+                                    />
+                                    <span className="w-6 text-xs font-bold text-slate-500 dark:text-slate-400">{letter}.</span>
+                                    <input
+                                      type="text"
+                                      required={idx < 2}
+                                      value={optVal}
+                                      onChange={(e) => {
+                                        const next = [...mcOptions];
+                                        next[idx] = e.target.value;
+                                        setMcOptions(next);
+                                        if (isCorrect) setCorrectAnswer(e.target.value);
+                                      }}
+                                      placeholder={`${letter} varianti matni`}
+                                      className="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-slate-50/50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {/* B. Multiple Selection (Choose 2/3) */}
+                          {questionCategory === 'multiple_selection' && (
+                            <div className="space-y-2.5 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                                Variantlar (A–E) va To‘g‘ri Javoblar (Checkbox orqali 2 ta yoki 3 tasini belgilang):
+                              </span>
+                              {['A', 'B', 'C', 'D', 'E'].map((letter, idx) => {
+                                const optVal = multiOptions[idx];
+                                const isChecked = multiCorrectAnswers.includes(letter);
+                                return (
+                                  <div key={letter} className="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setMultiCorrectAnswers([...multiCorrectAnswers, letter]);
+                                        } else {
+                                          setMultiCorrectAnswers(multiCorrectAnswers.filter((a) => a !== letter));
+                                        }
+                                      }}
+                                      className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer shrink-0"
+                                    />
+                                    <span className="w-6 text-xs font-bold text-slate-500 dark:text-slate-400">{letter}.</span>
+                                    <input
+                                      type="text"
+                                      required={idx < 3}
+                                      value={optVal}
+                                      onChange={(e) => {
+                                        const next = [...multiOptions];
+                                        next[idx] = e.target.value;
+                                        setMultiOptions(next);
+                                      }}
+                                      placeholder={`${letter} varianti`}
+                                      className="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-slate-50/50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                                    />
+                                  </div>
+                                );
+                              })}
+                              <div className="text-[11px] text-slate-500 dark:text-slate-400 pt-1 font-semibold">
+                                Belgilangan to‘g‘ri javoblar: <span className="font-bold text-indigo-600 dark:text-indigo-400">{multiCorrectAnswers.join(', ') || 'Hali belgilanmadi'}</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* C. True / False / Not Given */}
+                          {questionCategory === 'true_false_not_given' && (
+                            <div className="space-y-2 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                                To‘g‘ri Javobni Tanlang:
+                              </span>
+                              <div className="grid grid-cols-3 gap-3">
+                                {['TRUE', 'FALSE', 'NOT GIVEN'].map((ans) => {
+                                  const isSel = correctAnswer === ans;
+                                  return (
+                                    <button
+                                      key={ans}
+                                      type="button"
+                                      onClick={() => setCorrectAnswer(ans)}
+                                      className={`py-2.5 px-4 rounded-xl text-xs font-bold transition-all border cursor-pointer text-center ${
+                                        isSel
+                                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-500/30'
+                                          : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                                      }`}
+                                    >
+                                      {ans}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* D. Yes / No / Not Given */}
+                          {questionCategory === 'yes_no_not_given' && (
+                            <div className="space-y-2 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                                To‘g‘ri Javobni Tanlang:
+                              </span>
+                              <div className="grid grid-cols-3 gap-3">
+                                {['YES', 'NO', 'NOT GIVEN'].map((ans) => {
+                                  const isSel = correctAnswer === ans;
+                                  return (
+                                    <button
+                                      key={ans}
+                                      type="button"
+                                      onClick={() => setCorrectAnswer(ans)}
+                                      className={`py-2.5 px-4 rounded-xl text-xs font-bold transition-all border cursor-pointer text-center ${
+                                        isSel
+                                          ? 'bg-teal-600 text-white border-teal-600 shadow-sm ring-2 ring-teal-500/30'
+                                          : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                                      }`}
+                                    >
+                                      {ans}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* E. Completion / Fill in Blanks */}
+                          {questionCategory === 'completion' && (
+                            <div className="space-y-2 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                To‘g‘ri javob so‘z(lar)i:
+                              </label>
                               <input
                                 type="text"
                                 required
                                 value={correctAnswer}
                                 onChange={(e) => setCorrectAnswer(e.target.value)}
-                                placeholder="To‘g‘ri variant matnini shu yerga yozing"
-                                className="w-full px-3 py-2 rounded-xl border border-emerald-300 dark:border-emerald-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-emerald-50/30 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-200 font-semibold placeholder:text-slate-400"
+                                placeholder="Masalan: 1985 yoki university / college"
+                                className="w-full px-3.5 py-2 rounded-xl border border-amber-300 dark:border-amber-700 text-xs focus:ring-2 focus:ring-amber-500 outline-none bg-amber-50/20 dark:bg-amber-950/20 text-slate-900 dark:text-slate-100 font-semibold"
                               />
+                              <p className="text-[11px] text-slate-400 dark:text-slate-500">
+                                * Eslatma: Talaba javob yozganda registr (katta-kichik harf) e’tiborga olinmaydi. Agar bir nechta to‘g‘ri variant bo‘lsa, ularni <code className="text-amber-600 font-bold">/</code> belgisi bilan ajrating (masalan: <code className="text-amber-600">centre / center</code>).
+                              </p>
                             </div>
-                            <div>
-                              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Beriladigan ball:</label>
+                          )}
+
+                          {/* F. Matching (Headings / Features) */}
+                          {questionCategory === 'matching' && (
+                            <div className="space-y-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                  Moslashtiriladigan variantlar ro‘yxati (i, ii, iii...):
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setMatchingOptions([...matchingOptions, ''])}
+                                  className="text-[11px] font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" /> Variant qo‘shish
+                                </button>
+                              </div>
+
+                              <div className="space-y-2">
+                                {matchingOptions.map((opt, idx) => (
+                                  <div key={idx} className="flex items-center gap-2">
+                                    <input
+                                      type="text"
+                                      value={opt}
+                                      onChange={(e) => {
+                                        const next = [...matchingOptions];
+                                        next[idx] = e.target.value;
+                                        setMatchingOptions(next);
+                                      }}
+                                      placeholder={`Masalan: ${idx + 1}. The impact on climate`}
+                                      className="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-slate-50/50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                                    />
+                                    {matchingOptions.length > 2 && (
+                                      <button
+                                        type="button"
+                                        onClick={() => setMatchingOptions(matchingOptions.filter((_, i) => i !== idx))}
+                                        className="p-1.5 text-slate-400 hover:text-rose-600"
+                                        title="O‘chirish"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                                  Ushbu savol uchun to‘g‘ri javob (masalan, iii yoki B):
+                                </label>
+                                <input
+                                  type="text"
+                                  required
+                                  value={correctAnswer}
+                                  onChange={(e) => setCorrectAnswer(e.target.value)}
+                                  placeholder="Masalan: iii"
+                                  className="w-full px-3 py-1.5 rounded-lg border border-purple-300 dark:border-purple-700 text-xs bg-purple-50/20 dark:bg-purple-950/20 text-slate-900 dark:text-slate-100 font-bold"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* G. Writing Task (Task 1 & Task 2) */}
+                          {questionCategory === 'essay' && (
+                            <div className="space-y-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                              <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+                                Task 1 Diagramma/Grafik Rasmi (Ixtiyoriy):
+                              </span>
+                              <div className="flex flex-col sm:flex-row items-center gap-3">
+                                <label className="px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-650 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-2 shrink-0">
+                                  <Upload className="w-3.5 h-3.5" />
+                                  <span>{isUploadingWritingImg ? 'Yuklanmoqda...' : 'Rasm Yuklash (.png/.jpg)'}</span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleWritingImageUpload}
+                                    className="hidden"
+                                    disabled={isUploadingWritingImg}
+                                  />
+                                </label>
+                                <input
+                                  type="text"
+                                  value={writingImageUrl}
+                                  onChange={(e) => setWritingImageUrl(e.target.value)}
+                                  placeholder="Yoki to‘g‘ridan-to‘g‘ri rasm URL manzilini kiriting..."
+                                  className="flex-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
+                                />
+                              </div>
+                              {writingImageUrl && (
+                                <div className="mt-2 p-2 bg-slate-100 dark:bg-slate-900 rounded-xl max-w-xs">
+                                  <img src={writingImageUrl} alt="Task preview" className="w-full h-auto rounded-lg object-contain max-h-40" />
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Points and Submit */}
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+                            <div className="flex items-center gap-2">
+                              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap">
+                                Ball:
+                              </label>
                               <input
                                 type="number"
                                 min="1"
+                                max="50"
                                 value={questionPoints}
-                                onChange={(e) => setQuestionPoints(parseInt(e.target.value) || 5)}
-                                className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
+                                onChange={(e) => setQuestionPoints(parseInt(e.target.value) || 1)}
+                                className="w-20 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold"
                               />
                             </div>
-                          </div>
 
-                          <button
-                            type="submit"
-                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all"
-                          >
-                            Savolni Saqlash
-                          </button>
+                            <button
+                              type="submit"
+                              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                            >
+                              <Plus className="w-4 h-4" />
+                              <span>Savolni Saqlash</span>
+                            </button>
+                          </div>
                         </form>
                       </div>
                     )}

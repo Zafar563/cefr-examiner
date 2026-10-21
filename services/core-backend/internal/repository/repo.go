@@ -611,6 +611,7 @@ func (r *Repository) SubmitSession(sessionID int) error {
 			WHEN LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
 			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|'))
 			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/'))
+			  OR SPLIT_PART(LOWER(TRIM(COALESCE(a.user_answer_text, ''))), '.', 1) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
 			THEN q.points
 			ELSE 0
 		END,

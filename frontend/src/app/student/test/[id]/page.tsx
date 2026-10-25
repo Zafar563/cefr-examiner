@@ -1169,6 +1169,14 @@ export default function TestTakingPage() {
     };
   }, [sectionQuestions]);
 
+  const activeWritingQ = useMemo(() => {
+    return sectionQuestions.find((q) => q.order_index === activeQnum) || sectionQuestions[0];
+  }, [sectionQuestions, activeQnum]);
+
+  const activeSpeakingQ = useMemo(() => {
+    return sectionQuestions.find((q) => q.order_index === activeQnum) || sectionQuestions[0];
+  }, [sectionQuestions, activeQnum]);
+
   // Set initial activeQnum when section changes
   useEffect(() => {
     if (sectionQuestions.length > 0) {
@@ -2468,8 +2476,8 @@ export default function TestTakingPage() {
     );
   };
 
-  // 1. DEDICATED COMPUTER-DELIVERED READING TEST INTERFACE
-  if (currentSection?.type === 'reading') {
+  // 1. DEDICATED COMPUTER-DELIVERED TEST INTERFACE (ALL SKILLS)
+  if (currentSection) {
     return (
       <div className={`fixed inset-0 w-full h-full flex flex-col overflow-hidden select-none z-30 transition-colors ${
         isYellowOnBlack
@@ -2910,7 +2918,7 @@ export default function TestTakingPage() {
                 }`}
                 style={{ fontSize: '15px', lineHeight: '1.2' }}
               >
-                {test?.title || 'Reading Comprehension Test'}
+                {test?.title || 'Examination Test'}
               </h1>
               <span
                 className={`text-xs font-medium leading-normal mt-0.5 ${
@@ -2969,7 +2977,7 @@ export default function TestTakingPage() {
           </div>
         </header>
 
-        {/* PASSAGE Subheader Banner (Always light gray with black text per official IELTS CD exam) */}
+        {/* Section Subheader Banner (Always light gray with black text per official IELTS CD exam) */}
         <div
           className={`w-full px-6 py-2 select-none shrink-0 ${
             isDarkContrast ? 'bg-black' : 'bg-white'
@@ -2980,13 +2988,21 @@ export default function TestTakingPage() {
               className="text-base sm:text-lg font-black text-black tracking-wider uppercase leading-tight"
               style={{ fontSize: '16px', lineHeight: '1.2' }}
             >
-              PASSAGE {currentSectionIndex + 1}
+              {getSectionShortLabel(currentSection, currentSectionIndex).toUpperCase()}
             </h2>
             <p
               className="text-xs sm:text-sm text-slate-800 font-medium leading-normal mt-0.5"
               style={{ fontSize: '13px', lineHeight: '1.3' }}
             >
-              Read the text and answer questions {minQ}–{maxQ}
+              {currentSection.type === 'listening' ? (
+                minQ > 0 ? `Listen to the audio and answer questions ${minQ}–${maxQ}` : 'Listen to the audio and answer the questions'
+              ) : currentSection.type === 'writing' ? (
+                `Write at least ${currentSectionIndex === 0 ? 150 : 250} words. You should spend about ${currentSectionIndex === 0 ? 20 : 40} minutes on this task.`
+              ) : currentSection.type === 'speaking' ? (
+                'Listen to or read the prompts and record your spoken responses.'
+              ) : (
+                minQ > 0 ? `Read the text and answer questions ${minQ}–${maxQ}` : 'Read the text and answer the questions'
+              )}
             </p>
           </div>
         </div>
@@ -3009,7 +3025,172 @@ export default function TestTakingPage() {
             }`}
           >
             <div className="max-w-3xl mx-auto space-y-4">
-              {currentSection.passage_text ? (
+              {currentSection.type === 'writing' ? (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-zinc-800">
+                    <span className="font-extrabold uppercase text-sm tracking-wider">
+                      {getSectionShortLabel(currentSection, currentSectionIndex).toUpperCase()}
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-800">
+                      Max: {activeWritingQ?.points || currentSection.questions?.[0]?.points || 20} pts
+                    </span>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="text-base sm:text-lg font-medium leading-relaxed whitespace-pre-wrap">
+                      {activeWritingQ?.question_text || currentSection.questions?.[0]?.question_text}
+                    </div>
+
+                    {(() => {
+                      const q = activeWritingQ || currentSection.questions?.[0];
+                      if (!q) return null;
+                      const options = getOptions(q.options);
+                      const hasImage = options.length > 0 && typeof options[0] === 'string' && (options[0].startsWith('/') || options[0].startsWith('http') || options[0].includes('/uploads/'));
+                      if (!hasImage) return null;
+                      return (
+                        <div className="p-3 rounded-xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 inline-block max-w-full shadow-xs">
+                          <img
+                            src={options[0]}
+                            alt="Writing Task Diagram"
+                            className="max-h-[480px] w-auto max-w-full object-contain rounded mx-auto"
+                            onError={(e) => {
+                              if (options[1] && e.currentTarget.src !== options[1]) {
+                                e.currentTarget.src = options[1];
+                              }
+                            }}
+                          />
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              ) : currentSection.type === 'speaking' ? (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b pb-3 border-slate-200 dark:border-zinc-800">
+                    <span className="font-extrabold uppercase text-sm tracking-wider">
+                      {getSectionShortLabel(currentSection, currentSectionIndex).toUpperCase()}
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded border border-slate-200 dark:border-zinc-800">
+                      Max: {activeSpeakingQ?.points || currentSection.questions?.[0]?.points || 15} pts
+                    </span>
+                  </div>
+
+                  <div className={`p-5 rounded-xl border space-y-4 ${
+                    isYellowOnBlack
+                      ? 'bg-zinc-950 border-yellow-900/60'
+                      : isWhiteOnBlack
+                      ? 'bg-zinc-900 border-zinc-800'
+                      : 'bg-amber-50/20 border-amber-200/60'
+                  }`}>
+                    <h3 className="text-base sm:text-lg font-bold">
+                      Speaking Prompt
+                    </h3>
+                    <p className="text-base sm:text-lg font-medium leading-relaxed whitespace-pre-wrap">
+                      {activeSpeakingQ?.question_text || currentSection.questions?.[0]?.question_text || 'Prepare and record your response.'}
+                    </p>
+                  </div>
+
+                  {currentSection.instructions && (
+                    <div className="text-sm opacity-80 leading-relaxed space-y-2 border-t pt-4 border-slate-200 dark:border-zinc-800">
+                      <p className="font-semibold text-xs uppercase tracking-wider">Instructions</p>
+                      <p>{currentSection.instructions}</p>
+                    </div>
+                  )}
+                </div>
+              ) : currentSection.type === 'listening' ? (
+                <div className="space-y-6">
+                  {/* Listening Audio Player Card */}
+                  <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${
+                    isYellowOnBlack
+                      ? 'bg-zinc-950 border-yellow-900/60 text-[#fbbf24]'
+                      : isWhiteOnBlack
+                      ? 'bg-zinc-900 border-zinc-800 text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                        isDarkContrast ? 'bg-zinc-800 text-white' : 'bg-blue-100 text-blue-700'
+                      }`}>
+                        <Headphones className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold">Listening Audio Track</h3>
+                        <p className="text-xs opacity-75">Exam rule: Max 2 plays</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      {isPlayingAudio && (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-500 text-xs font-bold animate-pulse">
+                          <span className="w-2 h-2 rounded-full bg-blue-500" />
+                          Playing...
+                        </div>
+                      )}
+
+                      <div className="text-right">
+                        <span className="text-[11px] opacity-75 block">Plays left:</span>
+                        <span className="text-xs font-bold font-mono">
+                          {audioPlaysLeft[currentSection.id] !== undefined ? audioPlaysLeft[currentSection.id] : 2} / 2
+                        </span>
+                      </div>
+
+                      <audio
+                        ref={audioRef}
+                        src={currentSection.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}
+                        onEnded={() => {
+                          setIsPlayingAudio(false);
+                          setHasStartedCurrentPlay((prev) => ({ ...prev, [currentSection.id]: false }));
+                        }}
+                        className="hidden"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          playAudioWithLimit(
+                            currentSection.id,
+                            currentSection.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+                          )
+                        }
+                        disabled={
+                          audioPlaysLeft[currentSection.id] !== undefined &&
+                          audioPlaysLeft[currentSection.id] <= 0 &&
+                          !isPlayingAudio
+                        }
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white rounded-lg text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        {isPlayingAudio ? (
+                          <>
+                            <Pause className="w-3.5 h-3.5" /> Pause
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3.5 h-3.5" /> Play
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Transcript / Passage text if any */}
+                  {currentSection.passage_text ? (
+                    /<[a-z][\s\S]*>/i.test(currentSection.passage_text) ? (
+                      <div
+                        className="text-[17px] leading-[1.8] space-y-4"
+                        dangerouslySetInnerHTML={{ __html: currentSection.passage_text }}
+                      />
+                    ) : (
+                      <div className="text-[17px] leading-[1.8] space-y-4 whitespace-pre-wrap">
+                        {currentSection.passage_text}
+                      </div>
+                    )
+                  ) : (
+                    <div className="p-6 rounded-xl border border-dashed border-slate-300 dark:border-zinc-800 text-center opacity-70 text-sm">
+                      Listen carefully to the audio instructions and answer the questions on the right.
+                    </div>
+                  )}
+                </div>
+              ) : currentSection.passage_text ? (
                 /<[a-z][\s\S]*>/i.test(currentSection.passage_text) ? (
                   <div
                     className="text-slate-800 dark:text-slate-200 text-[18px] sm:text-[19px] leading-[1.9] space-y-5"
@@ -3163,7 +3344,133 @@ export default function TestTakingPage() {
                 : 'bg-white text-slate-900'
             }`}
           >
-            {currentSection.instructions?.includes('ielts-reading-container') ? (
+            {currentSection.type === 'writing' ? (
+              <div className="h-full flex flex-col space-y-4">
+                {(() => {
+                  const q = activeWritingQ || currentSection.questions?.[0];
+                  if (!q) return <p className="text-slate-500 italic">No question found.</p>;
+                  const currentText = answersMap[q.id]?.text || '';
+                  const wordCount = countWords(currentText);
+                  const targetWords = currentSectionIndex === 0 ? 150 : 250;
+                  const isTargetReached = wordCount >= targetWords;
+
+                  return (
+                    <div className="h-full flex flex-col space-y-3">
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-zinc-800">
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          Essay Response
+                        </span>
+                        <div
+                          className={`font-mono font-bold px-2.5 py-1 rounded text-xs ${
+                            isTargetReached
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
+                              : 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
+                          }`}
+                        >
+                          Word count: {wordCount} / min {targetWords}
+                        </div>
+                      </div>
+
+                      <textarea
+                        value={currentText}
+                        onChange={(e) => handleSaveAnswer(q.id, e.target.value)}
+                        placeholder={`Start typing your response here (at least ${targetWords} words)...`}
+                        className="flex-1 w-full p-4 rounded-xl border border-slate-300 dark:border-zinc-700 bg-transparent text-inherit text-base sm:text-lg focus:outline-none focus:ring-1 focus:ring-amber-500 leading-relaxed resize-none font-sans"
+                        style={{ minHeight: '380px' }}
+                      />
+                    </div>
+                  );
+                })()}
+              </div>
+            ) : currentSection.type === 'speaking' ? (
+              <div className="h-full flex flex-col justify-center max-w-xl mx-auto space-y-6">
+                {(() => {
+                  const q = activeSpeakingQ || currentSection.questions?.[0];
+                  if (!q) return <p className="text-slate-500 italic">No prompt found.</p>;
+                  const isRecordingThis = recordingQuestionId === q.id;
+                  const existingRecording = recordedAudios[q.id];
+                  const savedAudioUrl = answersMap[q.id]?.audioUrl;
+
+                  return (
+                    <div className="space-y-6">
+                      <div className="p-6 rounded-2xl border flex flex-col items-center justify-center text-center space-y-4 border-slate-200 dark:border-zinc-800">
+                        <div
+                          className={`w-20 h-20 rounded-full flex items-center justify-center transition-all ${
+                            isRecordingThis
+                              ? 'bg-rose-500 text-white animate-pulse ring-8 ring-rose-500/20'
+                              : 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300'
+                          }`}
+                        >
+                          <Mic className="w-10 h-10" />
+                        </div>
+
+                        <div>
+                          <h3 className="text-base font-bold">
+                            {isRecordingThis
+                              ? 'Recording in progress...'
+                              : savedAudioUrl
+                              ? 'Response saved successfully'
+                              : 'Record your spoken response'}
+                          </h3>
+                          <p className="text-sm font-mono opacity-75 mt-1">
+                            {isRecordingThis ? `Time: ${recordingSeconds}s` : 'Click below when ready to speak'}
+                          </p>
+                        </div>
+
+                        <div>
+                          {isRecordingThis ? (
+                            <button
+                              type="button"
+                              onClick={stopRecording}
+                              className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                            >
+                              <Square className="w-4 h-4" /> Stop Recording
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => startRecording(q.id)}
+                              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-2 cursor-pointer"
+                            >
+                              <Mic className="w-4 h-4" /> Start Recording
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Recorded Audio Preview and Save */}
+                      {(existingRecording || savedAudioUrl) && (
+                        <div className="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 bg-emerald-50/30 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                            <span className="text-xs font-semibold">
+                              {savedAudioUrl ? 'Audio saved' : 'Recording ready'}
+                            </span>
+                          </div>
+
+                          <audio
+                            controls
+                            src={existingRecording?.blobUrl || savedAudioUrl}
+                            className="h-9 w-full sm:w-60"
+                          />
+
+                          {existingRecording && !existingRecording.isSaved && (
+                            <button
+                              type="button"
+                              onClick={() => uploadAndSaveSpeakingAnswer(q.id)}
+                              disabled={isUploadingVoice}
+                              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold shadow-xs transition-all whitespace-nowrap cursor-pointer"
+                            >
+                              {isUploadingVoice ? 'Saving...' : 'Save Audio'}
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            ) : currentSection.instructions?.includes('ielts-reading-container') || currentSection.instructions?.includes('ielts-listening-container') ? (
               <IeltsReadingSection
                 ref={ieltsContainerRef}
                 instructionsHtml={currentSection.instructions}
@@ -3332,7 +3639,8 @@ export default function TestTakingPage() {
             ).map(({ sec, secIdx }) => {
               const isActivePassage = secIdx === currentSectionIndex;
               const secQuestions = sec.questions || [];
-              const secAnsCount = secQuestions.filter((q) => Boolean(answersMap[q.id]?.text)).length;
+              const secAnsCount = secQuestions.filter((q) => Boolean(answersMap[q.id]?.text || answersMap[q.id]?.audioUrl)).length;
+              const secLabel = getSectionShortLabel(sec, secIdx).toUpperCase();
 
               if (isActivePassage) {
                 return (
@@ -3349,11 +3657,11 @@ export default function TestTakingPage() {
                           : 'text-slate-900'
                       }`}
                     >
-                      PASSAGE {secIdx + 1}
+                      {secLabel}
                     </span>
                     <div className="flex items-center gap-1.5">
                       {secQuestions.map((q) => {
-                        const isAns = Boolean(answersMap[q.id]?.text);
+                        const isAns = Boolean(answersMap[q.id]?.text || answersMap[q.id]?.audioUrl);
                         const isActiveQ = activeQnum === q.order_index;
                         const isFlagged = flaggedQnums.has(q.order_index);
 
@@ -3405,7 +3713,7 @@ export default function TestTakingPage() {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
                   }`}
                 >
-                  <span className="font-extrabold uppercase">PASSAGE {secIdx + 1}</span>
+                  <span className="font-extrabold uppercase">{secLabel}</span>
                   <span
                     className={
                       isYellowOnBlack
@@ -3456,30 +3764,42 @@ export default function TestTakingPage() {
         {/* Submit Confirmation Modal */}
         {showSubmitModal && (
           <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+            <div className={`rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border ${
+              isDarkContrast
+                ? 'bg-[#18181b] border-zinc-800 text-white'
+                : 'bg-white border-slate-100 text-slate-900'
+            }`}>
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
                 <AlertTriangle className="w-6 h-6" />
               </div>
 
-              <h3 className="text-lg font-bold text-center text-slate-900">
+              <h3 className="text-lg font-bold text-center">
                 Are you sure you want to submit?
               </h3>
-              <p className="text-xs text-slate-600 text-center leading-relaxed">
+              <p className={`text-xs text-center leading-relaxed ${
+                isDarkContrast ? 'text-zinc-400' : 'text-slate-600'
+              }`}>
                 All your submitted answers will be recorded and graded.
               </p>
 
               <div className="flex gap-2 pt-2">
                 <button
+                  type="button"
                   onClick={() => setShowSubmitModal(false)}
                   disabled={submitting}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-all"
+                  className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                    isDarkContrast
+                      ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800'
+                      : 'border-slate-300 text-slate-700 hover:bg-slate-50'
+                  }`}
                 >
                   Cancel
                 </button>
                 <button
+                  type="button"
                   onClick={submitTest}
                   disabled={submitting}
-                  className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? 'Submitting...' : 'Yes, Submit'}
                 </button>
@@ -3492,727 +3812,20 @@ export default function TestTakingPage() {
   }
 
   return (
-    <div className={`w-full min-h-screen transition-colors ${
-      isYellowOnBlack
-        ? 'contrast-yellow-theme bg-black text-[#fbbf24]'
-        : isWhiteOnBlack
-        ? 'contrast-dark-theme bg-[#09090b] text-white'
-        : 'contrast-white-theme bg-slate-50 dark:bg-[#141c2b] text-slate-900 dark:text-slate-100'
-    } ${
-      textSizeMode === 'extra_large'
-        ? 'text-size-extra-large'
-        : textSizeMode === 'large'
-        ? 'text-size-large'
-        : ''
-    }`}>
-      <style>{`
-        .contrast-yellow-theme { background-color: #000000 !important; color: #fbbf24 !important; }
-        .contrast-yellow-theme header,
-        .contrast-yellow-theme div[class*="border-t"],
-        .contrast-yellow-theme div[class*="border-b"],
-        .contrast-yellow-theme .glass-panel { background-color: #121212 !important; border-color: #78350f !important; color: #fbbf24 !important; }
-        .contrast-yellow-theme .bg-white,
-        .contrast-yellow-theme .bg-[#fbfbfb],
-        .contrast-yellow-theme .bg-[#f1f3f5],
-        .contrast-yellow-theme .bg-[#f2f2f0] { background-color: #000000 !important; color: #fbbf24 !important; }
-        .contrast-yellow-theme input,
-        .contrast-yellow-theme textarea,
-        .contrast-yellow-theme select { background-color: #000000 !important; color: #fbbf24 !important; border-color: #b45309 !important; }
-        .contrast-yellow-theme p,
-        .contrast-yellow-theme span,
-        .contrast-yellow-theme strong,
-        .contrast-yellow-theme h1,
-        .contrast-yellow-theme h2,
-        .contrast-yellow-theme h3,
-        .contrast-yellow-theme h4,
-        .contrast-yellow-theme label { color: #fbbf24 !important; }
-        .contrast-yellow-theme .border-slate-200,
-        .contrast-yellow-theme .border-slate-300 { border-color: #78350f !important; }
-
-        .contrast-dark-theme { background-color: #09090b !important; color: #ffffff !important; }
-        .contrast-dark-theme header,
-        .contrast-dark-theme div[class*="border-t"],
-        .contrast-dark-theme div[class*="border-b"],
-        .contrast-dark-theme .glass-panel { background-color: #18181b !important; border-color: #27272a !important; color: #ffffff !important; }
-        .contrast-dark-theme .bg-white,
-        .contrast-dark-theme .bg-[#fbfbfb],
-        .contrast-dark-theme .bg-[#f1f3f5],
-        .contrast-dark-theme .bg-[#f2f2f0] { background-color: #09090b !important; color: #ffffff !important; }
-        .contrast-dark-theme input,
-        .contrast-dark-theme textarea,
-        .contrast-dark-theme select { background-color: #18181b !important; color: #ffffff !important; border-color: #3f3f46 !important; }
-        .contrast-dark-theme p,
-        .contrast-dark-theme span,
-        .contrast-dark-theme strong,
-        .contrast-dark-theme h1,
-        .contrast-dark-theme h2,
-        .contrast-dark-theme h3,
-        .contrast-dark-theme h4,
-        .contrast-dark-theme label { color: #ffffff !important; }
-        .contrast-dark-theme .border-slate-200,
-        .contrast-dark-theme .border-slate-300 { border-color: #27272a !important; }
-
-        /* SCOPED TEXT SIZES - General view: only scale question and passage content, never header/tabs/dock */
-        .text-size-large .main-test-content p,
-        .text-size-large .main-test-content label,
-        .text-size-large .main-test-content li,
-        .text-size-large .main-test-content span:not(.font-mono):not(.rounded-full):not(.animate-pulse):not(.ielts-q-badge) {
-          font-size: 18px !important;
-          line-height: 1.7 !important;
-        }
-        .text-size-extra-large .main-test-content p,
-        .text-size-extra-large .main-test-content label,
-        .text-size-extra-large .main-test-content li,
-        .text-size-extra-large .main-test-content span:not(.font-mono):not(.rounded-full):not(.animate-pulse):not(.ielts-q-badge) {
-          font-size: 20px !important;
-          line-height: 1.75 !important;
-        }
-
-        /* BURGER MENU BUTTON: Default transparent, Yellow on hover */
-        .ielts-burger-btn {
-          background-color: transparent !important;
-          border: none !important;
-          transition: all 0.15s ease-in-out !important;
-        }
-        .ielts-burger-btn:hover {
-          background-color: #e5a035 !important;
-        }
-        .ielts-burger-btn .burger-bar {
-          transition: all 0.15s ease-in-out !important;
-        }
-        .ielts-burger-btn:hover .burger-bar {
-          background-color: #000000 !important;
-        }
-      `}</style>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6 pb-28">
-        {/* Top Test Header Bar */}
-        <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-2 z-40 transition-all backdrop-blur-md">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-xs border transition-colors ${
-              isDarkContrast
-                ? 'bg-[#18181b] border-zinc-800'
-                : 'bg-white border-slate-200'
-            }`}>
-              <img
-                src={isYellowOnBlack ? "/logo-gold.png" : isWhiteOnBlack ? "/logo-dark.png" : "/logo.png"}
-                alt="CEFR MATERIALS"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white line-clamp-1">
-                {test.title}
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                CEFR Examination Standard
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Live Timer */}
-            <div
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm font-black border shadow-xs ${
-                secondsRemaining < 300
-                  ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800 animate-pulse ring-2 ring-rose-400/20'
-                  : 'bg-slate-900 dark:bg-slate-800 text-white border-slate-800 dark:border-slate-700'
-              }`}
-            >
-              <Clock className={`w-4 h-4 ${secondsRemaining < 300 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-400'}`} />
-              <span>{formatTimer(secondsRemaining)}</span>
-            </div>
-
-            {/* Options Button */}
-            <button
-              type="button"
-              onClick={() => {
-                setOptionsMenuOpen(true);
-                setOptionsSubView('main');
-              }}
-              title="Options"
-              className="ielts-burger-btn group w-9 h-9 sm:w-10 sm:h-10 rounded-md flex flex-col items-center justify-center gap-1 cursor-pointer shrink-0 active:scale-95"
-            >
-              <div
-                className={`burger-bar w-5 h-[2.5px] rounded-full ${
-                  isYellowOnBlack
-                    ? 'bg-[#fbbf24]'
-                    : isWhiteOnBlack
-                    ? 'bg-white'
-                    : 'bg-slate-900'
-                }`}
-              />
-              <div
-                className={`burger-bar w-5 h-[2.5px] rounded-full ${
-                  isYellowOnBlack
-                    ? 'bg-[#fbbf24]'
-                    : isWhiteOnBlack
-                    ? 'bg-white'
-                    : 'bg-slate-900'
-                }`}
-              />
-              <div
-                className={`burger-bar w-5 h-[2.5px] rounded-full ${
-                  isYellowOnBlack
-                    ? 'bg-[#fbbf24]'
-                    : isWhiteOnBlack
-                    ? 'bg-white'
-                    : 'bg-slate-900'
-                }`}
-              />
-            </button>
-
-            <button
-              onClick={() => setShowSubmitModal(true)}
-              className="py-2 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.02] flex items-center gap-1.5"
-            >
-              <Send className="w-3.5 h-3.5" />
-              Submit Test
-            </button>
-          </div>
-        </div>
-
-        {/* Section Navigation Tabs */}
-        <div className="flex gap-2 overflow-x-auto pt-3 mt-3 border-t border-slate-200/70 dark:border-slate-800">
-          {(targetSectionFilter !== null && sections[targetSectionFilter]
-            ? [{ sec: sections[targetSectionFilter], idx: targetSectionFilter }]
-            : sections.map((sec, idx) => ({ sec, idx }))
-          ).map(({ sec, idx }) => {
-            const isSelected = idx === currentSectionIndex;
-            let icon = <BookOpen className="w-4 h-4" />;
-            if (sec.type === 'listening') icon = <Headphones className="w-4 h-4" />;
-            if (sec.type === 'writing') icon = <Edit3 className="w-4 h-4" />;
-            if (sec.type === 'speaking') icon = <Mic className="w-4 h-4" />;
-            const tabLabel = getSectionShortLabel(sec, idx);
-
-            return (
-              <button
-                key={sec.id || idx}
-                onClick={() => handleSectionChange(idx)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
-                  isSelected
-                    ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-sm ring-1 ring-slate-800 dark:ring-emerald-500'
-                    : 'bg-white dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
-              >
-                {icon}
-                <span>{tabLabel}</span>
-              </button>
-            );
-          })}
-        </div>
+    <div className="w-full min-h-screen flex items-center justify-center p-8 text-center bg-slate-50 dark:bg-slate-900">
+      <div className="p-8 max-w-md bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md space-y-4">
+        <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">No Section Found</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Ushbu testda bo‘limlar topilmadi.
+        </p>
+        <button
+          onClick={() => router.push('/student')}
+          className="px-5 py-2.5 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all cursor-pointer"
+        >
+          Testlar ro‘yxatiga qaytish
+        </button>
       </div>
-
-      {/* Main Section Content Area */}
-      {currentSection ? (
-        <div className="main-test-content space-y-6">
-          {/* Section Instructions Card (only if custom non-IELTS instructions exist) */}
-          {!currentSection.instructions?.includes('ielts-') && currentSection.instructions && (
-            <div className="border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700">
-              <div>
-                <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                  {currentSection.title}
-                </h2>
-                <p className="text-xs sm:text-sm mt-1 text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {currentSection.instructions}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* 1. LISTENING SECTION */}
-          {currentSection.type === 'listening' && (
-            <div className="space-y-6">
-              {/* Audio Player Card with Limit (1-2 plays) */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                    <Headphones className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Listening Audio Track</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Exam Rule: Audio can be played at most 2 times.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {isPlayingAudio && (
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold animate-pulse">
-                      <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                      Playing audio...
-                    </div>
-                  )}
-
-                  <div className="text-right">
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">Plays left:</span>
-                    <span className="text-sm font-bold text-blue-700 dark:text-blue-400">
-                      {audioPlaysLeft[currentSection.id] !== undefined
-                        ? audioPlaysLeft[currentSection.id]
-                        : 2}{' '}
-                      / 2 plays
-                    </span>
-                  </div>
-
-                  <audio
-                    ref={audioRef}
-                    src={currentSection.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}
-                    onEnded={() => {
-                      setIsPlayingAudio(false);
-                      setHasStartedCurrentPlay((prev) => ({ ...prev, [currentSection.id]: false }));
-                    }}
-                    className="hidden"
-                  />
-
-                  <button
-                    onClick={() =>
-                      playAudioWithLimit(
-                        currentSection.id,
-                        currentSection.audio_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
-                      )
-                    }
-                    disabled={
-                      audioPlaysLeft[currentSection.id] !== undefined &&
-                      audioPlaysLeft[currentSection.id] <= 0 &&
-                      !isPlayingAudio
-                    }
-                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer"
-                  >
-                    {isPlayingAudio ? (
-                      <>
-                        <Pause className="w-4 h-4" /> Pause
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-4 h-4" /> Play
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Question Type Filter Bar */}
-              {renderQuestionTypeFilterBar()}
-
-              {/* Questions for Listening */}
-              {currentSection.instructions?.includes('ielts-reading-container') || currentSection.instructions?.includes('ielts-listening-container') ? (
-                <div className="space-y-4">
-                  <IeltsReadingSection
-                    ref={ieltsContainerRef}
-                    instructionsHtml={currentSection.instructions}
-                    qnumToQuestionId={qnumToQuestionId}
-                    initialAnswers={answersMap}
-                    onSaveAnswer={handleSaveAnswer}
-                    onAnswerUpdated={handleLiveAnswerUpdate}
-                    className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
-                  />
-
-                  {/* Question Navigator Palette */}
-                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        Questions in this section ({currentSection.questions?.length || 0})
-                      </span>
-                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
-                        Completed:{' '}
-                        {(currentSection.questions || []).filter((q) => Boolean(answersMap[q.id]?.text)).length} /{' '}
-                        {currentSection.questions?.length || 0}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
-                      {(currentSection.questions || []).map((q) => {
-                        const isAnswered = Boolean(answersMap[q.id]?.text);
-                        const isMatchFilter = filteredQnums.has(q.order_index);
-                        const isDimmed = selectedQuestionTypeFilter !== 'all' && !isMatchFilter;
-
-                        return (
-                          <button
-                            key={q.id}
-                            type="button"
-                            onClick={() => scrollToQuestion(q.order_index)}
-                            title={`Question #${q.order_index}`}
-                            className={`w-8 h-8 rounded-lg text-xs font-bold transition-all flex items-center justify-center border cursor-pointer ${
-                              isDimmed
-                                ? 'opacity-25 grayscale border-dashed border-slate-300 dark:border-slate-700 scale-90'
-                                : isAnswered
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400 hover:bg-blue-50/50 dark:hover:bg-slate-700'
-                            } ${selectedQuestionTypeFilter !== 'all' && isMatchFilter ? 'ring-2 ring-emerald-500 ring-offset-1' : ''}`}
-                          >
-                            {q.order_index}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredQuestions.length === 0 ? (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 text-center text-slate-500">
-                      No questions match the selected filter.
-                    </div>
-                  ) : (
-                    filteredQuestions.map((q) => {
-                      const options = getOptions(q.options);
-                      const isImageQuestion = options.length === 1 && typeof options[0] === 'string' && (options[0].startsWith('http') || options[0].startsWith('/') || options[0].includes('/uploads/'));
-                      const qCat = getQuestionCategory(q);
-                      const catMeta = IELTS_QUESTION_CATEGORIES[qCat];
-
-                      return (
-                        <div
-                          key={q.id}
-                          id={`question-card-${q.order_index}`}
-                          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-sm scroll-mt-28"
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
-                                Question #{q.order_index}
-                              </span>
-                              {catMeta && catMeta.id !== 'all' && (
-                                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catMeta.badgeClass}`}>
-                                  {catMeta.shortLabel}
-                                </span>
-                              )}
-                            </div>
-                            <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                              {q.points} pts
-                            </span>
-                          </div>
-
-                          <h4 className="text-base font-semibold text-slate-900 dark:text-white mb-4 whitespace-pre-wrap">{q.question_text}</h4>
-
-                          {options.length > 0 && !isImageQuestion ? (
-                            <div className="space-y-2">
-                              {options.map((opt, optIdx) => {
-                                const isChecked = answersMap[q.id]?.text === opt;
-                                return (
-                                  <label
-                                    key={optIdx}
-                                    className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm cursor-pointer transition-all ${
-                                      isChecked
-                                        ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/40 font-semibold text-emerald-950 dark:text-emerald-300'
-                                        : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300'
-                                    }`}
-                                  >
-                                    <input
-                                      type="radio"
-                                      name={`question_${q.id}`}
-                                      checked={isChecked}
-                                      onChange={() => handleSaveAnswer(q.id, opt, "", true)}
-                                      className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
-                                    />
-                                    <span>{opt}</span>
-                                  </label>
-                                );
-                              })}
-                            </div>
-                          ) : (
-                            <div className="space-y-3">
-                              {isImageQuestion && (
-                                <div className="max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-xs">
-                                  <img
-                                    src={options[0]}
-                                    alt="Table/Diagram"
-                                    className="w-full h-auto max-h-96 object-contain rounded-lg"
-                                  />
-                                </div>
-                              )}
-                              <input
-                                type="text"
-                                placeholder="Type your answer here..."
-                                value={answersMap[q.id]?.text || ''}
-                                onChange={(e) => {
-                                  const val = e.target.value;
-                                  setAnswersMap((prev) => ({
-                                    ...prev,
-                                    [q.id]: { text: val, audioUrl: '' },
-                                  }));
-                                }}
-                                onBlur={(e) => handleSaveAnswer(q.id, e.target.value)}
-                                className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* 3. WRITING SECTION */}
-          {currentSection.type === 'writing' && (
-            <div className="space-y-6">
-              {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
-                const currentText = answersMap[q.id]?.text || '';
-                const wordCount = countWords(currentText);
-                const targetWords = qIdx === 0 ? 150 : 250;
-                const isTargetReached = wordCount >= targetWords;
-
-                return (
-                  <div key={q.id || qIdx} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-md border border-amber-200 dark:border-amber-800">
-                        Writing Task #{qIdx + 1}
-                      </span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                        Max: {q.points} pts
-                      </span>
-                    </div>
-
-                    <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
-                      <div className="text-slate-800 dark:text-slate-200 text-sm font-semibold leading-relaxed whitespace-pre-wrap">
-                        {q.question_text}
-                      </div>
-                      {Array.isArray(q.options) && q.options.length > 0 && typeof q.options[0] === 'string' && (q.options[0].startsWith('/') || q.options[0].startsWith('http')) && (
-                        <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs inline-block max-w-full">
-                          <img
-                            src={q.options[0]}
-                            alt={`Writing Task ${qIdx + 1} Diagram`}
-                            className="max-h-[500px] w-auto max-w-full object-contain rounded-lg mx-auto"
-                            onError={(e) => {
-                              if (Array.isArray(q.options) && q.options[1] && e.currentTarget.src !== q.options[1]) {
-                                e.currentTarget.src = q.options[1];
-                              }
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    <div>
-                      <div className="flex items-center justify-between text-xs mb-2">
-                        <span className="text-slate-500 dark:text-slate-400 font-medium">Type your essay response here:</span>
-                        <div
-                          className={`font-mono font-bold px-2 py-1 rounded-md text-xs ${
-                            isTargetReached
-                              ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300'
-                              : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300'
-                          }`}
-                        >
-                          Words: {wordCount} / min {targetWords}
-                        </div>
-                      </div>
-
-                      <textarea
-                        rows={12}
-                        value={currentText}
-                        onChange={(e) => handleSaveAnswer(q.id, e.target.value)}
-                        placeholder={`Start writing your essay (at least ${targetWords} words)...`}
-                        className="w-full p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* 4. SPEAKING SECTION */}
-          {currentSection.type === 'speaking' && (
-            <div className="space-y-6">
-              {(Array.isArray(currentSection.questions) ? currentSection.questions : []).map((q, qIdx) => {
-                const isRecordingThis = recordingQuestionId === q.id;
-                const existingRecording = recordedAudios[q.id];
-                const savedAudioUrl = answersMap[q.id]?.audioUrl;
-
-                return (
-                  <div key={q.id || qIdx} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/60 px-2.5 py-1 rounded-md border border-purple-200 dark:border-purple-800">
-                        Speaking Part #{qIdx + 1}
-                      </span>
-                      <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                        Max: {q.points} pts
-                      </span>
-                    </div>
-
-                    <p className="text-slate-900 dark:text-purple-100 text-sm font-bold leading-relaxed bg-purple-50/50 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-100 dark:border-purple-900/50">
-                      {q.question_text}
-                    </p>
-
-                    {/* Microphone Controls */}
-                    <div className="p-5 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
-                            isRecordingThis
-                              ? 'bg-rose-500 text-white animate-pulse'
-                              : 'bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300'
-                          }`}
-                        >
-                          <Mic className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                            {isRecordingThis
-                              ? 'Recording in progress...'
-                              : savedAudioUrl
-                              ? 'Response saved successfully'
-                              : 'Record your response'}
-                          </div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                            {isRecordingThis ? `Time: ${recordingSeconds}s` : 'Click record to start speaking'}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {isRecordingThis ? (
-                          <button
-                            onClick={stopRecording}
-                            className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-                          >
-                            <Square className="w-4 h-4" /> Stop Recording
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => startRecording(q.id)}
-                            className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-                          >
-                            <Mic className="w-4 h-4" /> Start Recording
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Recorded Audio Preview */}
-                    {(existingRecording || savedAudioUrl) && (
-                      <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                          <span className="text-xs font-semibold text-emerald-900 dark:text-emerald-200">
-                            Recorded audio ready. Listen below:
-                          </span>
-                        </div>
-
-                        <audio
-                          controls
-                          src={existingRecording?.blobUrl || savedAudioUrl}
-                          className="h-9 w-full sm:w-64"
-                        />
-
-                        {existingRecording && !existingRecording.isSaved && (
-                          <button
-                            onClick={() => uploadAndSaveSpeakingAnswer(q.id)}
-                            disabled={isUploadingVoice}
-                            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold shadow-sm transition-all whitespace-nowrap"
-                          >
-                            {isUploadingVoice ? 'Uploading...' : 'Save Audio'}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Bottom Section Navigator */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-800">
-            {targetSectionFilter !== null ? (
-              <>
-                <button
-                  onClick={() => router.push('/student')}
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5"
-                >
-                  <ChevronLeft className="w-4 h-4" /> Back to Tests
-                </button>
-
-                <button
-                  onClick={() => setShowSubmitModal(true)}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-                >
-                  Finish Section <Send className="w-4 h-4" />
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => handleSectionChange(Math.max(0, currentSectionIndex - 1))}
-                  disabled={currentSectionIndex === 0}
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 transition-all flex items-center gap-1.5"
-                >
-                  <ChevronLeft className="w-4 h-4" /> Previous Section
-                </button>
-
-                {currentSectionIndex < sections.length - 1 ? (
-                  <button
-                    onClick={() => handleSectionChange(Math.min(sections.length - 1, currentSectionIndex + 1))}
-                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-                  >
-                    Next Section <ChevronRight className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowSubmitModal(true)}
-                    className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-                  >
-                    Finish Test <Send className="w-4 h-4" />
-                  </button>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
-          No sections found in this test.
-        </div>
-      )}
-
-      </div>
-
-      {/* Options Menu (Contrast & Text Size) */}
-      {renderOptionsMenu()}
-
-      {/* Instructions Modal Before Test */}
-      {renderInstructionsModal()}
-
-      {/* Submit Confirmation Modal */}
-      {showSubmitModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100 dark:border-slate-800">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
-              <AlertTriangle className="w-6 h-6" />
-            </div>
-
-            <h3 className="text-lg font-bold text-center text-slate-900 dark:text-white">
-              Are you sure you want to submit?
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 text-center leading-relaxed">
-              All your submitted answers will be recorded and graded.
-            </p>
-
-            <div className="flex gap-2 pt-2">
-              <button
-                onClick={() => setShowSubmitModal(false)}
-                disabled={submitting}
-                className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={submitTest}
-                disabled={submitting}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all disabled:opacity-50"
-              >
-                {submitting ? 'Submitting...' : 'Yes, Submit'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

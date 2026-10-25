@@ -10,7 +10,7 @@ export default function AppLayoutShell({ children }: { children: React.ReactNode
 
   if (isTestTakingPage) {
     return (
-      <div className="w-screen h-screen overflow-hidden bg-white dark:bg-[#141c2b] text-slate-900 dark:text-slate-100 flex flex-col">
+      <div className="w-full min-h-screen bg-white dark:bg-[#141c2b] text-slate-900 dark:text-slate-100 flex flex-col">
         {children}
       </div>
     );

@@ -2471,7 +2471,7 @@ export default function TestTakingPage() {
   // 1. DEDICATED COMPUTER-DELIVERED READING TEST INTERFACE
   if (currentSection?.type === 'reading') {
     return (
-      <div className={`w-full h-full flex flex-col overflow-hidden select-none relative transition-colors ${
+      <div className={`fixed inset-0 w-full h-full flex flex-col overflow-hidden select-none z-30 transition-colors ${
         isYellowOnBlack
           ? 'contrast-yellow-theme bg-black text-[#fbbf24]'
           : isWhiteOnBlack
@@ -3492,12 +3492,12 @@ export default function TestTakingPage() {
   }
 
   return (
-    <div className={`space-y-6 pb-20 min-h-screen transition-colors ${
+    <div className={`w-full min-h-screen transition-colors ${
       isYellowOnBlack
         ? 'contrast-yellow-theme bg-black text-[#fbbf24]'
         : isWhiteOnBlack
         ? 'contrast-dark-theme bg-[#09090b] text-white'
-        : ''
+        : 'contrast-white-theme bg-slate-50 dark:bg-[#141c2b] text-slate-900 dark:text-slate-100'
     } ${
       textSizeMode === 'extra_large'
         ? 'text-size-extra-large'
@@ -3584,8 +3584,10 @@ export default function TestTakingPage() {
           background-color: #000000 !important;
         }
       `}</style>
-      {/* Top Test Header Bar */}
-      <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-20 z-40 transition-all">
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6 pb-28">
+        {/* Top Test Header Bar */}
+        <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-2 z-40 transition-all backdrop-blur-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-xs border transition-colors ${
@@ -4169,7 +4171,9 @@ export default function TestTakingPage() {
         </div>
       )}
 
-{/* Options Menu (Contrast & Text Size) */}
+      </div>
+
+      {/* Options Menu (Contrast & Text Size) */}
       {renderOptionsMenu()}
 
       {/* Instructions Modal Before Test */}

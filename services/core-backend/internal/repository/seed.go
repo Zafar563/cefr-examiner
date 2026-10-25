@@ -16,8 +16,17 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 		password_hash VARCHAR(255) NOT NULL,
 		full_name VARCHAR(255) NOT NULL,
 		role VARCHAR(50) NOT NULL CHECK (role IN ('student', 'examiner', 'admin')),
+		phone_number VARCHAR(50) DEFAULT '',
+		date_of_birth VARCHAR(50) DEFAULT '',
+		gender VARCHAR(20) DEFAULT '',
+		avatar_url TEXT DEFAULT '',
 		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	);
+
+	ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number VARCHAR(50) DEFAULT '';
+	ALTER TABLE users ADD COLUMN IF NOT EXISTS date_of_birth VARCHAR(50) DEFAULT '';
+	ALTER TABLE users ADD COLUMN IF NOT EXISTS gender VARCHAR(20) DEFAULT '';
+	ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT DEFAULT '';
 
 	CREATE TABLE IF NOT EXISTS tests (
 		id SERIAL PRIMARY KEY,
@@ -68,8 +77,12 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 		started_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 		expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
 		submitted_at TIMESTAMP WITH TIME ZONE,
-		current_section_index INT DEFAULT 0
+		current_section_index INT DEFAULT 0,
+		target_section_index INT
 	);
+
+	ALTER TABLE test_sessions ADD COLUMN IF NOT EXISTS current_section_index INT DEFAULT 0;
+	ALTER TABLE test_sessions ADD COLUMN IF NOT EXISTS target_section_index INT;
 
 	CREATE TABLE IF NOT EXISTS answers (
 		id SERIAL PRIMARY KEY,
@@ -103,6 +116,9 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 	CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 	CREATE INDEX IF NOT EXISTS idx_sections_test_id ON sections(test_id);
 	CREATE INDEX IF NOT EXISTS idx_questions_section_id ON questions(section_id);
+	CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON test_sessions(user_id);
+	CREATE INDEX IF NOT EXISTS idx_sessions_target_section ON test_sessions(target_section_index);
+	CREATE INDEX IF NOT EXISTS idx_answers_session_id ON answers(session_id);
 	`
 	if _, err := db.Exec(schema); err != nil {
 		return err
@@ -127,8 +143,6 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 	} else {
 		log.Println("Demo users verified: student@cefr.uz, examiner@cefr.uz, admin@cefr.uz (password: password123)")
 	}
-
-
 
 	// Synchronize sequences
 	_, _ = db.Exec(`

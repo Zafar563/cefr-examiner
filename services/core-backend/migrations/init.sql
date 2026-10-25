@@ -6,8 +6,18 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('student', 'examiner', 'admin')),
+    phone_number VARCHAR(50) DEFAULT '',
+    date_of_birth VARCHAR(50) DEFAULT '',
+    gender VARCHAR(20) DEFAULT '',
+    avatar_url TEXT DEFAULT '',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Ensure user columns exist for existing databases
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number VARCHAR(50) DEFAULT '';
+ALTER TABLE users ADD COLUMN IF NOT EXISTS date_of_birth VARCHAR(50) DEFAULT '';
+ALTER TABLE users ADD COLUMN IF NOT EXISTS gender VARCHAR(20) DEFAULT '';
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS tests (
     id SERIAL PRIMARY KEY,
@@ -59,8 +69,13 @@ CREATE TABLE IF NOT EXISTS test_sessions (
     started_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
     submitted_at TIMESTAMP WITH TIME ZONE,
-    current_section_index INT DEFAULT 0
+    current_section_index INT DEFAULT 0,
+    target_section_index INT
 );
+
+-- Ensure test_sessions columns exist for existing databases
+ALTER TABLE test_sessions ADD COLUMN IF NOT EXISTS current_section_index INT DEFAULT 0;
+ALTER TABLE test_sessions ADD COLUMN IF NOT EXISTS target_section_index INT;
 
 CREATE TABLE IF NOT EXISTS answers (
     id SERIAL PRIMARY KEY,
@@ -96,6 +111,7 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_sections_test_id ON sections(test_id);
 CREATE INDEX IF NOT EXISTS idx_questions_section_id ON questions(section_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON test_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_target_section ON test_sessions(target_section_index);
 CREATE INDEX IF NOT EXISTS idx_answers_session_id ON answers(session_id);
 
 -- SEED DATA
@@ -106,8 +122,6 @@ INSERT INTO users (email, password_hash, full_name, role) VALUES
 ('examiner@cefr.uz', '$2a$10$bER7FK3.9KsIeNPNE6evCOBHP5oLSkHtNscMhMHRLcT1PgjeiwORK', 'Ali Qodirov (Senior Examiner)', 'examiner'),
 ('student@cefr.uz', '$2a$10$bER7FK3.9KsIeNPNE6evCOBHP5oLSkHtNscMhMHRLcT1PgjeiwORK', 'Jasur Rustamov (Student)', 'student')
 ON CONFLICT (email) DO NOTHING;
-
-
 
 -- Synchronize sequences for auto-incrementing SERIAL columns
 SELECT setval(pg_get_serial_sequence('tests', 'id'), COALESCE((SELECT MAX(id) FROM tests), 1));

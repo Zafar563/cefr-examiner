@@ -10,6 +10,10 @@ type User struct {
 	PasswordHash string    `json:"-"`
 	FullName     string    `json:"full_name"`
 	Role         string    `json:"role"` // 'student', 'examiner', 'admin'
+	PhoneNumber  string    `json:"phone_number"`
+	DateOfBirth  string    `json:"date_of_birth"`
+	Gender       string    `json:"gender"`
+	AvatarURL    string    `json:"avatar_url"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 
@@ -22,6 +26,10 @@ type Question struct {
 	CorrectAnswer string  `json:"correct_answer,omitempty"` // hidden from student during test
 	Points       int      `json:"points"`
 	OrderIndex   int      `json:"order_index"`
+	ExplanationText     string   `json:"explanation_text,omitempty"`
+	ExplanationAudioURL string   `json:"explanation_audio_url,omitempty"`
+	ExplanationVideoURL string   `json:"explanation_video_url,omitempty"`
+	ExplanationImageURL string   `json:"explanation_image_url,omitempty"`
 }
 
 type Section struct {
@@ -59,7 +67,11 @@ type Answer struct {
 	CreatedAt        time.Time `json:"created_at"`
 	QuestionText     string    `json:"question_text,omitempty"`
 	SectionType      string    `json:"section_type,omitempty"`
-	CorrectAnswer    string    `json:"correct_answer,omitempty"`
+	CorrectAnswer       string    `json:"correct_answer,omitempty"`
+	ExplanationText     string    `json:"explanation_text,omitempty"`
+	ExplanationAudioURL string    `json:"explanation_audio_url,omitempty"`
+	ExplanationVideoURL string    `json:"explanation_video_url,omitempty"`
+	ExplanationImageURL string    `json:"explanation_image_url,omitempty"`
 }
 
 type TestSession struct {
@@ -74,6 +86,7 @@ type TestSession struct {
 	ExpiresAt           time.Time   `json:"expires_at"`
 	SubmittedAt         *time.Time  `json:"submitted_at,omitempty"`
 	CurrentSectionIndex int         `json:"current_section_index"`
+	TargetSectionIndex  *int        `json:"target_section_index,omitempty"`
 	Answers             []Answer    `json:"answers,omitempty"`
 	Result              *TestResult `json:"result,omitempty"`
 }
@@ -129,4 +142,42 @@ type CreateTestRequest struct {
 	Description     string `json:"description"`
 	Level           string `json:"level"`
 	DurationMinutes int    `json:"duration_minutes"`
+}
+
+type UpdateProfileRequest struct {
+	FullName    string `json:"full_name"`
+	PhoneNumber string `json:"phone_number"`
+	DateOfBirth string `json:"date_of_birth"`
+	Gender      string `json:"gender"`
+	AvatarURL   string `json:"avatar_url"`
+}
+
+type ChangePasswordRequest struct {
+	CurrentPassword string `json:"current_password" binding:"required"`
+	NewPassword     string `json:"new_password" binding:"required,min=6"`
+}
+
+type UpdateTestRequest struct {
+	Title           string `json:"title" binding:"required"`
+	Description     string `json:"description"`
+	Level           string `json:"level"`
+	DurationMinutes int    `json:"duration_minutes"`
+}
+
+type UpdateSectionRequest struct {
+	Title        string  `json:"title" binding:"required"`
+	Instructions string  `json:"instructions"`
+	AudioURL     *string `json:"audio_url"`
+	PassageText  *string `json:"passage_text"`
+}
+
+type UpdateQuestionRequest struct {
+	QuestionText        string   `json:"question_text" binding:"required"`
+	Options             []string `json:"options"`
+	CorrectAnswer       string   `json:"correct_answer"`
+	Points              int      `json:"points"`
+	ExplanationText     string   `json:"explanation_text"`
+	ExplanationAudioURL string   `json:"explanation_audio_url"`
+	ExplanationVideoURL string   `json:"explanation_video_url"`
+	ExplanationImageURL string   `json:"explanation_image_url"`
 }

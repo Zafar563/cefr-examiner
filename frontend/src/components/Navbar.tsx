@@ -8,7 +8,6 @@ import {
   Menu,
   X,
   Settings,
-  CheckSquare,
   Headphones,
   BookOpen,
   Mic,
@@ -27,18 +26,49 @@ function NavbarContent() {
   const [user, setUser] = useState<User | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [readingMenuOpen, setReadingMenuOpen] = useState(false);
+  const [listeningMenuOpen, setListeningMenuOpen] = useState(false);
+  const [speakingMenuOpen, setSpeakingMenuOpen] = useState(false);
+  const [writingMenuOpen, setWritingMenuOpen] = useState(false);
+  const [mockMenuOpen, setMockMenuOpen] = useState(false);
+
   const accountRef = useRef<HTMLDivElement>(null);
+  const readingRef = useRef<HTMLDivElement>(null);
+  const listeningRef = useRef<HTMLDivElement>(null);
+  const speakingRef = useRef<HTMLDivElement>(null);
+  const writingRef = useRef<HTMLDivElement>(null);
+  const mockRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setUser(getCurrentStoredUser());
     setMobileMenuOpen(false);
     setAccountMenuOpen(false);
+    setReadingMenuOpen(false);
+    setListeningMenuOpen(false);
+    setSpeakingMenuOpen(false);
+    setWritingMenuOpen(false);
+    setMockMenuOpen(false);
   }, [pathname, searchParams]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (accountRef.current && !accountRef.current.contains(event.target as Node)) {
         setAccountMenuOpen(false);
+      }
+      if (readingRef.current && !readingRef.current.contains(event.target as Node)) {
+        setReadingMenuOpen(false);
+      }
+      if (listeningRef.current && !listeningRef.current.contains(event.target as Node)) {
+        setListeningMenuOpen(false);
+      }
+      if (speakingRef.current && !speakingRef.current.contains(event.target as Node)) {
+        setSpeakingMenuOpen(false);
+      }
+      if (writingRef.current && !writingRef.current.contains(event.target as Node)) {
+        setWritingMenuOpen(false);
+      }
+      if (mockRef.current && !mockRef.current.contains(event.target as Node)) {
+        setMockMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -73,8 +103,8 @@ function NavbarContent() {
       href: '/student?tab=listening',
       icon: Headphones,
       isActive: currentTab === 'listening',
-      activeClass: 'bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-extrabold ring-1 ring-blue-500/20 shadow-xs',
-      hoverClass: 'hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/30',
+      activeClass: 'bg-cyan-50 dark:bg-cyan-950/70 text-[#0a5c6e] dark:text-cyan-400 font-extrabold ring-1 ring-[#0a5c6e]/20 shadow-xs',
+      hoverClass: 'hover:text-[#0a5c6e] dark:hover:text-cyan-400 hover:bg-cyan-50/50 dark:hover:bg-cyan-950/30',
     },
     {
       id: 'reading',
@@ -82,8 +112,8 @@ function NavbarContent() {
       href: '/student?tab=reading',
       icon: BookOpen,
       isActive: currentTab === 'reading',
-      activeClass: 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-extrabold ring-1 ring-emerald-500/20 shadow-xs',
-      hoverClass: 'hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30',
+      activeClass: 'bg-blue-50 dark:bg-blue-950/70 text-[#1967d2] dark:text-blue-400 font-extrabold ring-1 ring-blue-500/20 shadow-xs',
+      hoverClass: 'hover:text-[#1967d2] dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-950/30',
     },
     {
       id: 'speaking',
@@ -91,8 +121,8 @@ function NavbarContent() {
       href: '/student?tab=speaking',
       icon: Mic,
       isActive: currentTab === 'speaking',
-      activeClass: 'bg-purple-50 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 font-extrabold ring-1 ring-purple-500/20 shadow-xs',
-      hoverClass: 'hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-950/30',
+      activeClass: 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 font-extrabold ring-1 ring-emerald-500/20 shadow-xs',
+      hoverClass: 'hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30',
     },
     {
       id: 'writing',
@@ -100,17 +130,17 @@ function NavbarContent() {
       href: '/student?tab=writing',
       icon: PenTool,
       isActive: currentTab === 'writing',
-      activeClass: 'bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 font-extrabold ring-1 ring-amber-500/20 shadow-xs',
-      hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30',
+      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-[#7a2259] dark:text-rose-400 font-extrabold ring-1 ring-[#7a2259]/20 shadow-xs',
+      hoverClass: 'hover:text-[#7a2259] dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
     },
     {
       id: 'mock',
-      label: 'Full Mock',
+      label: 'Mock',
       href: '/student?tab=mock',
       icon: Sparkles,
       isActive: currentTab === 'mock',
-      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 font-extrabold ring-1 ring-rose-500/20 shadow-xs',
-      hoverClass: 'hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
+      activeClass: 'bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 font-extrabold ring-1 ring-amber-500/20 shadow-xs',
+      hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30',
     },
   ];
 
@@ -141,10 +171,250 @@ function NavbarContent() {
           </div>
         </Link>
 
-        {/* Center: Desktop Navigation Tabs */}
+        {/* Center: Desktop Navigation Tabs with Dropdowns */}
         <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2 text-base font-bold text-slate-700 dark:text-slate-200">
           {navItems.map((item) => {
             const Icon = item.icon;
+
+            // Listening Dropdown
+            if (item.id === 'listening') {
+              return (
+                <div
+                  key={item.id}
+                  ref={listeningRef}
+                  className="relative"
+                  onMouseEnter={() => setListeningMenuOpen(true)}
+                  onMouseLeave={() => setListeningMenuOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      item.isActive
+                        ? item.activeClass
+                        : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{item.label}</span>
+                    <span className="text-xs transition-transform duration-200">▾</span>
+                  </Link>
+
+                  {listeningMenuOpen && (
+                    <div className="absolute left-0 top-full pt-1.5 z-50 min-w-[195px] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700/80 py-1.5 overflow-hidden">
+                        {[
+                          { label: 'Section 1', href: '/student?tab=listening&section=1' },
+                          { label: 'Section 2', href: '/student?tab=listening&section=2' },
+                          { label: 'Section 3', href: '/student?tab=listening&section=3' },
+                          { label: 'Section 4', href: '/student?tab=listening&section=4' },
+                          { label: 'Full Listening', href: '/student?tab=listening&section=full' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setListeningMenuOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-extrabold text-slate-800 dark:text-slate-200 hover:bg-cyan-50 dark:hover:bg-cyan-950/50 hover:text-[#0a5c6e] dark:hover:text-cyan-400 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Reading Dropdown
+            if (item.id === 'reading') {
+              return (
+                <div
+                  key={item.id}
+                  ref={readingRef}
+                  className="relative"
+                  onMouseEnter={() => setReadingMenuOpen(true)}
+                  onMouseLeave={() => setReadingMenuOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      item.isActive
+                        ? item.activeClass
+                        : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{item.label}</span>
+                    <span className="text-xs transition-transform duration-200">▾</span>
+                  </Link>
+
+                  {readingMenuOpen && (
+                    <div className="absolute left-0 top-full pt-1.5 z-50 min-w-[195px] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700/80 py-1.5 overflow-hidden">
+                        {[
+                          { label: 'Passage 1', href: '/student?tab=reading&passage=1' },
+                          { label: 'Passage 2', href: '/student?tab=reading&passage=2' },
+                          { label: 'Passage 3', href: '/student?tab=reading&passage=3' },
+                          { label: 'Full Reading', href: '/student?tab=reading&passage=full' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setReadingMenuOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-extrabold text-slate-800 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-950/50 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Speaking Dropdown
+            if (item.id === 'speaking') {
+              return (
+                <div
+                  key={item.id}
+                  ref={speakingRef}
+                  className="relative"
+                  onMouseEnter={() => setSpeakingMenuOpen(true)}
+                  onMouseLeave={() => setSpeakingMenuOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      item.isActive
+                        ? item.activeClass
+                        : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{item.label}</span>
+                    <span className="text-xs transition-transform duration-200">▾</span>
+                  </Link>
+
+                  {speakingMenuOpen && (
+                    <div className="absolute left-0 top-full pt-1.5 z-50 min-w-[195px] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700/80 py-1.5 overflow-hidden">
+                        {[
+                          { label: 'Speaking partner', href: '/student?tab=speaking&mode=partner' },
+                          { label: 'Part 1 · Interview', href: '/student?tab=speaking&part=1' },
+                          { label: 'Part 2 · Cue card', href: '/student?tab=speaking&part=2' },
+                          { label: 'Part 3 · Discussion', href: '/student?tab=speaking&part=3' },
+                          { label: 'My recordings', href: '/student?tab=speaking&mode=recordings' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setSpeakingMenuOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-extrabold text-slate-800 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Writing Dropdown (Matching Image 2)
+            if (item.id === 'writing') {
+              return (
+                <div
+                  key={item.id}
+                  ref={writingRef}
+                  className="relative"
+                  onMouseEnter={() => setWritingMenuOpen(true)}
+                  onMouseLeave={() => setWritingMenuOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      item.isActive
+                        ? item.activeClass
+                        : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{item.label}</span>
+                    <span className="text-xs transition-transform duration-200">▾</span>
+                  </Link>
+
+                  {writingMenuOpen && (
+                    <div className="absolute left-0 top-full pt-1.5 z-50 min-w-[195px] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700/80 py-1.5 overflow-hidden">
+                        {[
+                          { label: 'Task 1 Reports', href: '/student?tab=writing&task=1' },
+                          { label: 'Task 2 Essays', href: '/student?tab=writing&task=2' },
+                          { label: 'Band Feedback', href: '/student?tab=writing&mode=feedback' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setWritingMenuOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-extrabold text-slate-800 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/50 hover:text-[#7a2259] dark:hover:text-rose-400 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            // Mock Dropdown (Matching user screenshot)
+            if (item.id === 'mock') {
+              return (
+                <div
+                  key={item.id}
+                  ref={mockRef}
+                  className="relative"
+                  onMouseEnter={() => setMockMenuOpen(true)}
+                  onMouseLeave={() => setMockMenuOpen(false)}
+                >
+                  <Link
+                    href={item.href}
+                    className={`px-4 py-2.5 rounded-xl text-sm xl:text-[15px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      item.isActive
+                        ? item.activeClass
+                        : `text-slate-700 dark:text-slate-300 ${item.hoverClass}`
+                    }`}
+                  >
+                    <Icon className="w-4.5 h-4.5 shrink-0" />
+                    <span>{item.label}</span>
+                    <span className="text-xs transition-transform duration-200">▾</span>
+                  </Link>
+
+                  {mockMenuOpen && (
+                    <div className="absolute left-0 top-full pt-1.5 z-50 min-w-[180px] animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-700/80 py-1.5 overflow-hidden">
+                        {[
+                          { label: 'Full Mock', href: '/student?tab=mock' },
+                          { label: 'Mock Results', href: '/student?tab=mock&mode=results' },
+                        ].map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setMockMenuOpen(false)}
+                            className="block px-4 py-2.5 text-sm font-extrabold text-slate-800 dark:text-slate-200 hover:bg-amber-50 dark:hover:bg-amber-950/50 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
             return (
               <Link
                 key={item.id}
@@ -293,6 +563,125 @@ function NavbarContent() {
             })}
           </div>
 
+          {/* Quick Listening Sections for Mobile */}
+          {currentTab === 'listening' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Listening Bo‘limlari:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Section 1', href: '/student?tab=listening&section=1' },
+                  { label: 'Section 2', href: '/student?tab=listening&section=2' },
+                  { label: 'Section 3', href: '/student?tab=listening&section=3' },
+                  { label: 'Section 4', href: '/student?tab=listening&section=4' },
+                  { label: 'Full', href: '/student?tab=listening&section=full' },
+                ].map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 rounded-lg bg-cyan-50 dark:bg-cyan-950/60 text-[#0a5c6e] dark:text-cyan-300 text-xs font-bold"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Reading Passages for Mobile */}
+          {currentTab === 'reading' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Reading Bo‘limlari:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Passage 1', href: '/student?tab=reading&passage=1' },
+                  { label: 'Passage 2', href: '/student?tab=reading&passage=2' },
+                  { label: 'Passage 3', href: '/student?tab=reading&passage=3' },
+                  { label: 'Full', href: '/student?tab=reading&passage=full' },
+                ].map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-bold"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Speaking Parts for Mobile */}
+          {currentTab === 'speaking' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Speaking Bo‘limlari:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Speaking partner', href: '/student?tab=speaking&mode=partner' },
+                  { label: 'Part 1 · Interview', href: '/student?tab=speaking&part=1' },
+                  { label: 'Part 2 · Cue card', href: '/student?tab=speaking&part=2' },
+                  { label: 'Part 3 · Discussion', href: '/student?tab=speaking&part=3' },
+                  { label: 'My recordings', href: '/student?tab=speaking&mode=recordings' },
+                ].map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Writing Tasks for Mobile */}
+          {currentTab === 'writing' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Writing Bo‘limlari:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Task 1 Reports', href: '/student?tab=writing&task=1' },
+                  { label: 'Task 2 Essays', href: '/student?tab=writing&task=2' },
+                  { label: 'Band Feedback', href: '/student?tab=writing&mode=feedback' },
+                ].map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-[#7a2259] dark:text-rose-300 text-xs font-bold"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quick Mock Links for Mobile */}
+          {currentTab === 'mock' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Mock Bo‘limlari:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'Full Mock', href: '/student?tab=mock' },
+                  { label: 'Mock Results', href: '/student?tab=mock&mode=results' },
+                ].map((sub) => (
+                  <Link
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-xs font-bold"
+                  >
+                    {sub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {user && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-xs font-bold">
               <Link
@@ -333,7 +722,7 @@ function NavbarContent() {
 
 export default function Navbar() {
   return (
-    <Suspense fallback={<div className="h-18 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#182235]" />}>
+    <Suspense fallback={<div className="h-20 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#182235]" />}>
       <NavbarContent />
     </Suspense>
   );

@@ -39,10 +39,14 @@ func (r *Repository) CreateUser(email, passwordHash, fullName, role string) (*mo
 	return &u, nil
 }
 
+func (r *Repository) GetDB() *sql.DB {
+	return r.db
+}
+
 func (r *Repository) GetUserByEmail(email string) (*models.User, error) {
-	query := `SELECT id, email, password_hash, full_name, role, created_at FROM users WHERE email = $1`
+	query := `SELECT id, email, password_hash, full_name, role, COALESCE(phone_number, ''), COALESCE(date_of_birth, ''), COALESCE(gender, 'Male'), COALESCE(avatar_url, ''), created_at FROM users WHERE email = $1`
 	var u models.User
-	err := r.db.QueryRow(query, email).Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FullName, &u.Role, &u.CreatedAt)
+	err := r.db.QueryRow(query, email).Scan(&u.ID, &u.Email, &u.PasswordHash, &u.FullName, &u.Role, &u.PhoneNumber, &u.DateOfBirth, &u.Gender, &u.AvatarURL, &u.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -50,9 +54,9 @@ func (r *Repository) GetUserByEmail(email string) (*models.User, error) {
 }
 
 func (r *Repository) GetUserByID(id int) (*models.User, error) {
-	query := `SELECT id, email, full_name, role, created_at FROM users WHERE id = $1`
+	query := `SELECT id, email, full_name, role, COALESCE(phone_number, ''), COALESCE(date_of_birth, ''), COALESCE(gender, 'Male'), COALESCE(avatar_url, ''), created_at FROM users WHERE id = $1`
 	var u models.User
-	err := r.db.QueryRow(query, id).Scan(&u.ID, &u.Email, &u.FullName, &u.Role, &u.CreatedAt)
+	err := r.db.QueryRow(query, id).Scan(&u.ID, &u.Email, &u.FullName, &u.Role, &u.PhoneNumber, &u.DateOfBirth, &u.Gender, &u.AvatarURL, &u.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +64,7 @@ func (r *Repository) GetUserByID(id int) (*models.User, error) {
 }
 
 func (r *Repository) GetAllUsers() ([]models.User, error) {
-	query := `SELECT id, email, full_name, role, created_at FROM users ORDER BY id ASC`
+	query := `SELECT id, email, full_name, role, COALESCE(phone_number, ''), COALESCE(date_of_birth, ''), COALESCE(gender, 'Male'), COALESCE(avatar_url, ''), created_at FROM users ORDER BY id ASC`
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
@@ -70,12 +74,35 @@ func (r *Repository) GetAllUsers() ([]models.User, error) {
 	var users []models.User
 	for rows.Next() {
 		var u models.User
-		if err := rows.Scan(&u.ID, &u.Email, &u.FullName, &u.Role, &u.CreatedAt); err != nil {
+		if err := rows.Scan(&u.ID, &u.Email, &u.FullName, &u.Role, &u.PhoneNumber, &u.DateOfBirth, &u.Gender, &u.AvatarURL, &u.CreatedAt); err != nil {
 			return nil, err
 		}
 		users = append(users, u)
 	}
 	return users, nil
+}
+
+func (r *Repository) UpdateUserProfile(id int, req models.UpdateProfileRequest) (*models.User, error) {
+	query := `
+		UPDATE users
+		SET full_name = $1, phone_number = $2, date_of_birth = $3, gender = $4, avatar_url = $5
+		WHERE id = $6
+		RETURNING id, email, full_name, role, COALESCE(phone_number, ''), COALESCE(date_of_birth, ''), COALESCE(gender, 'Male'), COALESCE(avatar_url, ''), created_at
+	`
+	var u models.User
+	err := r.db.QueryRow(query, req.FullName, req.PhoneNumber, req.DateOfBirth, req.Gender, req.AvatarURL, id).Scan(
+		&u.ID, &u.Email, &u.FullName, &u.Role, &u.PhoneNumber, &u.DateOfBirth, &u.Gender, &u.AvatarURL, &u.CreatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
+}
+
+func (r *Repository) UpdateUserPassword(id int, newHash string) error {
+	query := `UPDATE users SET password_hash = $1 WHERE id = $2`
+	_, err := r.db.Exec(query, newHash, id)
+	return err
 }
 
 func (r *Repository) UpdateUserRole(userID int, newRole string) error {
@@ -118,6 +145,28 @@ func (r *Repository) GetActiveTests() ([]models.Test, error) {
 		}
 		tests = append(tests, t)
 	}
+
+	// Fetch sections summary for active tests
+	secQuery := `SELECT id, test_id, type, title, instructions, order_index FROM sections ORDER BY test_id, order_index ASC`
+	secRows, err := r.db.Query(secQuery)
+	if err == nil {
+		defer secRows.Close()
+		sectionsMap := make(map[int][]models.Section)
+		for secRows.Next() {
+			var s models.Section
+			if err := secRows.Scan(&s.ID, &s.TestID, &s.Type, &s.Title, &s.Instructions, &s.OrderIndex); err == nil {
+				sectionsMap[s.TestID] = append(sectionsMap[s.TestID], s)
+			}
+		}
+		for i := range tests {
+			if secs, ok := sectionsMap[tests[i].ID]; ok {
+				tests[i].Sections = secs
+			} else {
+				tests[i].Sections = []models.Section{}
+			}
+		}
+	}
+
 	return tests, nil
 }
 
@@ -144,7 +193,10 @@ func (r *Repository) GetTestDetails(testID int, includeAnswers bool) (*models.Te
 		}
 
 		// Fetch questions for section
-		qQuery := `SELECT id, section_id, question_type, question_text, options, correct_answer, points, order_index FROM questions WHERE section_id = $1 ORDER BY order_index ASC`
+		qQuery := `SELECT id, section_id, question_type, question_text, options, correct_answer, points, order_index,
+		                  COALESCE(explanation_text, ''), COALESCE(explanation_audio_url, ''),
+		                  COALESCE(explanation_video_url, ''), COALESCE(explanation_image_url, '')
+		           FROM questions WHERE section_id = $1 ORDER BY order_index ASC`
 		qRows, err := r.db.Query(qQuery, s.ID)
 		if err != nil {
 			return nil, err
@@ -154,13 +206,21 @@ func (r *Repository) GetTestDetails(testID int, includeAnswers bool) (*models.Te
 			var q models.Question
 			var optionsJSON []byte
 			var rawAnswer sql.NullString
-			if err := qRows.Scan(&q.ID, &q.SectionID, &q.QuestionType, &q.QuestionText, &optionsJSON, &rawAnswer, &q.Points, &q.OrderIndex); err != nil {
+			var expText, expAudio, expVideo, expImage string
+			if err := qRows.Scan(&q.ID, &q.SectionID, &q.QuestionType, &q.QuestionText, &optionsJSON, &rawAnswer, &q.Points, &q.OrderIndex,
+				&expText, &expAudio, &expVideo, &expImage); err != nil {
 				qRows.Close()
 				return nil, err
 			}
 			_ = json.Unmarshal(optionsJSON, &q.Options)
-			if includeAnswers && rawAnswer.Valid {
-				q.CorrectAnswer = rawAnswer.String
+			if includeAnswers {
+				if rawAnswer.Valid {
+					q.CorrectAnswer = rawAnswer.String
+				}
+				q.ExplanationText = expText
+				q.ExplanationAudioURL = expAudio
+				q.ExplanationVideoURL = expVideo
+				q.ExplanationImageURL = expImage
 			}
 			s.Questions = append(s.Questions, q)
 		}
@@ -203,7 +263,7 @@ func (r *Repository) AutoSubmitExpiredSessions(userID int) {
 }
 
 // Session operations
-func (r *Repository) StartSession(userID, testID int, forceNew bool) (*models.TestSession, error) {
+func (r *Repository) StartSession(userID, testID int, forceNew bool, targetSectionIndex *int) (*models.TestSession, error) {
 	// Auto-submit any expired in_progress sessions for this user first
 	r.AutoSubmitExpiredSessions(userID)
 
@@ -221,13 +281,14 @@ func (r *Repository) StartSession(userID, testID int, forceNew bool) (*models.Te
 		// Check existing in_progress session that is still valid (not expired)
 		var existing models.TestSession
 		err := r.db.QueryRow(`
-			SELECT id, user_id, test_id, status, started_at, expires_at, current_section_index
+			SELECT id, user_id, test_id, status, started_at, expires_at, current_section_index, target_section_index
 			FROM test_sessions
 			WHERE user_id = $1 AND test_id = $2 AND status = 'in_progress' AND expires_at > NOW()
 			ORDER BY id DESC LIMIT 1
 		`, userID, testID).Scan(
 			&existing.ID, &existing.UserID, &existing.TestID, &existing.Status,
 			&existing.StartedAt, &existing.ExpiresAt, &existing.CurrentSectionIndex,
+			&existing.TargetSectionIndex,
 		)
 		if err == nil {
 			// Session already active and not expired
@@ -242,17 +303,24 @@ func (r *Repository) StartSession(userID, testID int, forceNew bool) (*models.Te
 		return nil, fmt.Errorf("test not found: %w", err)
 	}
 
+	// Agar bitta bo'lim (single passage / single section) tanlangan bo'lsa, vaqtni moslashtiramiz (20 daqiqa)
+	currentSectionIdx := 0
+	if targetSectionIndex != nil {
+		durationMinutes = 20
+		currentSectionIdx = *targetSectionIndex
+	}
+
 	now := time.Now()
 	expiresAt := now.Add(time.Duration(durationMinutes) * time.Minute)
 
 	var s models.TestSession
 	query := `
-		INSERT INTO test_sessions (user_id, test_id, status, started_at, expires_at, current_section_index)
-		VALUES ($1, $2, 'in_progress', $3, $4, 0)
-		RETURNING id, user_id, test_id, status, started_at, expires_at, current_section_index
+		INSERT INTO test_sessions (user_id, test_id, status, started_at, expires_at, current_section_index, target_section_index)
+		VALUES ($1, $2, 'in_progress', $3, $4, $5, $6)
+		RETURNING id, user_id, test_id, status, started_at, expires_at, current_section_index, target_section_index
 	`
-	err = r.db.QueryRow(query, userID, testID, now, expiresAt).Scan(
-		&s.ID, &s.UserID, &s.TestID, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.CurrentSectionIndex,
+	err = r.db.QueryRow(query, userID, testID, now, expiresAt, currentSectionIdx, targetSectionIndex).Scan(
+		&s.ID, &s.UserID, &s.TestID, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.CurrentSectionIndex, &s.TargetSectionIndex,
 	)
 	if err != nil {
 		return nil, err
@@ -513,7 +581,7 @@ func (r *Repository) StartRandomMockSession(userID int, forceNew bool) (*models.
 func (r *Repository) GetSessionDetails(sessionID int) (*models.TestSession, error) {
 	var s models.TestSession
 	query := `
-		SELECT s.id, s.user_id, s.test_id, t.title, u.full_name, u.email, s.status, s.started_at, s.expires_at, s.submitted_at, s.current_section_index
+		SELECT s.id, s.user_id, s.test_id, t.title, u.full_name, u.email, s.status, s.started_at, s.expires_at, s.submitted_at, s.current_section_index, s.target_section_index
 		FROM test_sessions s
 		JOIN tests t ON s.test_id = t.id
 		JOIN users u ON s.user_id = u.id
@@ -521,7 +589,7 @@ func (r *Repository) GetSessionDetails(sessionID int) (*models.TestSession, erro
 	`
 	err := r.db.QueryRow(query, sessionID).Scan(
 		&s.ID, &s.UserID, &s.TestID, &s.TestTitle, &s.StudentName, &s.StudentEmail,
-		&s.Status, &s.StartedAt, &s.ExpiresAt, &s.SubmittedAt, &s.CurrentSectionIndex,
+		&s.Status, &s.StartedAt, &s.ExpiresAt, &s.SubmittedAt, &s.CurrentSectionIndex, &s.TargetSectionIndex,
 	)
 	if err != nil {
 		return nil, err
@@ -535,26 +603,55 @@ func (r *Repository) GetSessionDetails(sessionID int) (*models.TestSession, erro
 		s.SubmittedAt = &expTime
 	}
 
-	// Fetch answers
-	ansQuery := `
-		SELECT a.id, a.session_id, a.question_id, COALESCE(a.user_answer_text, ''), COALESCE(a.audio_file_url, ''),
-		       a.score, COALESCE(a.examiner_feedback, ''), a.is_graded, a.created_at,
-		       q.question_text, sec.type, COALESCE(q.correct_answer, '')
-		FROM answers a
-		JOIN questions q ON a.question_id = q.id
-		JOIN sections sec ON q.section_id = sec.id
-		WHERE a.session_id = $1
-	`
-	rows, err := r.db.Query(ansQuery, sessionID)
+	// Fetch answers (if submitted or graded, left join all questions so skipped questions appear in review!)
+	var ansQuery string
+	var rows *sql.Rows
+	if s.Status == "submitted" || s.Status == "graded" {
+		ansQuery = `
+			SELECT COALESCE(a.id, 0), $1 as session_id, q.id as question_id, COALESCE(a.user_answer_text, ''), COALESCE(a.audio_file_url, ''),
+			       COALESCE(a.score, 0), COALESCE(a.examiner_feedback, ''), COALESCE(a.is_graded, true), COALESCE(a.created_at, NOW()),
+			       q.question_text, sec.type, COALESCE(q.correct_answer, ''),
+			       COALESCE(q.explanation_text, ''), COALESCE(q.explanation_audio_url, ''),
+			       COALESCE(q.explanation_video_url, ''), COALESCE(q.explanation_image_url, '')
+			FROM questions q
+			JOIN sections sec ON q.section_id = sec.id
+			LEFT JOIN answers a ON a.question_id = q.id AND a.session_id = $1
+			WHERE sec.test_id = $2
+			  AND ($3::int IS NULL OR sec.order_index = $3::int + 1)
+			ORDER BY sec.order_index ASC, q.order_index ASC
+		`
+		rows, err = r.db.Query(ansQuery, sessionID, s.TestID, s.TargetSectionIndex)
+	} else {
+		ansQuery = `
+			SELECT a.id, a.session_id, a.question_id, COALESCE(a.user_answer_text, ''), COALESCE(a.audio_file_url, ''),
+			       a.score, COALESCE(a.examiner_feedback, ''), a.is_graded, a.created_at,
+			       q.question_text, sec.type, COALESCE(q.correct_answer, ''),
+			       COALESCE(q.explanation_text, ''), COALESCE(q.explanation_audio_url, ''),
+			       COALESCE(q.explanation_video_url, ''), COALESCE(q.explanation_image_url, '')
+			FROM answers a
+			JOIN questions q ON a.question_id = q.id
+			JOIN sections sec ON q.section_id = sec.id
+			WHERE a.session_id = $1
+		`
+		rows, err = r.db.Query(ansQuery, sessionID)
+	}
 	if err == nil {
 		defer rows.Close()
 		for rows.Next() {
 			var ans models.Answer
+			var expText, expAudio, expVideo, expImage string
 			if err := rows.Scan(
 				&ans.ID, &ans.SessionID, &ans.QuestionID, &ans.UserAnswerText, &ans.AudioFileURL,
 				&ans.Score, &ans.ExaminerFeedback, &ans.IsGraded, &ans.CreatedAt,
 				&ans.QuestionText, &ans.SectionType, &ans.CorrectAnswer,
+				&expText, &expAudio, &expVideo, &expImage,
 			); err == nil {
+				if s.Status == "submitted" || s.Status == "graded" {
+					ans.ExplanationText = expText
+					ans.ExplanationAudioURL = expAudio
+					ans.ExplanationVideoURL = expVideo
+					ans.ExplanationImageURL = expImage
+				}
 				s.Answers = append(s.Answers, ans)
 			}
 		}
@@ -604,13 +701,17 @@ func (r *Repository) SubmitSession(sessionID int) error {
 		return err
 	}
 
-	// Automatic grading for listening and reading
+	// Automatic grading for listening and reading (with trimmed alternatives)
 	autoGradeQuery := `
 		UPDATE answers a
 		SET score = CASE
 			WHEN LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
-			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|'))
-			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/'))
+			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(
+			      ARRAY(SELECT TRIM(x) FROM unnest(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '|')) x)
+			  )
+			  OR LOWER(TRIM(COALESCE(a.user_answer_text, ''))) = ANY(
+			      ARRAY(SELECT TRIM(x) FROM unnest(string_to_array(LOWER(COALESCE(q.correct_answer, '')), '/')) x)
+			  )
 			  OR SPLIT_PART(LOWER(TRIM(COALESCE(a.user_answer_text, ''))), '.', 1) = LOWER(TRIM(COALESCE(q.correct_answer, '')))
 			THEN q.points
 			ELSE 0
@@ -803,7 +904,7 @@ func (r *Repository) RecalculateSessionResults(sessionID int) error {
 			COUNT(CASE WHEN s.type IN ('writing', 'speaking') AND a.id IS NOT NULL AND a.is_graded = false THEN 1 END) as pending_grades
 		FROM test_sessions ts
 		JOIN tests t ON ts.test_id = t.id
-		JOIN sections s ON s.test_id = t.id
+		JOIN sections s ON s.test_id = t.id AND (ts.target_section_index IS NULL OR s.order_index = ts.target_section_index + 1)
 		JOIN questions q ON q.section_id = s.id
 		LEFT JOIN answers a ON a.session_id = ts.id AND a.question_id = q.id
 		WHERE ts.id = $1
@@ -858,7 +959,7 @@ func (r *Repository) GetPendingSubmissions() ([]models.TestSession, error) {
 		JOIN answers a ON a.session_id = ts.id
 		JOIN questions q ON a.question_id = q.id
 		JOIN sections s ON q.section_id = s.id
-		WHERE ts.status = 'submitted' AND s.type IN ('writing', 'speaking') AND a.is_graded = false
+		WHERE (ts.status = 'submitted' OR ts.status = 'graded') AND s.type IN ('writing', 'speaking')
 		ORDER BY ts.submitted_at DESC
 	`
 	rows, err := r.db.Query(query)
@@ -900,7 +1001,7 @@ func (r *Repository) GetStudentResults(userID int) ([]models.TestSession, error)
 	r.AutoSubmitExpiredSessions(userID)
 
 	query := `
-		SELECT ts.id, ts.user_id, ts.test_id, t.title, ts.status, ts.started_at, ts.expires_at, ts.submitted_at, ts.current_section_index
+		SELECT ts.id, ts.user_id, ts.test_id, t.title, ts.status, ts.started_at, ts.expires_at, ts.submitted_at, ts.current_section_index, ts.target_section_index
 		FROM test_sessions ts
 		JOIN tests t ON ts.test_id = t.id
 		WHERE ts.user_id = $1
@@ -915,7 +1016,7 @@ func (r *Repository) GetStudentResults(userID int) ([]models.TestSession, error)
 	sessions := make([]models.TestSession, 0)
 	for rows.Next() {
 		var s models.TestSession
-		if err := rows.Scan(&s.ID, &s.UserID, &s.TestID, &s.TestTitle, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.SubmittedAt, &s.CurrentSectionIndex); err != nil {
+		if err := rows.Scan(&s.ID, &s.UserID, &s.TestID, &s.TestTitle, &s.Status, &s.StartedAt, &s.ExpiresAt, &s.SubmittedAt, &s.CurrentSectionIndex, &s.TargetSectionIndex); err != nil {
 			return nil, err
 		}
 
@@ -971,16 +1072,17 @@ func (r *Repository) CreateSection(testID int, secType, title, instructions stri
 	return &s, nil
 }
 
-func (r *Repository) CreateQuestion(sectionID int, qType, text string, options []string, correctAnswer string, points, orderIndex int) (*models.Question, error) {
+func (r *Repository) CreateQuestion(sectionID int, qType, text string, options []string, correctAnswer string, points, orderIndex int, expText, expAudio, expVideo, expImage string) (*models.Question, error) {
 	optJSON, _ := json.Marshal(options)
 	query := `
-		INSERT INTO questions (section_id, question_type, question_text, options, correct_answer, points, order_index)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id, section_id, question_type, question_text, points, order_index
+		INSERT INTO questions (section_id, question_type, question_text, options, correct_answer, points, order_index, explanation_text, explanation_audio_url, explanation_video_url, explanation_image_url)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+		RETURNING id, section_id, question_type, question_text, points, order_index, explanation_text, explanation_audio_url, explanation_video_url, explanation_image_url
 	`
 	var q models.Question
-	err := r.db.QueryRow(query, sectionID, qType, text, optJSON, correctAnswer, points, orderIndex).Scan(
+	err := r.db.QueryRow(query, sectionID, qType, text, optJSON, correctAnswer, points, orderIndex, expText, expAudio, expVideo, expImage).Scan(
 		&q.ID, &q.SectionID, &q.QuestionType, &q.QuestionText, &q.Points, &q.OrderIndex,
+		&q.ExplanationText, &q.ExplanationAudioURL, &q.ExplanationVideoURL, &q.ExplanationImageURL,
 	)
 	if err != nil {
 		return nil, err
@@ -990,7 +1092,87 @@ func (r *Repository) CreateQuestion(sectionID int, qType, text string, options [
 	return &q, nil
 }
 
+func (r *Repository) UpdateQuestionExplanation(questionID int, expText, expAudio, expVideo, expImage string) error {
+	query := `
+		UPDATE questions
+		SET explanation_text = $1, explanation_audio_url = $2, explanation_video_url = $3, explanation_image_url = $4
+		WHERE id = $5
+	`
+	res, err := r.db.Exec(query, expText, expAudio, expVideo, expImage, questionID)
+	if err != nil {
+		return err
+	}
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+	return nil
+}
+
 func (r *Repository) DeleteTest(testID int) error {
 	_, err := r.db.Exec(`DELETE FROM tests WHERE id = $1`, testID)
+	return err
+}
+
+func (r *Repository) UpdateTest(id int, title, description, level string, durationMinutes int) (*models.Test, error) {
+	query := `
+		UPDATE tests
+		SET title = $1, description = $2, level = $3, duration_minutes = $4
+		WHERE id = $5
+		RETURNING id, title, description, level, duration_minutes, is_active, created_at
+	`
+	var t models.Test
+	err := r.db.QueryRow(query, title, description, level, durationMinutes, id).Scan(
+		&t.ID, &t.Title, &t.Description, &t.Level, &t.DurationMinutes, &t.IsActive, &t.CreatedAt,
+	)
+	return &t, err
+}
+
+func (r *Repository) UpdateSection(id int, title, instructions string, audioURL, passageText *string) (*models.Section, error) {
+	query := `
+		UPDATE sections
+		SET title = $1, instructions = $2, audio_url = $3, passage_text = $4
+		WHERE id = $5
+		RETURNING id, test_id, type, title, instructions, audio_url, passage_text, order_index
+	`
+	var s models.Section
+	err := r.db.QueryRow(query, title, instructions, audioURL, passageText, id).Scan(
+		&s.ID, &s.TestID, &s.Type, &s.Title, &s.Instructions, &s.AudioURL, &s.PassageText, &s.OrderIndex,
+	)
+	return &s, err
+}
+
+func (r *Repository) DeleteSection(id int) error {
+	_, err := r.db.Exec(`DELETE FROM sections WHERE id = $1`, id)
+	return err
+}
+
+func (r *Repository) UpdateQuestion(id int, req models.UpdateQuestionRequest) (*models.Question, error) {
+	optionsJSON, err := json.Marshal(req.Options)
+	if err != nil {
+		optionsJSON = []byte("[]")
+	}
+	query := `
+		UPDATE questions
+		SET question_text = $1, options = $2, correct_answer = $3, points = $4,
+		    explanation_text = $5, explanation_audio_url = $6, explanation_video_url = $7, explanation_image_url = $8
+		WHERE id = $9
+		RETURNING id, section_id, question_type, question_text, points, order_index,
+		          correct_answer, explanation_text, explanation_audio_url, explanation_video_url, explanation_image_url
+	`
+	var q models.Question
+	err = r.db.QueryRow(
+		query, req.QuestionText, optionsJSON, req.CorrectAnswer, req.Points,
+		req.ExplanationText, req.ExplanationAudioURL, req.ExplanationVideoURL, req.ExplanationImageURL, id,
+	).Scan(
+		&q.ID, &q.SectionID, &q.QuestionType, &q.QuestionText, &q.Points, &q.OrderIndex,
+		&q.CorrectAnswer, &q.ExplanationText, &q.ExplanationAudioURL, &q.ExplanationVideoURL, &q.ExplanationImageURL,
+	)
+	q.Options = req.Options
+	return &q, err
+}
+
+func (r *Repository) DeleteQuestion(id int) error {
+	_, err := r.db.Exec(`DELETE FROM questions WHERE id = $1`, id)
 	return err
 }

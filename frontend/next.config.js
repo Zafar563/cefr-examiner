@@ -10,6 +10,10 @@ const nextConfig = {
     const mediaServiceUrl = process.env.MEDIA_API_URL || 'http://media-service:8000';
     return [
       {
+        source: '/api/v1/media/:path*',
+        destination: `${mediaServiceUrl}/api/v1/media/:path*`,
+      },
+      {
         source: '/api/v1/:path*',
         destination: `${coreBackendUrl}/api/v1/:path*`,
       },

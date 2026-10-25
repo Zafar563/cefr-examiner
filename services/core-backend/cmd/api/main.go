@@ -122,6 +122,11 @@ func main() {
 			authRequired.POST("/sessions/:id/submit", h.SubmitSession)
 			authRequired.GET("/student/history", h.GetStudentResults)
 
+			// User profile & security
+			authRequired.GET("/user/profile", h.GetUserProfile)
+			authRequired.PUT("/user/profile", h.UpdateUserProfile)
+			authRequired.PUT("/user/password", h.ChangePassword)
+
 			// Examiner & Admin Routes
 			examinerOnly := authRequired.Group("/examiner")
 			examinerOnly.Use(auth.RequireRole("examiner", "admin"))
@@ -135,9 +140,15 @@ func main() {
 			adminOnly.Use(auth.RequireRole("admin"))
 			{
 				adminOnly.POST("/tests", h.CreateTest)
+				adminOnly.PUT("/tests/:id", h.UpdateTest)
 				adminOnly.DELETE("/tests/:id", h.DeleteTest)
 				adminOnly.POST("/tests/:id/sections", h.CreateSection)
+				adminOnly.PUT("/sections/:sectionId", h.UpdateSection)
+				adminOnly.DELETE("/sections/:sectionId", h.DeleteSection)
 				adminOnly.POST("/sections/:sectionId/questions", h.CreateQuestion)
+				adminOnly.PUT("/questions/:id", h.UpdateQuestion)
+				adminOnly.DELETE("/questions/:id", h.DeleteQuestion)
+				adminOnly.PUT("/questions/:id/explanation", h.UpdateQuestionExplanation)
 				adminOnly.GET("/users", h.ListUsers)
 				adminOnly.PUT("/users/:id/role", h.UpdateUserRole)
 			}

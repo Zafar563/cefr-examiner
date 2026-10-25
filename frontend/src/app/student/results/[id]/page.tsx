@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiGetSession, apiStartSession, apiStartRandomMock, TestSession } from '@/lib/api';
 import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, Sparkles, Headphones, BookOpen, Mic, RotateCcw } from 'lucide-react';
+import QuestionExplanationViewer from '@/components/QuestionExplanationViewer';
 
 export default function TestResultPage() {
   const params = useParams();
@@ -64,9 +65,10 @@ export default function TestResultPage() {
       if (isMock) {
         newSession = await apiStartRandomMock(true);
       } else {
-        newSession = await apiStartSession(session.test_id, true);
+        newSession = await apiStartSession(session.test_id, true, session.target_section_index);
       }
-      router.push(`/student/test/${newSession.id}`);
+      const secQuery = session.target_section_index !== undefined && session.target_section_index !== null ? `?section=${session.target_section_index}` : '';
+      router.push(`/student/test/${newSession.id}${secQuery}`);
     } catch (e: any) {
       alert('Testni qayta boshlashda xatolik: ' + e.message);
       setRetaking(false);
@@ -389,6 +391,15 @@ export default function TestResultPage() {
                         <span className="text-slate-700 dark:text-slate-300">{ans.examiner_feedback}</span>
                       </div>
                     )}
+
+                    {/* Multi-modal Explanation (Text, Audio MP3, Video MP4, Image) */}
+                    <QuestionExplanationViewer
+                      text={ans.explanation_text}
+                      audioUrl={ans.explanation_audio_url}
+                      videoUrl={ans.explanation_video_url}
+                      imageUrl={ans.explanation_image_url}
+                      isIncorrect={!isCorrect}
+                    />
                   </div>
                 </div>
               );

@@ -31,6 +31,11 @@ import {
   Filter,
   Sparkles,
   Bookmark,
+  Menu,
+  X,
+  Check,
+  ArrowLeft,
+  ArrowRight,
 } from 'lucide-react';
 import {
   IELTS_QUESTION_CATEGORIES,
@@ -1013,6 +1018,68 @@ export default function TestTakingPage() {
   const [answersMap, setAnswersMap] = useState<Record<number, { text: string; audioUrl: string }>>({});
   const [savingQuestionId, setSavingQuestionId] = useState<number | null>(null);
 
+  // Options (Contrast & Text Size) Modal State
+  type ContrastMode = 'black_on_white' | 'white_on_black' | 'yellow_on_black';
+  type TextSizeMode = 'regular' | 'large' | 'extra_large';
+
+  const [contrastMode, setContrastMode] = useState<ContrastMode>('black_on_white');
+  const [textSizeMode, setTextSizeMode] = useState<TextSizeMode>('regular');
+  const [optionsMenuOpen, setOptionsMenuOpen] = useState(false);
+  const [optionsSubView, setOptionsSubView] = useState<'main' | 'contrast' | 'text_size'>('main');
+
+  // Load saved preferences from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedContrast = localStorage.getItem('cefr_contrast_mode') as ContrastMode;
+      if (savedContrast && ['black_on_white', 'white_on_black', 'yellow_on_black'].includes(savedContrast)) {
+        setContrastMode(savedContrast);
+      }
+      const savedTextSize = localStorage.getItem('cefr_text_size_mode') as TextSizeMode;
+      if (savedTextSize && ['regular', 'large', 'extra_large'].includes(savedTextSize)) {
+        setTextSizeMode(savedTextSize);
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleSelectContrast = (mode: ContrastMode) => {
+    setContrastMode(mode);
+    try {
+      localStorage.setItem('cefr_contrast_mode', mode);
+    } catch (e) {}
+  };
+
+  const handleSelectTextSize = (mode: TextSizeMode) => {
+    setTextSizeMode(mode);
+    try {
+      localStorage.setItem('cefr_text_size_mode', mode);
+    } catch (e) {}
+  };
+
+  const isWhiteOnBlack = contrastMode === 'white_on_black';
+  const isYellowOnBlack = contrastMode === 'yellow_on_black';
+  const isDarkContrast = isWhiteOnBlack || isYellowOnBlack;
+
+  // Instructions Modal (shown before starting the test)
+  const [showInstructionsModal, setShowInstructionsModal] = useState<boolean>(true);
+
+  // Check if student has already dismissed instructions for this session
+  useEffect(() => {
+    if (isNaN(sessionId)) return;
+    try {
+      const seen = sessionStorage.getItem(`cefr_test_instructions_seen_${sessionId}`);
+      if (seen === 'true') {
+        setShowInstructionsModal(false);
+      }
+    } catch (e) {}
+  }, [sessionId]);
+
+  const handleBeginTest = () => {
+    setShowInstructionsModal(false);
+    try {
+      sessionStorage.setItem(`cefr_test_instructions_seen_${sessionId}`, 'true');
+    } catch (e) {}
+  };
+
   // Timer state
   const [secondsRemaining, setSecondsRemaining] = useState<number>(7200);
 
@@ -1250,20 +1317,51 @@ export default function TestTakingPage() {
     }));
   };
 
-  const flushAnswers = () => {
-    if (!ieltsContainerRef.current) return;
-    const inputs = ieltsContainerRef.current.querySelectorAll<HTMLInputElement>('input[type="text"][data-qnum]');
-    inputs.forEach((input) => {
-      const qnum = Number(input.getAttribute('data-qnum'));
-      const qId = qnumToQuestionId[qnum];
-      if (qId && input.value.trim()) {
-        handleSaveAnswer(qId, input.value.trim());
+  const pendingAnswersRef = useRef<Record<number, { text: string; audioUrl: string }>>({});
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const flushAnswers = useCallback(async () => {
+    if (isNaN(sessionId)) return;
+
+    if (ieltsContainerRef.current) {
+      const inputs = ieltsContainerRef.current.querySelectorAll<HTMLInputElement>('input[type="text"][data-qnum]');
+      inputs.forEach((input) => {
+        const qnum = Number(input.getAttribute('data-qnum'));
+        const qId = qnumToQuestionId[qnum];
+        if (qId && input.value !== undefined) {
+          pendingAnswersRef.current[qId] = {
+            text: input.value.trim(),
+            audioUrl: '',
+          };
+        }
+      });
+    }
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+
+    const pending = { ...pendingAnswersRef.current };
+    pendingAnswersRef.current = {};
+
+    const questionIds = Object.keys(pending).map(Number);
+    if (questionIds.length === 0) return;
+
+    const promises = questionIds.map(async (qId) => {
+      const item = pending[qId];
+      try {
+        await apiSaveAnswer(sessionId, qId, item.text, item.audioUrl);
+      } catch (e) {
+        console.error(`Failed to flush answer for question ${qId}:`, e);
       }
     });
-  };
 
-  const handleSectionChange = (idx: number) => {
-    flushAnswers();
+    await Promise.all(promises);
+  }, [sessionId, qnumToQuestionId]);
+
+  const handleSectionChange = async (idx: number) => {
+    await flushAnswers();
     setCurrentSectionIndex(idx);
   };
 
@@ -1394,7 +1492,7 @@ export default function TestTakingPage() {
 
   // Timer countdown
   useEffect(() => {
-    if (!mounted || secondsRemaining <= 0) return;
+    if (!mounted || secondsRemaining <= 0 || showInstructionsModal) return;
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => {
         if (prev <= 1) {
@@ -1406,19 +1504,19 @@ export default function TestTakingPage() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [mounted, secondsRemaining]);
+  }, [mounted, secondsRemaining, showInstructionsModal]);
 
   const handleAutoSubmit = async () => {
     alert('Time is up! Your test is being submitted automatically...');
-    flushAnswers();
+    await flushAnswers();
     await submitTest();
   };
 
   const submitTest = async () => {
     if (isNaN(sessionId)) return;
-    flushAnswers();
     setSubmitting(true);
     try {
+      await flushAnswers();
       await apiSubmitSession(sessionId);
       router.push(`/student/results/${sessionId}`);
     } catch (e: any) {
@@ -1427,23 +1525,51 @@ export default function TestTakingPage() {
     }
   };
 
-  // Autosave handler
-  const handleSaveAnswer = async (questionId: number, text: string, audioUrl: string = '') => {
-    if (isNaN(sessionId)) return;
-    setAnswersMap((prev) => ({
-      ...prev,
-      [questionId]: { text, audioUrl: audioUrl || prev[questionId]?.audioUrl || '' },
-    }));
+  // Autosave handler with debounce for typing and immediate save for selections
+  const handleSaveAnswer = useCallback(
+    (questionId: number, text: string, audioUrl: string = '', immediate = false) => {
+      if (isNaN(sessionId)) return;
+      setAnswersMap((prev) => ({
+        ...prev,
+        [questionId]: { text, audioUrl: audioUrl || prev[questionId]?.audioUrl || '' },
+      }));
 
-    setSavingQuestionId(questionId);
-    try {
-      await apiSaveAnswer(sessionId, questionId, text, audioUrl || answersMap[questionId]?.audioUrl || '');
-    } catch (e) {
-      console.error('Failed to autosave answer:', e);
-    } finally {
-      setSavingQuestionId(null);
-    }
-  };
+      pendingAnswersRef.current[questionId] = {
+        text,
+        audioUrl: audioUrl || answersMap[questionId]?.audioUrl || '',
+      };
+
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      if (immediate) {
+        const item = pendingAnswersRef.current[questionId];
+        delete pendingAnswersRef.current[questionId];
+        setSavingQuestionId(questionId);
+        apiSaveAnswer(sessionId, questionId, item.text, item.audioUrl)
+          .catch((e) => console.error('Failed to autosave answer immediately:', e))
+          .finally(() => setSavingQuestionId(null));
+      } else {
+        setSavingQuestionId(questionId);
+        saveTimeoutRef.current = setTimeout(async () => {
+          const toSave = { ...pendingAnswersRef.current };
+          pendingAnswersRef.current = {};
+          try {
+            const entries = Object.entries(toSave);
+            for (const [qIdStr, val] of entries) {
+              await apiSaveAnswer(sessionId, Number(qIdStr), val.text, val.audioUrl);
+            }
+          } catch (e) {
+            console.error('Failed to debounced-save answer:', e);
+          } finally {
+            setSavingQuestionId(null);
+          }
+        }, 700);
+      }
+    },
+    [sessionId, answersMap]
+  );
 
   // Listening Audio Player functions
   const playAudioWithLimit = (sectionId: number, audioUrl: string) => {
@@ -1527,7 +1653,7 @@ export default function TestTakingPage() {
     setIsUploadingVoice(true);
     try {
       const uploadRes = await apiUploadAudio(audioBlob, `speaking_q${questionId}_${sessionId}.webm`);
-      await handleSaveAnswer(questionId, 'Speaking audio answer recorded', uploadRes.url);
+      await handleSaveAnswer(questionId, 'Speaking audio answer recorded', uploadRes.url, true);
       setRecordedAudios((prev) => ({
         ...prev,
         [questionId]: { ...prev[questionId], isSaved: true },
@@ -2040,28 +2166,830 @@ export default function TestTakingPage() {
     );
   }
 
-  // 1. DEDICATED COMPUTER-DELIVERED READING TEST INTERFACE
-  if (currentSection?.type === 'reading') {
+  if (sections.length === 0 || !currentSection) {
     return (
-      <div className="w-full h-full flex flex-col overflow-hidden bg-white text-slate-900 select-none relative">
-        {/* Top Header */}
-        <header className="h-14 bg-[#f2f2f0] border-b border-slate-300 px-6 flex items-center justify-between shrink-0 select-none z-30">
-          <div>
-            <h1 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-wide uppercase">
-              PASSAGE {currentSectionIndex + 1}
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 font-medium">
-              Read the text and answer questions {minQ}–{maxQ}
+      <div className="max-w-md mx-auto my-16 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm">
+        <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-6 h-6" />
+        </div>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">Ushbu testda bo‘limlar mavjud emas</h3>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          Ushbu testga hali bo‘limlar yoki savollar kiritilmagan. Iltimos, boshqa testni tanlang yoki administrator bilan bog‘laning.
+        </p>
+        <button
+          onClick={() => router.push('/student')}
+          className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm"
+        >
+          Testlar ro‘yxatiga qaytish
+        </button>
+      </div>
+    );
+  }
+
+  const renderInstructionsModal = () => {
+    if (!showInstructionsModal) return null;
+    return (
+      <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200 select-none">
+        <div className="bg-white dark:bg-slate-900 rounded-[28px] max-w-[700px] w-full p-8 sm:p-10 shadow-2xl border border-slate-200/90 dark:border-slate-800 space-y-6">
+          <h2 className="text-2xl sm:text-[30px] font-extrabold text-slate-900 dark:text-white text-center tracking-tight">
+            Instructions for taking the test
+          </h2>
+
+          <div className="space-y-2 pt-2">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-wide uppercase">
+              NOTE BEFORE TAKING THE TEST
+            </h3>
+            <p className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">
+              Device and browser requirements:
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 font-mono text-sm sm:text-base font-bold text-slate-800 bg-white/80 border border-slate-300 px-3.5 py-1.5 rounded shadow-2xs">
-              <Clock className="w-4 h-4 text-slate-600" />
-              <span>{formatTimer(secondsRemaining)} left</span>
+          <ul className="list-disc pl-5 sm:pl-6 space-y-3.5 text-sm sm:text-[15px] text-slate-800 dark:text-slate-200 leading-relaxed marker:text-slate-800 dark:marker:text-slate-200">
+            <li>
+              Please use <strong className="font-extrabold text-slate-900 dark:text-white">Google Chrome on a desktop or laptop computer</strong> for the most stable experience.
+            </li>
+            <li>
+              For the best experience, do not adjust the font size (always leave it <strong className="font-extrabold text-slate-900 dark:text-white">REGULAR</strong>) and contrast (always leave it <strong className="font-extrabold text-slate-900 dark:text-white">Black on White</strong> ).
+            </li>
+          </ul>
+
+          <div className="pt-6 border-b border-[#e2d8cb] dark:border-slate-800"></div>
+
+          <div className="flex justify-end pt-1">
+            <button
+              type="button"
+              onClick={handleBeginTest}
+              className="px-8 py-2.5 rounded-xl font-bold text-sm sm:text-base text-white bg-[#6a2216] hover:bg-[#581c11] active:scale-95 transition-all shadow-md cursor-pointer"
+            >
+              Begin
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderOptionsMenu = () => {
+    if (!optionsMenuOpen) return null;
+
+    return (
+      <div
+        className={`fixed inset-0 z-[120] overflow-y-auto flex flex-col p-6 sm:p-10 select-none transition-colors ${
+          isYellowOnBlack
+            ? 'bg-[#0c0c0e] text-[#fbbf24]'
+            : isWhiteOnBlack
+            ? 'bg-[#0c0c0e] text-white'
+            : 'bg-white text-slate-900'
+        }`}
+      >
+        {/* Top Header with Back button (if inside subview) and Circular Close button */}
+        <div className="flex items-center justify-between w-full max-w-3xl mx-auto">
+          {optionsSubView !== 'main' ? (
+            <button
+              type="button"
+              onClick={() => setOptionsSubView('main')}
+              className={`flex items-center gap-1.5 font-bold text-sm sm:text-base px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
+                isYellowOnBlack
+                  ? 'text-[#fbbf24] hover:bg-yellow-950/40'
+                  : isWhiteOnBlack
+                  ? 'text-white hover:bg-zinc-800'
+                  : 'text-slate-800 hover:bg-slate-100'
+              }`}
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span>Options</span>
+            </button>
+          ) : (
+            <div />
+          )}
+
+          {/* Circular Close Button (Image 2) */}
+          <button
+            type="button"
+            onClick={() => setOptionsMenuOpen(false)}
+            className="w-10 h-10 rounded-full border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white flex items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
+            title="Close options"
+          >
+            <X className="w-5 h-5 stroke-[2.5]" />
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 flex flex-col items-center justify-center max-w-xl w-full mx-auto py-8">
+          {/* 1. MAIN OPTIONS MENU (Image 2) */}
+          {optionsSubView === 'main' && (
+            <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-150">
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-center tracking-tight">
+                Options
+              </h1>
+
+              <div className="space-y-4 pt-4">
+                {/* Contrast row */}
+                <button
+                  type="button"
+                  onClick={() => setOptionsSubView('contrast')}
+                  className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all cursor-pointer ${
+                    isYellowOnBlack
+                      ? 'border-yellow-900/60 hover:bg-yellow-950/30 text-[#fbbf24]'
+                      : isWhiteOnBlack
+                      ? 'border-zinc-800 hover:bg-zinc-900 text-white'
+                      : 'border-slate-200/90 hover:bg-slate-50 text-slate-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Contrast Icon (circle split in half vertically) */}
+                    <div className="w-7 h-7 rounded-full border-2 border-current flex overflow-hidden shrink-0">
+                      <div className="w-1/2 h-full bg-transparent" />
+                      <div className="w-1/2 h-full bg-current" />
+                    </div>
+                    <span className="text-lg sm:text-xl font-bold">Contrast</span>
+                  </div>
+                  <ChevronRight className="w-6 h-6 shrink-0 opacity-70" />
+                </button>
+
+                {/* Text size row */}
+                <button
+                  type="button"
+                  onClick={() => setOptionsSubView('text_size')}
+                  className={`w-full flex items-center justify-between p-5 rounded-2xl border transition-all cursor-pointer ${
+                    isYellowOnBlack
+                      ? 'border-yellow-900/60 hover:bg-yellow-950/30 text-[#fbbf24]'
+                      : isWhiteOnBlack
+                      ? 'border-zinc-800 hover:bg-zinc-900 text-white'
+                      : 'border-slate-200/90 hover:bg-slate-50 text-slate-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Text Size Icon ([T]) */}
+                    <div className="w-7 h-7 border-2 border-dashed border-current rounded flex items-center justify-center shrink-0">
+                      <span className="font-serif font-black text-sm leading-none">T</span>
+                    </div>
+                    <span className="text-lg sm:text-xl font-bold">Text size</span>
+                  </div>
+                  <ChevronRight className="w-6 h-6 shrink-0 opacity-70" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 2. CONTRAST OPTIONS SUBVIEW (Images 3, 4, 5) */}
+          {optionsSubView === 'contrast' && (
+            <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-150">
+              <h1
+                className={`text-4xl sm:text-5xl font-extrabold text-center tracking-tight ${
+                  isYellowOnBlack ? 'text-[#fbbf24]' : ''
+                }`}
+              >
+                Contrast
+              </h1>
+
+              <div className="space-y-3 pt-4 w-full">
+                {[
+                  { id: 'black_on_white', label: 'Black on white' },
+                  { id: 'white_on_black', label: 'White on black' },
+                  { id: 'yellow_on_black', label: 'Yellow on black' },
+                ].map((opt) => {
+                  const isSelected = contrastMode === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => handleSelectContrast(opt.id as ContrastMode)}
+                      className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-lg font-bold transition-all text-left cursor-pointer ${
+                        isSelected
+                          ? isDarkContrast
+                            ? 'bg-white text-slate-900 shadow-md font-extrabold'
+                            : 'bg-[#f8f9fa] border border-slate-200/80 text-slate-900 shadow-2xs font-extrabold'
+                          : isYellowOnBlack
+                          ? 'text-[#fbbf24] hover:bg-yellow-950/20'
+                          : isWhiteOnBlack
+                          ? 'text-white hover:bg-zinc-900'
+                          : 'text-slate-800 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                        {isSelected && (
+                          <Check
+                            className={`w-6 h-6 stroke-[3.5] ${
+                              isSelected && isYellowOnBlack
+                                ? 'text-[#d97706]'
+                                : isSelected && isWhiteOnBlack
+                                ? 'text-black'
+                                : 'text-slate-900'
+                            }`}
+                          />
+                        )}
+                      </div>
+                      <span
+                        className={
+                          isSelected && isYellowOnBlack
+                            ? 'text-[#d97706]'
+                            : isSelected && isWhiteOnBlack
+                            ? 'text-black'
+                            : ''
+                        }
+                      >
+                        {opt.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 3. TEXT SIZE OPTIONS SUBVIEW */}
+          {optionsSubView === 'text_size' && (
+            <div className="w-full space-y-8 animate-in fade-in zoom-in-95 duration-150">
+              <h1
+                className={`text-4xl sm:text-5xl font-extrabold text-center tracking-tight ${
+                  isYellowOnBlack ? 'text-[#fbbf24]' : ''
+                }`}
+              >
+                Text size
+              </h1>
+
+              <div className="space-y-3 pt-4 w-full">
+                {[
+                  { id: 'regular', label: 'Regular' },
+                  { id: 'large', label: 'Large' },
+                  { id: 'extra_large', label: 'Extra large' },
+                ].map((opt) => {
+                  const isSelected = textSizeMode === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => handleSelectTextSize(opt.id as TextSizeMode)}
+                      className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-lg font-bold transition-all text-left cursor-pointer ${
+                        isSelected
+                          ? isDarkContrast
+                            ? 'bg-white text-slate-900 shadow-md font-extrabold'
+                            : 'bg-[#f8f9fa] border border-slate-200/80 text-slate-900 shadow-2xs font-extrabold'
+                          : isYellowOnBlack
+                          ? 'text-[#fbbf24] hover:bg-yellow-950/20'
+                          : isWhiteOnBlack
+                          ? 'text-white hover:bg-zinc-900'
+                          : 'text-slate-800 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                        {isSelected && (
+                          <Check
+                            className={`w-6 h-6 stroke-[3.5] ${
+                              isSelected && isYellowOnBlack
+                                ? 'text-[#d97706]'
+                                : isSelected && isWhiteOnBlack
+                                ? 'text-black'
+                                : 'text-slate-900'
+                            }`}
+                          />
+                        )}
+                      </div>
+                      <span
+                        className={
+                          isSelected && isYellowOnBlack
+                            ? 'text-[#d97706]'
+                            : isSelected && isWhiteOnBlack
+                            ? 'text-black'
+                            : ''
+                        }
+                      >
+                        {opt.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // 1. DEDICATED COMPUTER-DELIVERED READING TEST INTERFACE
+  if (currentSection?.type === 'reading') {
+    return (
+      <div className={`w-full h-full flex flex-col overflow-hidden select-none relative transition-colors ${
+        isYellowOnBlack
+          ? 'contrast-yellow-theme bg-black text-[#fbbf24]'
+          : isWhiteOnBlack
+          ? 'contrast-dark-theme bg-black text-white'
+          : 'contrast-white-theme bg-white text-slate-900'
+      } ${
+        textSizeMode === 'extra_large'
+          ? 'text-size-extra-large'
+          : textSizeMode === 'large'
+          ? 'text-size-large'
+          : ''
+      }`}>
+        <style>{`
+          /* PASSAGE BANNER - Always light gray with black text per official IELTS CD exam */
+          .ielts-passage-banner {
+            background-color: #eeeeee !important;
+            border-color: #dcdcdc !important;
+          }
+          .ielts-passage-banner h2,
+          .ielts-passage-banner p,
+          .ielts-passage-banner span,
+          .ielts-passage-banner strong,
+          .ielts-passage-banner * {
+            color: #000000 !important;
+          }
+
+          /* YELLOW ON BLACK THEME */
+          .contrast-yellow-theme { background-color: #000000 !important; color: #fbbf24 !important; }
+          .contrast-yellow-theme header { background-color: #000000 !important; border-bottom-color: #000000 !important; }
+          .contrast-yellow-theme .passage-container,
+          .contrast-yellow-theme .passage-container * {
+            color: #fbbf24 !important;
+            background-color: transparent !important;
+          }
+          .contrast-yellow-theme .questions-container {
+            background-color: #000000 !important;
+            border-left-color: #e5a035 !important;
+            border-right-color: #e5a035 !important;
+          }
+          .contrast-yellow-theme .ielts-reading-container,
+          .contrast-yellow-theme .ielts-listening-container {
+            background-color: #000000 !important;
+            color: #fbbf24 !important;
+          }
+          .contrast-yellow-theme .ielts-reading-container *:not(.ielts-passage-banner *),
+          .contrast-yellow-theme .ielts-listening-container *:not(.ielts-passage-banner *) {
+            color: #fbbf24 !important;
+          }
+          .contrast-yellow-theme .ielts-reading-question-section-heading,
+          .contrast-yellow-theme .ielts-reading-question-text,
+          .contrast-yellow-theme .ielts-q-badge,
+          .contrast-yellow-theme .ielts-reading-question-number {
+            color: #fbbf24 !important;
+            border-color: #a16207 !important;
+            background-color: #000000 !important;
+          }
+          .contrast-yellow-theme .ielts-radio-btn {
+            color: #fbbf24 !important;
+            background-color: transparent !important;
+          }
+          .contrast-yellow-theme .ielts-radio-btn input[type="radio"] {
+            accent-color: #e5a035 !important;
+          }
+          .contrast-yellow-theme .ielts-radio-btn.is-selected {
+            background-color: #1a1505 !important;
+          }
+          .contrast-yellow-theme input[type="text"],
+          .contrast-yellow-theme .ielts-inline-input,
+          .contrast-yellow-theme textarea,
+          .contrast-yellow-theme select {
+            background-color: #000000 !important;
+            color: #fbbf24 !important;
+            border-color: #a16207 !important;
+          }
+          .contrast-yellow-theme input[type="text"]:focus,
+          .contrast-yellow-theme .ielts-inline-input:focus,
+          .contrast-yellow-theme textarea:focus {
+            border-color: #e5a035 !important;
+            outline: none !important;
+          }
+          .contrast-yellow-theme table,
+          .contrast-yellow-theme th,
+          .contrast-yellow-theme td,
+          .contrast-yellow-theme .ielts-reading-container table td,
+          .contrast-yellow-theme .ielts-reading-container table th,
+          html.dark .contrast-yellow-theme .ielts-reading-container table td,
+          html.dark .contrast-yellow-theme .ielts-reading-container table th {
+            background-color: #000000 !important;
+            border-color: #78350f !important;
+            color: #fbbf24 !important;
+          }
+          .contrast-yellow-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          .contrast-yellow-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td,
+          html.dark .contrast-yellow-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          html.dark .contrast-yellow-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td {
+            background-color: #1f1905 !important;
+            border-color: #78350f !important;
+            color: #fbbf24 !important;
+          }
+          .contrast-yellow-theme .ielts-dnd-dropzone {
+            background-color: #0c0a02 !important;
+            border-color: #a16207 !important;
+            color: #fbbf24 !important;
+          }
+          .contrast-yellow-theme .dnd-card,
+          .contrast-yellow-theme .ielts-dnd-placed-card {
+            background-color: #1f1905 !important;
+            border-color: #e5a035 !important;
+            color: #fbbf24 !important;
+          }
+
+          /* WHITE ON BLACK THEME */
+          .contrast-dark-theme { background-color: #000000 !important; color: #ffffff !important; }
+          .contrast-dark-theme header { background-color: #000000 !important; border-bottom-color: #000000 !important; }
+          .contrast-dark-theme .passage-container,
+          .contrast-dark-theme .passage-container * {
+            color: #ffffff !important;
+            background-color: transparent !important;
+          }
+          .contrast-dark-theme .questions-container {
+            background-color: #000000 !important;
+            border-left-color: #e5a035 !important;
+            border-right-color: #e5a035 !important;
+          }
+          .contrast-dark-theme .ielts-reading-container,
+          .contrast-dark-theme .ielts-listening-container {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+          }
+          .contrast-dark-theme .ielts-reading-container *:not(.ielts-passage-banner *),
+          .contrast-dark-theme .ielts-listening-container *:not(.ielts-passage-banner *) {
+            color: #ffffff !important;
+          }
+          .contrast-dark-theme .ielts-reading-question-section-heading,
+          .contrast-dark-theme .ielts-reading-question-text,
+          .contrast-dark-theme .ielts-q-badge,
+          .contrast-dark-theme .ielts-reading-question-number {
+            color: #ffffff !important;
+            border-color: #52525b !important;
+            background-color: #18181b !important;
+          }
+          .contrast-dark-theme .ielts-radio-btn {
+            color: #ffffff !important;
+            background-color: transparent !important;
+          }
+          .contrast-dark-theme .ielts-radio-btn input[type="radio"] {
+            accent-color: #ffffff !important;
+          }
+          .contrast-dark-theme .ielts-radio-btn.is-selected {
+            background-color: #18181b !important;
+          }
+          .contrast-dark-theme input[type="text"],
+          .contrast-dark-theme .ielts-inline-input,
+          .contrast-dark-theme textarea,
+          .contrast-dark-theme select {
+            background-color: #18181b !important;
+            color: #ffffff !important;
+            border-color: #52525b !important;
+          }
+          .contrast-dark-theme input[type="text"]:focus,
+          .contrast-dark-theme .ielts-inline-input:focus,
+          .contrast-dark-theme textarea:focus {
+            border-color: #ffffff !important;
+            outline: none !important;
+          }
+          .contrast-dark-theme table,
+          .contrast-dark-theme th,
+          .contrast-dark-theme td,
+          .contrast-dark-theme .ielts-reading-container table td,
+          .contrast-dark-theme .ielts-reading-container table th,
+          html.dark .contrast-dark-theme .ielts-reading-container table td,
+          html.dark .contrast-dark-theme .ielts-reading-container table th {
+            background-color: #121212 !important;
+            border-color: #3f3f46 !important;
+            color: #ffffff !important;
+          }
+          .contrast-dark-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          .contrast-dark-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td,
+          html.dark .contrast-dark-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          html.dark .contrast-dark-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td {
+            background-color: #18181b !important;
+            border-color: #3f3f46 !important;
+            color: #ffffff !important;
+          }
+          .contrast-dark-theme .ielts-dnd-dropzone {
+            background-color: #18181b !important;
+            border-color: #52525b !important;
+            color: #ffffff !important;
+          }
+          .contrast-dark-theme .dnd-card,
+          .contrast-dark-theme .ielts-dnd-placed-card {
+            background-color: #27272a !important;
+            border-color: #71717a !important;
+            color: #ffffff !important;
+          }
+
+          /* BLACK ON WHITE THEME (Default) - forces crisp contrast regardless of html.dark mode */
+          .contrast-white-theme {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme header {
+            background-color: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme .passage-container,
+          .contrast-white-theme .passage-container * {
+            color: #000000 !important;
+            background-color: transparent !important;
+          }
+          .contrast-white-theme .questions-container {
+            background-color: #ffffff !important;
+            border-left-color: #e5a035 !important;
+            border-right-color: #e5a035 !important;
+          }
+          .contrast-white-theme .questions-container,
+          .contrast-white-theme .questions-container p,
+          .contrast-white-theme .questions-container span:not(.ielts-q-badge),
+          .contrast-white-theme .questions-container label,
+          .contrast-white-theme .questions-container h1,
+          .contrast-white-theme .questions-container h2,
+          .contrast-white-theme .questions-container h3,
+          .contrast-white-theme .questions-container h4,
+          .contrast-white-theme .questions-container li {
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-reading-container,
+          .contrast-white-theme .ielts-listening-container {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-reading-container *:not(.ielts-passage-banner *),
+          .contrast-white-theme .ielts-listening-container *:not(.ielts-passage-banner *) {
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-reading-question-section-heading,
+          .contrast-white-theme .ielts-reading-question-text,
+          .contrast-white-theme .ielts-reading-question-number {
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-q-badge {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+          }
+          .contrast-white-theme .ielts-radio-btn {
+            color: #000000 !important;
+            background-color: transparent !important;
+          }
+          .contrast-white-theme .ielts-radio-btn input[type="radio"] {
+            accent-color: #2563eb !important;
+          }
+          .contrast-white-theme .ielts-radio-btn.is-selected {
+            background-color: #f8fafc !important;
+          }
+          .contrast-white-theme input[type="text"],
+          .contrast-white-theme .ielts-inline-input,
+          .contrast-white-theme textarea,
+          .contrast-white-theme select {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-color: #cbd5e1 !important;
+          }
+          .contrast-white-theme input[type="text"]:focus,
+          .contrast-white-theme .ielts-inline-input:focus,
+          .contrast-white-theme textarea:focus {
+            border-color: #2563eb !important;
+            outline: none !important;
+          }
+          .contrast-white-theme table,
+          .contrast-white-theme th,
+          .contrast-white-theme td,
+          .contrast-white-theme tr,
+          .contrast-white-theme .ielts-reading-container table td,
+          .contrast-white-theme .ielts-reading-container table th,
+          html.dark .contrast-white-theme .ielts-reading-container table td,
+          html.dark .contrast-white-theme .ielts-reading-container table th,
+          .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) td,
+          .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) th,
+          html.dark .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) td,
+          html.dark .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) th {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td,
+          html.dark .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child th,
+          html.dark .contrast-white-theme .ielts-reading-container table:not(.ielts-reading-matching-table) tr:first-child td {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #000000 !important;
+            font-weight: 700 !important;
+          }
+          .contrast-white-theme .ielts-reading-container table tr:first-child td *,
+          .contrast-white-theme .ielts-reading-container table tr:first-child th *,
+          .contrast-white-theme .ielts-reading-container table td * {
+            color: #000000 !important;
+          }
+          .contrast-white-theme .ielts-dnd-dropzone {
+            background-color: #f8fafc !important;
+            border-color: #94a3b8 !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme .dnd-card,
+          .contrast-white-theme .ielts-dnd-placed-card {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #000000 !important;
+          }
+          .contrast-white-theme .bottom-dock {
+            background-color: #f4f4f4 !important;
+            border-top-color: #e2e8f0 !important;
+          }
+          .contrast-white-theme .q-palette-btn {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+          }
+          .contrast-white-theme .q-palette-btn.is-active-q {
+            background-color: #fef3c7 !important;
+            border-color: #f59e0b !important;
+            color: #0f172a !important;
+          }
+
+          /* SCOPED TEXT SIZES - ONLY scale passage and questions content, never header/dock/banner */
+          .text-size-large .passage-container p,
+          .text-size-large .passage-container div,
+          .text-size-large .passage-container span:not(.ielts-q-badge),
+          .text-size-large .passage-container li {
+            font-size: 19px !important;
+            line-height: 1.8 !important;
+          }
+          .text-size-large .questions-container p,
+          .text-size-large .questions-container span:not(.ielts-q-badge):not(.dnd-card):not(.ielts-dnd-placed-card),
+          .text-size-large .questions-container label,
+          .text-size-large .questions-container li,
+          .text-size-large .ielts-reading-container p,
+          .text-size-large .ielts-reading-container span:not(.ielts-q-badge):not(.dnd-card):not(.ielts-dnd-placed-card),
+          .text-size-large .ielts-reading-container label,
+          .text-size-large .ielts-reading-container td,
+          .text-size-large .ielts-reading-container th,
+          .text-size-large .questions-container input,
+          .text-size-large .questions-container select,
+          .text-size-large .questions-container textarea,
+          .text-size-large .ielts-reading-container input,
+          .text-size-large .ielts-reading-container select,
+          .text-size-large .ielts-reading-container textarea {
+            font-size: 17px !important;
+            line-height: 1.7 !important;
+          }
+          .text-size-large .ielts-reading-question-section-heading {
+            font-size: 20px !important;
+            line-height: 1.4 !important;
+          }
+
+          .text-size-extra-large .passage-container p,
+          .text-size-extra-large .passage-container div,
+          .text-size-extra-large .passage-container span:not(.ielts-q-badge),
+          .text-size-extra-large .passage-container li {
+            font-size: 21px !important;
+            line-height: 1.85 !important;
+          }
+          .text-size-extra-large .questions-container p,
+          .text-size-extra-large .questions-container span:not(.ielts-q-badge):not(.dnd-card):not(.ielts-dnd-placed-card),
+          .text-size-extra-large .questions-container label,
+          .text-size-extra-large .questions-container li,
+          .text-size-extra-large .ielts-reading-container p,
+          .text-size-extra-large .ielts-reading-container span:not(.ielts-q-badge):not(.dnd-card):not(.ielts-dnd-placed-card),
+          .text-size-extra-large .ielts-reading-container label,
+          .text-size-extra-large .ielts-reading-container td,
+          .text-size-extra-large .ielts-reading-container th,
+          .text-size-extra-large .questions-container input,
+          .text-size-extra-large .questions-container select,
+          .text-size-extra-large .questions-container textarea,
+          .text-size-extra-large .ielts-reading-container input,
+          .text-size-extra-large .ielts-reading-container select,
+          .text-size-extra-large .ielts-reading-container textarea {
+            font-size: 19px !important;
+            line-height: 1.75 !important;
+          }
+          .text-size-extra-large .ielts-reading-question-section-heading {
+            font-size: 22px !important;
+            line-height: 1.4 !important;
+          }
+
+          /* BURGER MENU BUTTON: Default transparent, Yellow on hover */
+          .ielts-burger-btn {
+            background-color: transparent !important;
+            border: none !important;
+            transition: all 0.15s ease-in-out !important;
+          }
+          .ielts-burger-btn:hover {
+            background-color: #e5a035 !important;
+          }
+          .ielts-burger-btn .burger-bar {
+            transition: all 0.15s ease-in-out !important;
+          }
+          .ielts-burger-btn:hover .burger-bar {
+            background-color: #000000 !important;
+          }
+        `}</style>
+
+        {/* Top Header (Matches CD IELTS header) */}
+        <header
+          className={`h-14 min-h-[56px] px-6 flex items-center justify-between shrink-0 select-none z-30 transition-colors ${
+            isYellowOnBlack
+              ? 'bg-black border-b border-black text-[#fbbf24]'
+              : isWhiteOnBlack
+              ? 'bg-black border-b border-black text-white'
+              : 'bg-white border-b border-slate-200 text-slate-900'
+          }`}
+        >
+          {/* Left: Platform Logo Emblem + Test Title + Countdown Minutes */}
+          <div className="flex items-center gap-3 min-w-0">
+            <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-xs border transition-colors ${
+              isDarkContrast
+                ? 'bg-[#18181b] border-zinc-800'
+                : 'bg-white border-slate-200'
+            }`}>
+              <img
+                src={isYellowOnBlack ? "/logo-gold.png" : isWhiteOnBlack ? "/logo-dark.png" : "/logo.png"}
+                alt="CEFR MATERIALS"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="flex flex-col min-w-0 justify-center">
+              <h1
+                className={`text-sm sm:text-base font-bold leading-tight truncate ${
+                  isYellowOnBlack
+                    ? 'text-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'text-white'
+                    : 'text-slate-900'
+                }`}
+                style={{ fontSize: '15px', lineHeight: '1.2' }}
+              >
+                {test?.title || 'Reading Comprehension Test'}
+              </h1>
+              <span
+                className={`text-xs font-medium leading-normal mt-0.5 ${
+                  isYellowOnBlack
+                    ? 'text-[#fbbf24]/90'
+                    : isWhiteOnBlack
+                    ? 'text-slate-200'
+                    : 'text-slate-500'
+                }`}
+                style={{ fontSize: '12px', lineHeight: '1.3' }}
+              >
+                {Math.ceil(secondsRemaining / 60)} minutes remaining
+              </span>
             </div>
           </div>
+
+          {/* Right: Hamburger Menu Button (Options) */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setOptionsMenuOpen(true);
+                setOptionsSubView('main');
+              }}
+              title="Options"
+              className="ielts-burger-btn group w-9 h-9 sm:w-10 sm:h-10 rounded-md flex flex-col items-center justify-center gap-1 cursor-pointer shrink-0 active:scale-95"
+            >
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+            </button>
+          </div>
         </header>
+
+        {/* PASSAGE Subheader Banner (Always light gray with black text per official IELTS CD exam) */}
+        <div
+          className={`w-full px-6 py-2 select-none shrink-0 ${
+            isDarkContrast ? 'bg-black' : 'bg-white'
+          }`}
+        >
+          <div className="ielts-passage-banner w-full bg-[#eeeeee] rounded-md px-5 py-2.5 border border-[#dcdcdc] shadow-2xs">
+            <h2
+              className="text-base sm:text-lg font-black text-black tracking-wider uppercase leading-tight"
+              style={{ fontSize: '16px', lineHeight: '1.2' }}
+            >
+              PASSAGE {currentSectionIndex + 1}
+            </h2>
+            <p
+              className="text-xs sm:text-sm text-slate-800 font-medium leading-normal mt-0.5"
+              style={{ fontSize: '13px', lineHeight: '1.3' }}
+            >
+              Read the text and answer questions {minQ}–{maxQ}
+            </p>
+          </div>
+        </div>
 
         {/* Middle Split-screen Resizable Body */}
         <div
@@ -2072,7 +3000,13 @@ export default function TestTakingPage() {
           {/* Left Pane: Passage Text (Clean, marker-free, large font) */}
           <div
             style={{ width: `${splitRatio}%` }}
-            className="h-full overflow-y-auto bg-white border-r border-slate-200 p-6 md:p-8 scrollbar-thin select-text"
+            className={`h-full overflow-y-auto p-6 md:p-8 scrollbar-thin select-text passage-container ${
+              isYellowOnBlack
+                ? 'bg-black text-[#fbbf24]'
+                : isWhiteOnBlack
+                ? 'bg-black text-white'
+                : 'bg-white text-slate-900 border-r border-slate-200'
+            }`}
           >
             <div className="max-w-3xl mx-auto space-y-4">
               {currentSection.passage_text ? (
@@ -2221,7 +3155,13 @@ export default function TestTakingPage() {
           {/* Right Pane: Questions */}
           <div
             style={{ width: `${100 - splitRatio}%` }}
-            className="h-full overflow-y-auto p-6 md:p-8 bg-white relative scrollbar-thin"
+            className={`h-full overflow-y-auto p-6 md:p-8 relative scrollbar-thin questions-container border-l-[4px] border-r-[4px] border-[#e5a035] ${
+              isYellowOnBlack
+                ? 'bg-black text-[#fbbf24]'
+                : isWhiteOnBlack
+                ? 'bg-black text-white'
+                : 'bg-white text-slate-900'
+            }`}
           >
             {currentSection.instructions?.includes('ielts-reading-container') ? (
               <IeltsReadingSection
@@ -2241,6 +3181,7 @@ export default function TestTakingPage() {
               <div className="space-y-4">
                 {(currentSection.questions || []).map((q) => {
                   const options = getOptions(q.options);
+                  const isImageQuestion = options.length === 1 && typeof options[0] === 'string' && (options[0].startsWith('http') || options[0].startsWith('/') || options[0].includes('/uploads/'));
                   const isActive = activeQnum === q.order_index;
                   const isFlagged = flaggedQnums.has(q.order_index);
 
@@ -2264,7 +3205,7 @@ export default function TestTakingPage() {
                           >
                             {q.order_index}
                           </span>
-                          <span className="text-base sm:text-lg font-semibold text-slate-800 leading-snug">
+                          <span className="text-base sm:text-lg font-semibold text-slate-800 leading-snug whitespace-pre-wrap">
                             {q.question_text}
                           </span>
                         </div>
@@ -2285,7 +3226,7 @@ export default function TestTakingPage() {
                         </button>
                       </div>
 
-                      {options.length > 0 ? (
+                      {options.length > 0 && !isImageQuestion ? (
                         <div className="flex flex-col gap-1.5 w-full pl-5">
                           {options.map((opt, optIdx) => {
                             const isChecked = answersMap[q.id]?.text === opt;
@@ -2302,7 +3243,7 @@ export default function TestTakingPage() {
                                   type="radio"
                                   name={`question_${q.id}`}
                                   checked={isChecked}
-                                  onChange={() => handleSaveAnswer(q.id, opt)}
+                                  onChange={() => handleSaveAnswer(q.id, opt, "", true)}
                                   className="accent-[#2563eb] w-4 h-4 cursor-pointer"
                                 />
                                 <span className="text-base">{opt}</span>
@@ -2311,7 +3252,16 @@ export default function TestTakingPage() {
                           })}
                         </div>
                       ) : (
-                        <div className="pl-5 pt-1">
+                        <div className="pl-5 pt-1 space-y-3">
+                          {isImageQuestion && (
+                            <div className="max-w-xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 shadow-xs">
+                              <img
+                                src={options[0]}
+                                alt="Table/Diagram"
+                                className="w-full h-auto max-h-96 object-contain rounded-lg"
+                              />
+                            </div>
+                          )}
                           <input
                             type="text"
                             value={answersMap[q.id]?.text || ''}
@@ -2341,17 +3291,25 @@ export default function TestTakingPage() {
                   type="button"
                   onClick={handlePrevQuestion}
                   title="Previous question"
-                  className="w-9 h-9 rounded bg-[#18181b] hover:bg-slate-700 active:bg-black text-white flex items-center justify-center cursor-pointer transition-colors"
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded flex items-center justify-center cursor-pointer transition-all ${
+                    isDarkContrast
+                      ? 'bg-[#27272a] hover:bg-[#3f3f46] text-[#9ca3af]'
+                      : 'bg-[#6b7280] hover:bg-slate-700 text-white'
+                  }`}
                 >
-                  <ChevronLeft className="w-5 h-5 text-white" />
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
                 <button
                   type="button"
                   onClick={handleNextQuestion}
                   title="Next question"
-                  className="w-9 h-9 rounded bg-[#18181b] hover:bg-slate-700 active:bg-black text-white flex items-center justify-center cursor-pointer transition-colors"
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded flex items-center justify-center cursor-pointer transition-all font-bold ${
+                    isDarkContrast
+                      ? 'bg-[#ffffff] hover:bg-slate-100 text-[#18181b]'
+                      : 'bg-[#18181b] hover:bg-black text-white'
+                  }`}
                 >
-                  <ChevronRight className="w-5 h-5 text-white" />
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -2359,10 +3317,19 @@ export default function TestTakingPage() {
         </div>
 
         {/* Bottom Docked Bar */}
-        <div className="fixed bottom-0 left-0 right-0 h-12 bg-[#f1f3f5] border-t border-slate-300 flex items-center justify-between px-4 z-30 select-none">
+        <div
+          className={`fixed bottom-0 left-0 right-0 h-12 flex items-center justify-between px-4 z-30 select-none bottom-dock ${
+            isDarkContrast
+              ? 'bg-black border-t border-black'
+              : 'bg-[#f4f4f4] border-t border-slate-200'
+          }`}
+        >
           {/* Left: Passages & question numbers palette */}
           <div className="flex items-center gap-4 overflow-x-auto py-1 scrollbar-none">
-            {sections.map((sec, secIdx) => {
+            {(targetSectionFilter !== null && sections[targetSectionFilter]
+              ? [{ sec: sections[targetSectionFilter], secIdx: targetSectionFilter }]
+              : sections.map((sec, secIdx) => ({ sec, secIdx }))
+            ).map(({ sec, secIdx }) => {
               const isActivePassage = secIdx === currentSectionIndex;
               const secQuestions = sec.questions || [];
               const secAnsCount = secQuestions.filter((q) => Boolean(answersMap[q.id]?.text)).length;
@@ -2371,9 +3338,17 @@ export default function TestTakingPage() {
                 return (
                   <div
                     key={sec.id || secIdx}
-                    className="relative flex items-center gap-1.5 shrink-0 after:absolute after:-top-[7px] after:left-0 after:right-0 after:h-[3px] after:bg-emerald-600"
+                    className="relative flex items-center gap-2 shrink-0"
                   >
-                    <span className="font-extrabold text-sm sm:text-base text-slate-900 tracking-wide uppercase mr-1">
+                    <span
+                      className={`font-black text-xs sm:text-sm tracking-wider uppercase mr-1 ${
+                        isYellowOnBlack
+                          ? 'text-[#fbbf24]'
+                          : isWhiteOnBlack
+                          ? 'text-white'
+                          : 'text-slate-900'
+                      }`}
+                    >
                       PASSAGE {secIdx + 1}
                     </span>
                     <div className="flex items-center gap-1.5">
@@ -2391,11 +3366,19 @@ export default function TestTakingPage() {
                               scrollToQuestion(q.order_index);
                             }}
                             title={`Question #${q.order_index} ${isAns ? '(Answered)' : ''} ${isFlagged ? '(Flagged)' : ''}`}
-                            className={`w-8 h-8 min-w-[32px] min-h-[32px] sm:w-[34px] sm:h-[34px] sm:min-w-[34px] sm:min-h-[34px] rounded bg-white flex items-center justify-center font-bold text-sm cursor-pointer relative shrink-0 transition-all ${
-                              isActiveQ
-                                ? 'border-2 border-amber-500 bg-amber-50/60 text-slate-900 shadow-xs ring-1 ring-amber-400/20'
-                                : 'border border-slate-300 text-slate-800 hover:border-slate-500 hover:bg-slate-50'
-                            } ${isAns ? 'underline decoration-2 underline-offset-2 decoration-slate-900 font-extrabold' : ''}`}
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xs flex items-center justify-center font-bold text-xs sm:text-sm cursor-pointer relative shrink-0 transition-all q-palette-btn ${
+                              isYellowOnBlack
+                                ? isActiveQ
+                                  ? 'bg-black text-[#fbbf24] border-2 border-white ring-1 ring-white is-active-q'
+                                  : 'bg-black text-[#fbbf24] border border-zinc-700 hover:border-zinc-500'
+                                : isWhiteOnBlack
+                                ? isActiveQ
+                                  ? 'bg-black text-white border-2 border-white ring-1 ring-white is-active-q'
+                                  : 'bg-black text-white border border-zinc-700 hover:border-zinc-500'
+                                : isActiveQ
+                                ? 'bg-amber-50/60 text-slate-900 border-2 border-amber-500 ring-1 ring-amber-400/20 is-active-q'
+                                : 'bg-white text-slate-800 border border-slate-300 hover:border-slate-500'
+                            } ${isAns ? 'underline decoration-2 underline-offset-2' : ''}`}
                           >
                             <span>{q.order_index}</span>
                             {isFlagged && (
@@ -2414,10 +3397,24 @@ export default function TestTakingPage() {
                   key={sec.id || secIdx}
                   type="button"
                   onClick={() => handleSectionChange(secIdx)}
-                  className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1.5 px-2 py-1 rounded hover:bg-slate-200 transition-colors shrink-0 cursor-pointer"
+                  className={`text-xs sm:text-sm font-semibold flex items-center gap-1.5 px-2 py-1 rounded transition-colors shrink-0 cursor-pointer ${
+                    isYellowOnBlack
+                      ? 'text-[#fbbf24]/80 hover:text-[#fbbf24]'
+                      : isWhiteOnBlack
+                      ? 'text-white/80 hover:text-white'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
+                  }`}
                 >
                   <span className="font-extrabold uppercase">PASSAGE {secIdx + 1}</span>
-                  <span className="text-slate-500 font-medium">
+                  <span
+                    className={
+                      isYellowOnBlack
+                        ? 'text-[#fbbf24]/60'
+                        : isWhiteOnBlack
+                        ? 'text-zinc-400'
+                        : 'text-slate-500'
+                    }
+                  >
                     {secAnsCount} of {secQuestions.length}
                   </span>
                 </button>
@@ -2431,12 +3428,30 @@ export default function TestTakingPage() {
               type="button"
               onClick={() => setShowSubmitModal(true)}
               title="Submit Test"
-              className="w-9 h-9 rounded bg-slate-200 hover:bg-slate-300 active:bg-slate-400 text-slate-800 flex items-center justify-center cursor-pointer transition-colors shadow-xs"
+              className={`w-9 h-9 rounded-md flex items-center justify-center cursor-pointer transition-colors shadow-xs ${
+                isDarkContrast
+                  ? 'bg-[#27272a] hover:bg-[#3f3f46] text-[#71717a] hover:text-white'
+                  : 'bg-[#e2e8f0] hover:bg-[#cbd5e1] text-slate-800'
+              }`}
             >
-              <CheckCircle className="w-5 h-5 text-slate-800" />
+              <Check
+                className={`w-5 h-5 stroke-[3] ${
+                  isYellowOnBlack
+                    ? 'text-[#71717a]'
+                    : isWhiteOnBlack
+                    ? 'text-white'
+                    : 'text-slate-800'
+                }`}
+              />
             </button>
           </div>
         </div>
+
+{/* Options Menu (Contrast & Text Size) */}
+        {renderOptionsMenu()}
+
+        {/* Instructions Modal Before Test */}
+        {renderInstructionsModal()}
 
         {/* Submit Confirmation Modal */}
         {showSubmitModal && (
@@ -2477,18 +3492,122 @@ export default function TestTakingPage() {
   }
 
   return (
-    <div className="space-y-6 pb-20">
+    <div className={`space-y-6 pb-20 min-h-screen transition-colors ${
+      isYellowOnBlack
+        ? 'contrast-yellow-theme bg-black text-[#fbbf24]'
+        : isWhiteOnBlack
+        ? 'contrast-dark-theme bg-[#09090b] text-white'
+        : ''
+    } ${
+      textSizeMode === 'extra_large'
+        ? 'text-size-extra-large'
+        : textSizeMode === 'large'
+        ? 'text-size-large'
+        : ''
+    }`}>
+      <style>{`
+        .contrast-yellow-theme { background-color: #000000 !important; color: #fbbf24 !important; }
+        .contrast-yellow-theme header,
+        .contrast-yellow-theme div[class*="border-t"],
+        .contrast-yellow-theme div[class*="border-b"],
+        .contrast-yellow-theme .glass-panel { background-color: #121212 !important; border-color: #78350f !important; color: #fbbf24 !important; }
+        .contrast-yellow-theme .bg-white,
+        .contrast-yellow-theme .bg-[#fbfbfb],
+        .contrast-yellow-theme .bg-[#f1f3f5],
+        .contrast-yellow-theme .bg-[#f2f2f0] { background-color: #000000 !important; color: #fbbf24 !important; }
+        .contrast-yellow-theme input,
+        .contrast-yellow-theme textarea,
+        .contrast-yellow-theme select { background-color: #000000 !important; color: #fbbf24 !important; border-color: #b45309 !important; }
+        .contrast-yellow-theme p,
+        .contrast-yellow-theme span,
+        .contrast-yellow-theme strong,
+        .contrast-yellow-theme h1,
+        .contrast-yellow-theme h2,
+        .contrast-yellow-theme h3,
+        .contrast-yellow-theme h4,
+        .contrast-yellow-theme label { color: #fbbf24 !important; }
+        .contrast-yellow-theme .border-slate-200,
+        .contrast-yellow-theme .border-slate-300 { border-color: #78350f !important; }
+
+        .contrast-dark-theme { background-color: #09090b !important; color: #ffffff !important; }
+        .contrast-dark-theme header,
+        .contrast-dark-theme div[class*="border-t"],
+        .contrast-dark-theme div[class*="border-b"],
+        .contrast-dark-theme .glass-panel { background-color: #18181b !important; border-color: #27272a !important; color: #ffffff !important; }
+        .contrast-dark-theme .bg-white,
+        .contrast-dark-theme .bg-[#fbfbfb],
+        .contrast-dark-theme .bg-[#f1f3f5],
+        .contrast-dark-theme .bg-[#f2f2f0] { background-color: #09090b !important; color: #ffffff !important; }
+        .contrast-dark-theme input,
+        .contrast-dark-theme textarea,
+        .contrast-dark-theme select { background-color: #18181b !important; color: #ffffff !important; border-color: #3f3f46 !important; }
+        .contrast-dark-theme p,
+        .contrast-dark-theme span,
+        .contrast-dark-theme strong,
+        .contrast-dark-theme h1,
+        .contrast-dark-theme h2,
+        .contrast-dark-theme h3,
+        .contrast-dark-theme h4,
+        .contrast-dark-theme label { color: #ffffff !important; }
+        .contrast-dark-theme .border-slate-200,
+        .contrast-dark-theme .border-slate-300 { border-color: #27272a !important; }
+
+        /* SCOPED TEXT SIZES - General view: only scale question and passage content, never header/tabs/dock */
+        .text-size-large .main-test-content p,
+        .text-size-large .main-test-content label,
+        .text-size-large .main-test-content li,
+        .text-size-large .main-test-content span:not(.font-mono):not(.rounded-full):not(.animate-pulse):not(.ielts-q-badge) {
+          font-size: 18px !important;
+          line-height: 1.7 !important;
+        }
+        .text-size-extra-large .main-test-content p,
+        .text-size-extra-large .main-test-content label,
+        .text-size-extra-large .main-test-content li,
+        .text-size-extra-large .main-test-content span:not(.font-mono):not(.rounded-full):not(.animate-pulse):not(.ielts-q-badge) {
+          font-size: 20px !important;
+          line-height: 1.75 !important;
+        }
+
+        /* BURGER MENU BUTTON: Default transparent, Yellow on hover */
+        .ielts-burger-btn {
+          background-color: transparent !important;
+          border: none !important;
+          transition: all 0.15s ease-in-out !important;
+        }
+        .ielts-burger-btn:hover {
+          background-color: #e5a035 !important;
+        }
+        .ielts-burger-btn .burger-bar {
+          transition: all 0.15s ease-in-out !important;
+        }
+        .ielts-burger-btn:hover .burger-bar {
+          background-color: #000000 !important;
+        }
+      `}</style>
       {/* Top Test Header Bar */}
       <div className="glass-panel rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 shadow-md shadow-slate-200/40 dark:shadow-none sticky top-20 z-40 transition-all">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white line-clamp-1">
-              {test.title}
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              CEFR Examination Standard
-            </p>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-xs border transition-colors ${
+              isDarkContrast
+                ? 'bg-[#18181b] border-zinc-800'
+                : 'bg-white border-slate-200'
+            }`}>
+              <img
+                src={isYellowOnBlack ? "/logo-gold.png" : isWhiteOnBlack ? "/logo-dark.png" : "/logo.png"}
+                alt="CEFR MATERIALS"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white line-clamp-1">
+                {test.title}
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                CEFR Examination Standard
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -2504,7 +3623,45 @@ export default function TestTakingPage() {
               <span>{formatTimer(secondsRemaining)}</span>
             </div>
 
-            {/* Submit Button */}
+            {/* Options Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setOptionsMenuOpen(true);
+                setOptionsSubView('main');
+              }}
+              title="Options"
+              className="ielts-burger-btn group w-9 h-9 sm:w-10 sm:h-10 rounded-md flex flex-col items-center justify-center gap-1 cursor-pointer shrink-0 active:scale-95"
+            >
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+              <div
+                className={`burger-bar w-5 h-[2.5px] rounded-full ${
+                  isYellowOnBlack
+                    ? 'bg-[#fbbf24]'
+                    : isWhiteOnBlack
+                    ? 'bg-white'
+                    : 'bg-slate-900'
+                }`}
+              />
+            </button>
+
             <button
               onClick={() => setShowSubmitModal(true)}
               className="py-2 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md shadow-emerald-600/20 hover:scale-[1.02] flex items-center gap-1.5"
@@ -2548,7 +3705,7 @@ export default function TestTakingPage() {
 
       {/* Main Section Content Area */}
       {currentSection ? (
-        <div className="space-y-6">
+        <div className="main-test-content space-y-6">
           {/* Section Instructions Card (only if custom non-IELTS instructions exist) */}
           {!currentSection.instructions?.includes('ielts-') && currentSection.instructions && (
             <div className="border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700">
@@ -2701,6 +3858,7 @@ export default function TestTakingPage() {
                   ) : (
                     filteredQuestions.map((q) => {
                       const options = getOptions(q.options);
+                      const isImageQuestion = options.length === 1 && typeof options[0] === 'string' && (options[0].startsWith('http') || options[0].startsWith('/') || options[0].includes('/uploads/'));
                       const qCat = getQuestionCategory(q);
                       const catMeta = IELTS_QUESTION_CATEGORIES[qCat];
 
@@ -2726,9 +3884,9 @@ export default function TestTakingPage() {
                             </span>
                           </div>
 
-                          <h4 className="text-base font-semibold text-slate-900 dark:text-white mb-4">{q.question_text}</h4>
+                          <h4 className="text-base font-semibold text-slate-900 dark:text-white mb-4 whitespace-pre-wrap">{q.question_text}</h4>
 
-                          {options.length > 0 ? (
+                          {options.length > 0 && !isImageQuestion ? (
                             <div className="space-y-2">
                               {options.map((opt, optIdx) => {
                                 const isChecked = answersMap[q.id]?.text === opt;
@@ -2745,7 +3903,7 @@ export default function TestTakingPage() {
                                       type="radio"
                                       name={`question_${q.id}`}
                                       checked={isChecked}
-                                      onChange={() => handleSaveAnswer(q.id, opt)}
+                                      onChange={() => handleSaveAnswer(q.id, opt, "", true)}
                                       className="text-emerald-600 focus:ring-emerald-500 w-4 h-4"
                                     />
                                     <span>{opt}</span>
@@ -2754,7 +3912,16 @@ export default function TestTakingPage() {
                               })}
                             </div>
                           ) : (
-                            <div>
+                            <div className="space-y-3">
+                              {isImageQuestion && (
+                                <div className="max-w-2xl rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 shadow-xs">
+                                  <img
+                                    src={options[0]}
+                                    alt="Table/Diagram"
+                                    className="w-full h-auto max-h-96 object-contain rounded-lg"
+                                  />
+                                </div>
+                              )}
                               <input
                                 type="text"
                                 placeholder="Type your answer here..."
@@ -3001,6 +4168,12 @@ export default function TestTakingPage() {
           No sections found in this test.
         </div>
       )}
+
+{/* Options Menu (Contrast & Text Size) */}
+      {renderOptionsMenu()}
+
+      {/* Instructions Modal Before Test */}
+      {renderInstructionsModal()}
 
       {/* Submit Confirmation Modal */}
       {showSubmitModal && (

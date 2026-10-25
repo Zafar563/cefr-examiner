@@ -45,6 +45,11 @@ export interface Question {
   correct_answer?: string;
   points: number;
   order_index: number;
+  explanation_text?: string;
+  explanation_audio_url?: string;
+  media_url?: string;
+  explanation_video_url?: string;
+  explanation_image_url?: string;
 }
 
 export interface Section {
@@ -82,6 +87,10 @@ export interface Answer {
   question_text?: string;
   section_type?: string;
   correct_answer?: string;
+  explanation_text?: string;
+  explanation_audio_url?: string;
+  explanation_video_url?: string;
+  explanation_image_url?: string;
 }
 
 export interface TestResult {
@@ -111,6 +120,7 @@ export interface TestSession {
   expires_at: string;
   submitted_at?: string;
   current_section_index: number;
+  target_section_index?: number | null;
   answers?: Answer[];
   result?: TestResult;
 }
@@ -236,9 +246,24 @@ export const apiGetTestDetails = async (id: number): Promise<Test> => {
 };
 
 // Session & Test Taking API
-export const apiStartSession = async (testId: number, forceNew: boolean = false): Promise<TestSession> => {
-  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/tests/${testId}/start?force_new=${forceNew}`, {
+export const apiStartSession = async (
+  testId: number,
+  forceNew: boolean = false,
+  targetSectionIndex?: number | null
+): Promise<TestSession> => {
+  const query = new URLSearchParams();
+  if (forceNew) query.set('force_new', 'true');
+  if (targetSectionIndex !== undefined && targetSectionIndex !== null) {
+    query.set('section', targetSectionIndex.toString());
+  }
+  const qStr = query.toString() ? `?${query.toString()}` : '';
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/tests/${testId}/start${qStr}`, {
     method: 'POST',
+    body: JSON.stringify(
+      targetSectionIndex !== undefined && targetSectionIndex !== null
+        ? { target_section_index: targetSectionIndex }
+        : {}
+    ),
   });
 };
 
@@ -351,6 +376,65 @@ export const apiUploadAudio = async (blob: Blob, filename: string = 'recording.w
   };
 };
 
+export const apiUploadImage = async (file: File | Blob, filename: string = 'image.png'): Promise<{ url: string; filename: string }> => {
+  const mediaUrl = getMediaApiUrl();
+  const formData = new FormData();
+  formData.append('file', file, filename);
+
+  const res = await fetch(`${mediaUrl}/api/v1/media/upload/image`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Rasm yuklashda xatolik' }));
+    throw new Error(err.detail || 'Rasmni saqlash muvaffaqiyatsiz bo‘ldi');
+  }
+
+  const data = await res.json();
+  return {
+    url: `${mediaUrl}${data.url}`,
+    filename: data.filename,
+  };
+};
+
+export const apiUploadVideo = async (file: File | Blob, filename: string = 'video.mp4'): Promise<{ url: string; filename: string }> => {
+  const mediaUrl = getMediaApiUrl();
+  const formData = new FormData();
+  formData.append('file', file, filename);
+
+  const res = await fetch(`${mediaUrl}/api/v1/media/upload/video`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: 'Video yuklashda xatolik' }));
+    throw new Error(err.detail || 'Videoni saqlash muvaffaqiyatsiz bo‘ldi');
+  }
+
+  const data = await res.json();
+  return {
+    url: `${mediaUrl}${data.url}`,
+    filename: data.filename,
+  };
+};
+
+export const apiUpdateQuestionExplanation = async (
+  questionId: number,
+  data: {
+    explanation_text?: string;
+    explanation_audio_url?: string;
+    explanation_video_url?: string;
+    explanation_image_url?: string;
+  }
+): Promise<{ message: string }> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/questions/${questionId}/explanation`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
 // Users management API (Admin only)
 export const apiGetUsers = async (): Promise<User[]> => {
   return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/users`);
@@ -367,6 +451,75 @@ export const apiUpdateUserRole = async (userId: number, role: 'student' | 'exami
  * Sorts Cambridge tests strictly from 13 to 21 ascending,
  * followed by test number (1 to 4), and then any remaining tests.
  */
+
+// User Profile & Password APIs
+export const apiGetProfile = async (): Promise<User> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/user/profile`);
+};
+
+export const apiUpdateProfile = async (profileData: {
+  full_name: string;
+  phone_number?: string;
+  date_of_birth?: string;
+  gender?: string;
+  avatar_url?: string;
+}): Promise<User> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/user/profile`, {
+    method: 'PUT',
+    body: JSON.stringify(profileData),
+  });
+};
+
+export const apiUpdatePassword = async (
+  currentPassword: string,
+  newPassword: string
+): Promise<{ message: string }> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/user/password`, {
+    method: 'PUT',
+    body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+  });
+};
+
+// Admin CRUD additions
+export const apiUpdateTest = async (
+  testId: number,
+  data: { title: string; description: string; level: string; duration_minutes: number }
+): Promise<Test> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/tests/${testId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const apiUpdateSection = async (
+  sectionId: number,
+  data: { title: string; instructions: string; audio_url?: string | null; passage_text?: string | null }
+): Promise<Section> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/sections/${sectionId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const apiDeleteSection = async (sectionId: number): Promise<{ message: string }> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/sections/${sectionId}`, {
+    method: 'DELETE',
+  });
+};
+
+export const apiUpdateQuestion = async (questionId: number, data: any): Promise<Question> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/questions/${questionId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const apiDeleteQuestion = async (questionId: number): Promise<{ message: string }> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/admin/questions/${questionId}`, {
+    method: 'DELETE',
+  });
+};
+
 export const sortCambridgeTests = (a: Test, b: Test): number => {
   const getBook = (title: string): number => {
     const m = title.match(/Cambridge IELTS (\d+)/i);
@@ -382,5 +535,5 @@ export const sortCambridgeTests = (a: Test, b: Test): number => {
   if (bookDiff !== 0) return bookDiff;
   const testDiff = getTestNum(a.title) - getTestNum(b.title);
   if (testDiff !== 0) return testDiff;
-  return a.id - b.id;
+  return b.id - a.id;
 };

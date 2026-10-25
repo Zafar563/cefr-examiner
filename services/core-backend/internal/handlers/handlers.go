@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"net/http"
 	"strconv"
 	"time"
@@ -136,17 +137,30 @@ func (h *Handler) StartSession(c *gin.Context) {
 		return
 	}
 
-	forceNew := c.Query("force_new") == "true"
-	if !forceNew && c.Request.Body != nil && c.Request.ContentLength > 0 {
-		var body struct {
-			ForceNew bool `json:"force_new"`
-		}
-		if err := c.ShouldBindJSON(&body); err == nil && body.ForceNew {
-			forceNew = true
+	var targetSec *int
+	if secParam := c.Query("section"); secParam != "" {
+		if secIdx, err := strconv.Atoi(secParam); err == nil && secIdx >= 0 {
+			targetSec = &secIdx
 		}
 	}
 
-	session, err := h.repo.StartSession(userID, testID, forceNew)
+	forceNew := c.Query("force_new") == "true"
+	if c.Request.Body != nil && c.Request.ContentLength > 0 {
+		var body struct {
+			ForceNew           bool `json:"force_new"`
+			TargetSectionIndex *int `json:"target_section_index"`
+		}
+		if err := c.ShouldBindJSON(&body); err == nil {
+			if body.ForceNew {
+				forceNew = true
+			}
+			if body.TargetSectionIndex != nil {
+				targetSec = body.TargetSectionIndex
+			}
+		}
+	}
+
+	session, err := h.repo.StartSession(userID, testID, forceNew, targetSec)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -352,12 +366,16 @@ func (h *Handler) CreateQuestion(c *gin.Context) {
 	}
 
 	var req struct {
-		QuestionType  string   `json:"question_type" binding:"required"`
-		QuestionText  string   `json:"question_text" binding:"required"`
-		Options       []string `json:"options"`
-		CorrectAnswer string   `json:"correct_answer"`
-		Points        int      `json:"points"`
-		OrderIndex    int      `json:"order_index"`
+		QuestionType        string   `json:"question_type" binding:"required"`
+		QuestionText        string   `json:"question_text" binding:"required"`
+		Options             []string `json:"options"`
+		CorrectAnswer       string   `json:"correct_answer"`
+		Points              int      `json:"points"`
+		OrderIndex          int      `json:"order_index"`
+		ExplanationText     string   `json:"explanation_text"`
+		ExplanationAudioURL string   `json:"explanation_audio_url"`
+		ExplanationVideoURL string   `json:"explanation_video_url"`
+		ExplanationImageURL string   `json:"explanation_image_url"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -368,13 +386,44 @@ func (h *Handler) CreateQuestion(c *gin.Context) {
 		req.Points = 1
 	}
 
-	q, err := h.repo.CreateQuestion(secID, req.QuestionType, req.QuestionText, req.Options, req.CorrectAnswer, req.Points, req.OrderIndex)
+	q, err := h.repo.CreateQuestion(secID, req.QuestionType, req.QuestionText, req.Options, req.CorrectAnswer, req.Points, req.OrderIndex,
+		req.ExplanationText, req.ExplanationAudioURL, req.ExplanationVideoURL, req.ExplanationImageURL)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create question"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create question: " + err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusCreated, q)
+}
+
+func (h *Handler) UpdateQuestionExplanation(c *gin.Context) {
+	qID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid question ID"})
+		return
+	}
+
+	var req struct {
+		ExplanationText     string `json:"explanation_text"`
+		ExplanationAudioURL string `json:"explanation_audio_url"`
+		ExplanationVideoURL string `json:"explanation_video_url"`
+		ExplanationImageURL string `json:"explanation_image_url"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.repo.UpdateQuestionExplanation(qID, req.ExplanationText, req.ExplanationAudioURL, req.ExplanationVideoURL, req.ExplanationImageURL); err != nil {
+		if err == sql.ErrNoRows {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Question not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update explanation: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Explanation updated successfully"})
 }
 
 func (h *Handler) DeleteTest(c *gin.Context) {
@@ -430,3 +479,146 @@ func (h *Handler) UpdateUserRole(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Foydalanuvchi roli muvaffaqiyatli yangilandi", "user_id": userID, "role": req.Role})
 }
 
+
+// Profile handlers
+func (h *Handler) GetUserProfile(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	user, err := h.repo.GetUserByID(userID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Foydalanuvchi topilmadi"})
+		return
+	}
+	c.JSON(http.StatusOK, user)
+}
+
+func (h *Handler) UpdateUserProfile(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	var req models.UpdateProfileRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	user, err := h.repo.UpdateUserProfile(userID, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Profilni yangilashda xatolik"})
+		return
+	}
+	c.JSON(http.StatusOK, user)
+}
+
+func (h *Handler) ChangePassword(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	var req models.ChangePasswordRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var currentHash string
+	if err := h.repo.GetDB().QueryRow("SELECT password_hash FROM users WHERE id = $1", userID).Scan(&currentHash); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Foydalanuvchi parolini tekshirib bo'lmadi"})
+		return
+	}
+	if !auth.CheckPassword(req.CurrentPassword, currentHash) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Hozirgi parol noto‘g‘ri kiritildi"})
+		return
+	}
+	if len(req.NewPassword) < 6 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Yangi parol kamida 6 belgidan iborat bo‘lishi lozim"})
+		return
+	}
+	newHash, err := auth.HashPassword(req.NewPassword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Parolni shifrlashda xatolik"})
+		return
+	}
+	if err := h.repo.UpdateUserPassword(userID, newHash); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Parolni saqlashda xatolik"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Parol muvaffaqiyatli o‘zgartirildi!"})
+}
+
+// Admin CRUD handlers
+func (h *Handler) UpdateTest(c *gin.Context) {
+	testID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid test ID"})
+		return
+	}
+	var req models.UpdateTestRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	test, err := h.repo.UpdateTest(testID, req.Title, req.Description, req.Level, req.DurationMinutes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Testni yangilashda xatolik: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, test)
+}
+
+func (h *Handler) UpdateSection(c *gin.Context) {
+	secID, err := strconv.Atoi(c.Param("sectionId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid section ID"})
+		return
+	}
+	var req models.UpdateSectionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	sec, err := h.repo.UpdateSection(secID, req.Title, req.Instructions, req.AudioURL, req.PassageText)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Bo'limni yangilashda xatolik: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, sec)
+}
+
+func (h *Handler) DeleteSection(c *gin.Context) {
+	secID, err := strconv.Atoi(c.Param("sectionId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid section ID"})
+		return
+	}
+	if err := h.repo.DeleteSection(secID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Bo'limni o'chirishda xatolik: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Bo'lim muvaffaqiyatli o'chirildi"})
+}
+
+func (h *Handler) UpdateQuestion(c *gin.Context) {
+	qID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid question ID"})
+		return
+	}
+	var req models.UpdateQuestionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	q, err := h.repo.UpdateQuestion(qID, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Savolni yangilashda xatolik: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, q)
+}
+
+func (h *Handler) DeleteQuestion(c *gin.Context) {
+	qID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid question ID"})
+		return
+	}
+	if err := h.repo.DeleteQuestion(qID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Savolni o'chirishda xatolik: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Savol muvaffaqiyatli o'chirildi"})
+}

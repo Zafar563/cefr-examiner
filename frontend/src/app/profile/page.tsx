@@ -24,6 +24,9 @@ import {
   removeToken,
   User,
   apiGetStudentHistory,
+  apiGetProfile,
+  apiUpdateProfile,
+  apiUpdatePassword,
   TestSession,
 } from '@/lib/api';
 
@@ -49,6 +52,14 @@ export default function ProfilePage() {
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
 
+  // Password change states
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
   useEffect(() => {
     const currentUser = getCurrentStoredUser();
     if (!currentUser) {
@@ -58,22 +69,31 @@ export default function ProfilePage() {
     setUser(currentUser);
     setEmail(currentUser.email || '');
 
-    // Load saved extra profile details for this specific email from localStorage
-    const savedProfileKey = `cefr_profile_${currentUser.email}`;
-    const rawSaved = localStorage.getItem(savedProfileKey);
-    let profileData: any = {};
-    if (rawSaved) {
-      try {
-        profileData = JSON.parse(rawSaved);
-      } catch (e) {}
-    }
+    // 1. First populate from stored user
+    setFullName(currentUser.full_name || '');
+    setUsername(currentUser.username || (currentUser.email ? currentUser.email.split('@')[0] : ''));
+    setDateOfBirth(currentUser.date_of_birth || '');
+    setPhoneNumber(currentUser.phone_number || '');
+    setSex((currentUser.gender as any) || 'Male');
+    setAvatarUrl(currentUser.avatar_url || '');
 
-    setFullName(profileData.fullName || currentUser.full_name || '');
-    setUsername(profileData.username || currentUser.username || (currentUser.email ? currentUser.email.split('@')[0] : ''));
-    setDateOfBirth(profileData.dateOfBirth || currentUser.date_of_birth || '');
-    setPhoneNumber(profileData.phoneNumber || currentUser.phone_number || '');
-    setSex(profileData.sex || currentUser.gender || 'Male');
-    setAvatarUrl(profileData.avatarUrl || currentUser.avatar_url || '');
+    // 2. Fetch latest synced profile from database
+    apiGetProfile()
+      .then((dbUser) => {
+        if (dbUser) {
+          setUser(dbUser);
+          setCurrentStoredUser(dbUser);
+          setFullName(dbUser.full_name || '');
+          setUsername(dbUser.username || (dbUser.email ? dbUser.email.split('@')[0] : ''));
+          setDateOfBirth(dbUser.date_of_birth || '');
+          setPhoneNumber(dbUser.phone_number || '');
+          if (dbUser.gender) setSex(dbUser.gender as any);
+          if (dbUser.avatar_url) setAvatarUrl(dbUser.avatar_url);
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not load profile from backend:', err);
+      });
 
     // Load test history
     apiGetStudentHistory()
@@ -82,38 +102,71 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [router]);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
-    const profileData = {
-      fullName,
-      username,
-      dateOfBirth,
-      email,
-      phoneNumber,
-      sex,
-      avatarUrl,
-    };
+    try {
+      // 1. Sync with PostgreSQL backend
+      await apiUpdateProfile({
+        full_name: fullName,
+        phone_number: phoneNumber,
+        date_of_birth: dateOfBirth,
+        gender: sex,
+        avatar_url: avatarUrl,
+      });
 
-    // Save per-email profile
-    localStorage.setItem(`cefr_profile_${user.email}`, JSON.stringify(profileData));
+      // 2. Also keep local storage in sync
+      const updatedUser: User = {
+        ...user,
+        full_name: fullName,
+        username,
+        phone_number: phoneNumber,
+        date_of_birth: dateOfBirth,
+        gender: sex,
+        avatar_url: avatarUrl,
+      };
+      setCurrentStoredUser(updatedUser);
+      setUser(updatedUser);
 
-    // Also update current user object in storage
-    const updatedUser: User = {
-      ...user,
-      full_name: fullName,
-      username,
-      phone_number: phoneNumber,
-      date_of_birth: dateOfBirth,
-      gender: sex,
-      avatar_url: avatarUrl,
-    };
-    setCurrentStoredUser(updatedUser);
-    setUser(updatedUser);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 3500);
+    } catch (err: any) {
+      alert('Profilni saqlashda xatolik: ' + (err.message || 'Server xatosi'));
+    }
+  };
 
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3500);
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    if (!oldPassword || !newPassword) {
+      setPasswordError('Iltimos, barcha maydonlarni to‘ldiring.');
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPasswordError('Yangi parol kamida 6 belgidan iborat bo‘lishi kerak.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Yangi parollar mos kelmadi.');
+      return;
+    }
+
+    setPasswordLoading(true);
+    try {
+      await apiUpdatePassword(oldPassword, newPassword);
+      setPasswordSuccess('Parolingiz muvaffaqiyatli o‘zgartirildi!');
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => setPasswordSuccess(''), 4000);
+    } catch (err: any) {
+      setPasswordError(err.message || 'Parolni o‘zgartirishda xatolik');
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,17 +180,22 @@ export default function ProfilePage() {
     }
 
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const base64 = reader.result as string;
       setAvatarUrl(base64);
 
       if (user) {
-        // Automatically save avatar in profile
-        const savedProfileKey = `cefr_profile_${user.email}`;
-        const rawSaved = localStorage.getItem(savedProfileKey);
-        const existing = rawSaved ? JSON.parse(rawSaved) : {};
-        existing.avatarUrl = base64;
-        localStorage.setItem(savedProfileKey, JSON.stringify(existing));
+        try {
+          await apiUpdateProfile({
+            full_name: fullName || user.full_name,
+            phone_number: phoneNumber || user.phone_number,
+            date_of_birth: dateOfBirth || user.date_of_birth,
+            gender: sex || user.gender,
+            avatar_url: base64,
+          });
+        } catch (e) {
+          console.error('Failed to sync avatar to backend:', e);
+        }
 
         const updatedUser: User = {
           ...user,
@@ -682,6 +740,82 @@ export default function ProfilePage() {
                 <div className="text-xs text-slate-500">
                   Hisobingiz xavfsiz JWT token orqali himoyalangan.
                 </div>
+              </div>
+
+              {/* Password Change Card */}
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5">
+                <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-slate-900 dark:text-white">Parolni O‘zgartirish</h3>
+                    <p className="text-xs text-slate-500">Hisobingiz xavfsizligini ta'minlash uchun parolingizni yangilab turing.</p>
+                  </div>
+                </div>
+
+                {passwordSuccess && (
+                  <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>{passwordSuccess}</span>
+                  </div>
+                )}
+
+                {passwordError && (
+                  <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs sm:text-sm font-bold flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{passwordError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleChangePassword} className="space-y-4 max-w-lg">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Joriy parol
+                    </label>
+                    <input
+                      type="password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      placeholder="Joriy parolingizni kiriting"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Yangi parol (kamida 6 ta belgi)
+                    </label>
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Yangi parolni kiriting"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                      Yangi parolni tasdiqlang
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Yangi parolni qayta kiriting"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={passwordLoading}
+                    className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                  >
+                    {passwordLoading ? 'O‘zgartirilmoqda...' : 'Parolni Saqlash'}
+                  </button>
+                </form>
               </div>
             </div>
           )}

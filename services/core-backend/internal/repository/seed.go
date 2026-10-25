@@ -48,8 +48,17 @@ func AutoMigrateAndSeed(db *sql.DB) error {
 		options JSONB DEFAULT '[]'::jsonb,
 		correct_answer TEXT,
 		points INT DEFAULT 1,
-		order_index INT DEFAULT 1
+		order_index INT DEFAULT 1,
+		explanation_text TEXT DEFAULT '',
+		explanation_audio_url TEXT DEFAULT '',
+		explanation_video_url TEXT DEFAULT '',
+		explanation_image_url TEXT DEFAULT ''
 	);
+
+	ALTER TABLE questions ADD COLUMN IF NOT EXISTS explanation_text TEXT DEFAULT '';
+	ALTER TABLE questions ADD COLUMN IF NOT EXISTS explanation_audio_url TEXT DEFAULT '';
+	ALTER TABLE questions ADD COLUMN IF NOT EXISTS explanation_video_url TEXT DEFAULT '';
+	ALTER TABLE questions ADD COLUMN IF NOT EXISTS explanation_image_url TEXT DEFAULT '';
 
 	CREATE TABLE IF NOT EXISTS test_sessions (
 		id SERIAL PRIMARY KEY,

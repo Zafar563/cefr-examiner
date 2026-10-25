@@ -1162,4 +1162,51 @@ select.ielts-inline-select {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
+/* Page & Card Entrance Animations */
+@keyframes tabContentEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardCascadeEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bannerPulseIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-tab-entrance {
+  animation: tabContentEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-card-cascade {
+  opacity: 0;
+  animation: cardCascadeEntrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-banner-in {
+  animation: bannerPulseIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 

@@ -161,30 +161,17 @@ export default function HomePage() {
         <BentoGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {/* Card 1: Full Mock Exam Simulator (Hero Bento Card - spans 2 columns) */}
           <BentoCard
+            size="large"
             title="Full Mock Exam Simulator"
-            description="Experience an authentic, uninterrupted 180-minute examination simulating all 4 modules (Listening, Reading, Writing, Speaking) under strict exam timing."
+            description="Experience an authentic, uninterrupted 180-minute examination simulating all 4 modules (Listening, Reading, Writing, Speaking) under strict exam timing and official CEFR / IELTS scoring criteria."
             badge="180 MINS · FULL EXAM"
             badgeColor="from-amber-500 via-orange-500 to-amber-600"
-            icon={<Award className="w-6 h-6 text-amber-500" />}
+            icon={<Award className="w-8 h-8 text-amber-500" />}
             href="/student?tab=mock"
-            cta="Launch Full Mock"
-            glowColor="rgba(245, 158, 11, 0.25)"
-            className="md:col-span-2 bg-gradient-to-br from-amber-50/40 via-white/80 to-orange-50/30 dark:from-amber-950/20 dark:via-slate-900/60 dark:to-orange-950/10 border-amber-200/80 dark:border-amber-500/20"
-          >
-            <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3">
-              {[
-                { name: '1. Listening', count: '40 Qs · 30m', color: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/60' },
-                { name: '2. Reading', count: '40 Qs · 60m', color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60' },
-                { name: '3. Writing', count: '2 Tasks · 60m', color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/60' },
-                { name: '4. Speaking', count: '3 Parts · 15m', color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60' },
-              ].map((skill, i) => (
-                <div key={i} className={`p-3 rounded-2xl border border-current/10 ${skill.color}`}>
-                  <span className="block text-xs font-bold">{skill.name}</span>
-                  <span className="text-[11px] font-medium opacity-80">{skill.count}</span>
-                </div>
-              ))}
-            </div>
-          </BentoCard>
+            cta="Launch Full Mock Exam"
+            glowColor="rgba(245, 158, 11, 0.3)"
+            className="md:col-span-2 bg-gradient-to-br from-amber-50/50 via-white/85 to-orange-50/40 dark:from-amber-950/25 dark:via-slate-900/70 dark:to-orange-950/15 border-amber-200/90 dark:border-amber-500/30 hover:border-amber-400/80 dark:hover:border-amber-400/60 shadow-xl"
+          />
 
           {/* Card 2: Listening Laboratory */}
           <BentoCard

@@ -167,6 +167,11 @@ function normalizeInstructionsHtml(rawHtml: string): string {
     }
   );
 
+  // 5. Clean up Uzbek placeholders and text from legacy scraped content to English
+  html = html.replace(/\[(\d+)\]\s*javob\.\.\./gi, '[$1] answer...');
+  html = html.replace(/placeholder=["']javob\.\.\.["']/gi, 'placeholder="answer..."');
+  html = html.replace(/\bjavob\.\.\./gi, 'answer...');
+
   return html;
 }
 
@@ -1438,7 +1443,7 @@ export default function TestTakingPage() {
     try {
       const sess = await apiGetSession(sId);
       if (!sess || !sess.id) {
-        throw new Error('Sessiya topilmadi');
+        throw new Error('Test session not found');
       }
 
       if (sess.status !== 'in_progress') {
@@ -2180,15 +2185,15 @@ export default function TestTakingPage() {
         <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
           <AlertTriangle className="w-6 h-6" />
         </div>
-        <h3 className="text-base font-bold text-slate-900 dark:text-white">Ushbu testda bo‘limlar mavjud emas</h3>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">No sections found in this test</h3>
         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-          Ushbu testga hali bo‘limlar yoki savollar kiritilmagan. Iltimos, boshqa testni tanlang yoki administrator bilan bog‘laning.
+          No sections or questions have been configured for this test yet. Please select another test or contact an administrator.
         </p>
         <button
           onClick={() => router.push('/student')}
           className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm"
         >
-          Testlar ro‘yxatiga qaytish
+          Back to Tests
         </button>
       </div>
     );
@@ -3172,23 +3177,42 @@ export default function TestTakingPage() {
                     </div>
                   </div>
 
-                  {/* Transcript / Passage text if any */}
-                  {currentSection.passage_text ? (
-                    /<[a-z][\s\S]*>/i.test(currentSection.passage_text) ? (
-                      <div
-                        className="text-[17px] leading-[1.8] space-y-4"
-                        dangerouslySetInnerHTML={{ __html: currentSection.passage_text }}
-                      />
-                    ) : (
-                      <div className="text-[17px] leading-[1.8] space-y-4 whitespace-pre-wrap">
-                        {currentSection.passage_text}
-                      </div>
-                    )
-                  ) : (
-                    <div className="p-6 rounded-xl border border-dashed border-slate-300 dark:border-zinc-800 text-center opacity-70 text-sm">
-                      Listen carefully to the audio instructions and answer the questions on the right.
+                  {/* Listening Examination Instructions & Guidelines (Audio script is hidden during test) */}
+                  <div className={`p-5 rounded-2xl border space-y-4 ${
+                    isYellowOnBlack
+                      ? 'bg-zinc-950 border-yellow-900/60 text-[#fbbf24]'
+                      : isWhiteOnBlack
+                      ? 'bg-zinc-900 border-zinc-800 text-white'
+                      : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}>
+                    <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200 dark:border-zinc-800">
+                      <Headphones className="w-5 h-5 text-blue-500" />
+                      <h4 className="text-sm font-bold uppercase tracking-wider">
+                        Listening Instructions & Rules
+                      </h4>
                     </div>
-                  )}
+
+                    <ul className="text-sm space-y-3 leading-relaxed opacity-90">
+                      <li className="flex items-start gap-2.5">
+                        <span className="font-bold text-blue-500">•</span>
+                        <span>
+                          <strong>Audio Playback:</strong> Click the Play button above to listen to the recording. In accordance with exam rules, the audio can be played up to <strong>2 times</strong>.
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="font-bold text-blue-500">•</span>
+                        <span>
+                          <strong>Answer As You Listen:</strong> Read the questions on the right carefully and write your answers while the audio is playing. Check word limits (e.g. <em>ONE WORD AND/OR A NUMBER</em>).
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <span className="font-bold text-blue-500">•</span>
+                        <span>
+                          <strong>Official Exam Security:</strong> In authentic IELTS / CEFR examination format, the audioscript is strictly confidential and not visible during the test. You will be able to review the full audio transcript and detailed explanations after submitting the exam.
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               ) : currentSection.passage_text ? (
                 /<[a-z][\s\S]*>/i.test(currentSection.passage_text) ? (
@@ -3817,13 +3841,13 @@ export default function TestTakingPage() {
         <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">No Section Found</h2>
         <p className="text-xs text-slate-500 dark:text-slate-400">
-          Ushbu testda bo‘limlar topilmadi.
+          No sections were found in this test.
         </p>
         <button
           onClick={() => router.push('/student')}
           className="px-5 py-2.5 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-all cursor-pointer"
         >
-          Testlar ro‘yxatiga qaytish
+          Back to Tests
         </button>
       </div>
     </div>

@@ -186,8 +186,8 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
         window.location.href = '/login?expired=1';
       }
     }
-    const errorData = await res.json().catch(() => ({ error: 'Kutilmagan xatolik yuz berdi' }));
-    throw new Error(errorData.error || errorData.detail || 'So‘rov bajarilmadi');
+    const errorData = await res.json().catch(() => ({ error: 'An unexpected error occurred' }));
+    throw new Error(errorData.error || errorData.detail || 'Request failed');
   }
   return res.json();
 }
@@ -200,8 +200,8 @@ export const apiLogin = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Kirishda xatolik' }));
-    throw new Error(err.error || 'Login yoki parol xato');
+    const err = await res.json().catch(() => ({ error: 'Login error' }));
+    throw new Error(err.error || 'Invalid email or password');
   }
   const data = await res.json();
   setToken(data.token);
@@ -216,8 +216,8 @@ export const apiRegister = async (fullName: string, email: string, password: str
     body: JSON.stringify({ full_name: fullName, email, password, role }),
   });
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Ro‘yxatdan o‘tishda xatolik' }));
-    throw new Error(err.error || 'Ro‘yxatdan o‘tib bo‘lmadi');
+    const err = await res.json().catch(() => ({ error: 'Registration error' }));
+    throw new Error(err.error || 'Failed to register account');
   }
   const data = await res.json();
   setToken(data.token);
@@ -364,8 +364,8 @@ export const apiUploadAudio = async (blob: Blob, filename: string = 'recording.w
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Audio yuklashda xatolik' }));
-    throw new Error(err.detail || 'Audioni saqlash muvaffaqiyatsiz bo‘ldi');
+    const err = await res.json().catch(() => ({ detail: 'Error uploading audio' }));
+    throw new Error(err.detail || 'Failed to save audio');
   }
 
   const data = await res.json();
@@ -387,8 +387,8 @@ export const apiUploadImage = async (file: File | Blob, filename: string = 'imag
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Rasm yuklashda xatolik' }));
-    throw new Error(err.detail || 'Rasmni saqlash muvaffaqiyatsiz bo‘ldi');
+    const err = await res.json().catch(() => ({ detail: 'Error uploading image' }));
+    throw new Error(err.detail || 'Failed to save image');
   }
 
   const data = await res.json();
@@ -409,8 +409,8 @@ export const apiUploadVideo = async (file: File | Blob, filename: string = 'vide
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: 'Video yuklashda xatolik' }));
-    throw new Error(err.detail || 'Videoni saqlash muvaffaqiyatsiz bo‘ldi');
+    const err = await res.json().catch(() => ({ detail: 'Error uploading video' }));
+    throw new Error(err.detail || 'Failed to save video');
   }
 
   const data = await res.json();

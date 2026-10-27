@@ -51,8 +51,8 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
     <button
       type="button"
       onClick={toggleTheme}
-      title={isDark ? 'Kunduzgi rejimga o‘tish' : 'Tungi rejimga o‘tish'}
-      aria-label={isDark ? 'Kunduzgi rejimga o‘tish' : 'Tungi rejimga o‘tish'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className={`relative inline-flex items-center gap-2 p-2 rounded-xl border transition-all duration-200 select-none ${
         isDark
           ? 'bg-slate-800/90 hover:bg-slate-700/90 text-amber-400 border-slate-700 shadow-xs hover:border-amber-400/50'
@@ -68,7 +68,7 @@ export default function ThemeToggle({ className = '', showLabel = false }: Theme
       </div>
       {showLabel && (
         <span className="text-xs font-semibold">
-          {isDark ? 'Kunduzgi' : 'Tungi'}
+          {isDark ? 'Light' : 'Dark'}
         </span>
       )}
     </button>

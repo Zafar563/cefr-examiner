@@ -132,7 +132,7 @@ export default function ProfilePage() {
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3500);
     } catch (err: any) {
-      alert('Profilni saqlashda xatolik: ' + (err.message || 'Server xatosi'));
+      alert('Error saving profile: ' + (err.message || 'Server error'));
     }
   };
 
@@ -142,28 +142,28 @@ export default function ProfilePage() {
     setPasswordSuccess('');
 
     if (!oldPassword || !newPassword) {
-      setPasswordError('Iltimos, barcha maydonlarni to‘ldiring.');
+      setPasswordError('Please fill in all fields.');
       return;
     }
     if (newPassword.length < 6) {
-      setPasswordError('Yangi parol kamida 6 belgidan iborat bo‘lishi kerak.');
+      setPasswordError('New password must be at least 6 characters.');
       return;
     }
     if (newPassword !== confirmPassword) {
-      setPasswordError('Yangi parollar mos kelmadi.');
+      setPasswordError('New passwords do not match.');
       return;
     }
 
     setPasswordLoading(true);
     try {
       await apiUpdatePassword(oldPassword, newPassword);
-      setPasswordSuccess('Parolingiz muvaffaqiyatli o‘zgartirildi!');
+      setPasswordSuccess('Your password has been changed successfully!');
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => setPasswordSuccess(''), 4000);
     } catch (err: any) {
-      setPasswordError(err.message || 'Parolni o‘zgartirishda xatolik');
+      setPasswordError(err.message || 'Error changing password');
     } finally {
       setPasswordLoading(false);
     }
@@ -222,7 +222,7 @@ export default function ProfilePage() {
     return (
       <div className="py-24 text-center">
         <div className="w-12 h-12 border-4 border-rose-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-500 font-semibold text-sm">Yuklanmoqda...</p>
+        <p className="text-slate-500 font-semibold text-sm">Loading...</p>
       </div>
     );
   }
@@ -347,7 +347,7 @@ export default function ProfilePage() {
               {savedSuccess && (
                 <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm font-bold flex items-center gap-2 animate-in fade-in duration-200">
                   <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                  <span>Profilingiz ma'lumotlari muvaffaqiyatli saqlandi!</span>
+                  <span>Your profile details have been saved successfully!</span>
                 </div>
               )}
 
@@ -555,38 +555,38 @@ export default function ProfilePage() {
                   Overview
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-                  Platformadagi faolligingiz va asosiy natijalar qisqacha ko‘rinishi.
+                  Summary of your activity and performance across the platform.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-2">
-                  <span className="text-xs font-bold text-slate-500">Topshirilgan testlar</span>
+                  <span className="text-xs font-bold text-slate-500">Tests completed</span>
                   <div className="text-3xl font-black text-slate-900 dark:text-white">{completedSessions.length}</div>
                 </div>
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-2">
-                  <span className="text-xs font-bold text-slate-500">Eng yuqori daraja</span>
+                  <span className="text-xs font-bold text-slate-500">Highest level</span>
                   <div className="text-3xl font-black text-emerald-600">{bestLevel}</div>
                 </div>
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-2">
-                  <span className="text-xs font-bold text-slate-500">Profil holati</span>
+                  <span className="text-xs font-bold text-slate-500">Profile status</span>
                   <div className="text-base font-extrabold text-indigo-600 flex items-center gap-1.5 mt-2">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Faol / Tasdiqlangan</span>
+                    <span>Active / Verified</span>
                   </div>
                 </div>
               </div>
 
               <div className="p-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl flex items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold">Imtihon topshirishga tayyormisiz?</h3>
-                  <p className="text-xs text-white/80 mt-1">Listening, Reading, Writing va Speaking bo‘yicha 144 ta to‘liq akademik test mavjud.</p>
+                  <h3 className="text-lg font-bold">Ready to take an exam?</h3>
+                  <p className="text-xs text-white/80 mt-1">144 authentic academic tests available across Listening, Reading, Writing, and Speaking.</p>
                 </div>
                 <Link
                   href="/student"
                   className="px-5 py-2.5 rounded-xl bg-white text-indigo-600 font-black text-xs uppercase tracking-wider shrink-0 hover:bg-slate-100 transition-colors"
                 >
-                  Testlarga o‘tish
+                  Go to Tests
                 </Link>
               </div>
             </div>
@@ -599,22 +599,22 @@ export default function ProfilePage() {
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Test Tarixi
+                  Test History
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-                  Siz topshirgan barcha testlar va ularning batafsil ballari.
+                  All your completed and in-progress exams with detailed scores.
                 </p>
               </div>
 
               {history.length === 0 ? (
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center text-slate-500 space-y-3">
                   <Clock className="w-10 h-10 mx-auto text-slate-400 opacity-60" />
-                  <p className="font-bold text-slate-700 dark:text-slate-300">Hozircha testlar topshirilmagan</p>
+                  <p className="font-bold text-slate-700 dark:text-slate-300">No tests taken yet</p>
                   <Link
                     href="/student"
                     className="inline-block px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs"
                   >
-                    Birinchi testni boshlash
+                    Start your first test
                   </Link>
                 </div>
               ) : (
@@ -623,12 +623,12 @@ export default function ProfilePage() {
                     <table className="w-full text-left text-xs sm:text-sm">
                       <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-500 border-b border-slate-200 dark:border-slate-800">
                         <tr>
-                          <th className="py-3.5 px-4 font-bold">Imtihon</th>
-                          <th className="py-3.5 px-4 font-bold">Sana</th>
-                          <th className="py-3.5 px-4 font-bold">Holat</th>
-                          <th className="py-3.5 px-4 font-bold">Ball</th>
+                          <th className="py-3.5 px-4 font-bold">Exam</th>
+                          <th className="py-3.5 px-4 font-bold">Date</th>
+                          <th className="py-3.5 px-4 font-bold">Status</th>
+                          <th className="py-3.5 px-4 font-bold">Score</th>
                           <th className="py-3.5 px-4 font-bold">CEFR</th>
-                          <th className="py-3.5 px-4 font-bold text-right">Amal</th>
+                          <th className="py-3.5 px-4 font-bold text-right">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -638,7 +638,7 @@ export default function ProfilePage() {
                               {s.test_title || `Test #${s.test_id}`}
                             </td>
                             <td className="py-4 px-4 text-slate-500 text-xs">
-                              {s.started_at ? new Date(s.started_at).toLocaleDateString('uz-UZ') : 'Yaqinda'}
+                              {s.started_at ? new Date(s.started_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently'}
                             </td>
                             <td className="py-4 px-4">
                               <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
@@ -657,14 +657,14 @@ export default function ProfilePage() {
                                   href={`/student/test/${s.id}`}
                                   className="text-xs font-bold text-emerald-600 hover:underline"
                                 >
-                                  Davom ettirish
+                                  Continue
                                 </Link>
                               ) : (
                                 <Link
                                   href={`/student/results/${s.id}`}
                                   className="text-xs font-bold text-indigo-600 hover:underline"
                                 >
-                                  Natija
+                                  View Result
                                 </Link>
                               )}
                             </td>
@@ -688,7 +688,7 @@ export default function ProfilePage() {
                   Learning Progress
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-                  IELTS ko‘nikmalaringiz bo‘yicha o‘zlashtirish ko‘rsatkichlari.
+                  Your progress and mastery across IELTS / CEFR skills.
                 </p>
               </div>
 
@@ -702,7 +702,7 @@ export default function ProfilePage() {
                   <div key={skill.name} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="font-extrabold text-sm text-slate-900 dark:text-white">{skill.name}</span>
-                      <span className="text-xs text-slate-500">{skill.tests} testlar</span>
+                      <span className="text-xs text-slate-500">{skill.tests} tests</span>
                     </div>
                     <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
                       <div className="bg-[#8b2323] h-full rounded-full" style={{ width: skill.progress }}></div>
@@ -723,22 +723,22 @@ export default function ProfilePage() {
                   Log ins
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-                  Xavfsizlik va oxirgi faol seanslar tarixi.
+                  Security details and active session history.
                 </p>
               </div>
 
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                   <div>
-                    <div className="font-bold text-sm text-slate-900 dark:text-white">Joriy qurilma / Brauzer</div>
-                    <div className="text-xs text-slate-500 mt-0.5">Faol seans • Ushbu kompyuter</div>
+                    <div className="font-bold text-sm text-slate-900 dark:text-white">Current Device / Browser</div>
+                    <div className="text-xs text-slate-500 mt-0.5">Active session • Current device</div>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
                     Online
                   </span>
                 </div>
                 <div className="text-xs text-slate-500">
-                  Hisobingiz xavfsiz JWT token orqali himoyalangan.
+                  Your account is authenticated and secured with encrypted JWT tokens.
                 </div>
               </div>
 
@@ -749,8 +749,8 @@ export default function ProfilePage() {
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-base text-slate-900 dark:text-white">Parolni O‘zgartirish</h3>
-                    <p className="text-xs text-slate-500">Hisobingiz xavfsizligini ta'minlash uchun parolingizni yangilab turing.</p>
+                    <h3 className="font-bold text-base text-slate-900 dark:text-white">Change Password</h3>
+                    <p className="text-xs text-slate-500">Update your password regularly to maintain account security.</p>
                   </div>
                 </div>
 
@@ -771,39 +771,39 @@ export default function ProfilePage() {
                 <form onSubmit={handleChangePassword} className="space-y-4 max-w-lg">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Joriy parol
+                      Current password
                     </label>
                     <input
                       type="password"
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
-                      placeholder="Joriy parolingizni kiriting"
+                      placeholder="Enter current password"
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Yangi parol (kamida 6 ta belgi)
+                      New password (min 6 characters)
                     </label>
                     <input
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Yangi parolni kiriting"
+                      placeholder="Enter new password"
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      Yangi parolni tasdiqlang
+                      Confirm new password
                     </label>
                     <input
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Yangi parolni qayta kiriting"
+                      placeholder="Re-enter new password"
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
@@ -813,7 +813,7 @@ export default function ProfilePage() {
                     disabled={passwordLoading}
                     className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition-all disabled:opacity-50 cursor-pointer"
                   >
-                    {passwordLoading ? 'O‘zgartirilmoqda...' : 'Parolni Saqlash'}
+                    {passwordLoading ? 'Updating...' : 'Save Password'}
                   </button>
                 </form>
               </div>

@@ -83,19 +83,19 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     id: 'mc_single',
     title: 'Multiple Choice (one answer)',
     badge: '🔘 Single Choice',
-    sub: 'Yakka to‘g‘ri javob (A, B, C, D)',
+    sub: 'Single correct answer (A, B, C, D)',
     baseCategory: 'multiple_choice',
     sectionTypes: ['reading', 'listening'],
-    placeholder: 'Savol matnini kiriting (masalan: According to the passage, why did the author...?)',
+    placeholder: 'Enter question text (e.g., According to the passage, why did the author...?)',
   },
   {
     id: 'mc_multi',
     title: 'Multiple Choice (more than one answer)',
     badge: '☑️ Multi Selection',
-    sub: 'Bir nechta to‘g‘ri javob (Choose TWO / THREE)',
+    sub: 'Multiple correct answers (Choose TWO / THREE)',
     baseCategory: 'multiple_selection',
     sectionTypes: ['reading', 'listening'],
-    placeholder: 'Savol matnini kiriting (masalan: Which TWO of the following reasons are mentioned...?)',
+    placeholder: 'Enter question text (e.g., Which TWO of the following reasons are mentioned...?)',
   },
   {
     id: 'tf_ng',
@@ -113,7 +113,7 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     sub: 'Muallif qarashi va da’volari bilan solishtirish',
     baseCategory: 'yes_no_not_given',
     sectionTypes: ['reading'],
-    placeholder: 'Muallif qarashi haqidagi mulohaza (masalan: The writer suggests that future energy needs will...)',
+    placeholder: 'Statement regarding author view (e.g., The writer suggests that future energy needs will...)',
   },
   {
     id: 'note_completion',
@@ -140,7 +140,7 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     sub: 'Olimlar, davrlar yoki xususiyatlarni moslashtirish',
     baseCategory: 'matching',
     sectionTypes: ['reading', 'listening'],
-    placeholder: 'Savol yoki bayonot (masalan: Who was the first to propose continental drift?)',
+    placeholder: 'Question or statement (e.g., Who was the first to propose continental drift?)',
     defaultOptions: ['A. Isaac Newton', 'B. Charles Darwin', 'C. Alfred Wegener', 'D. James Hutton'],
   },
   {
@@ -208,16 +208,16 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     sub: 'Grafik tahlili (Task 1) yoki Insho (Task 2)',
     baseCategory: 'essay',
     sectionTypes: ['writing'],
-    placeholder: 'Writing topshirig‘i sharti (masalan: WRITING TASK 2: Some people believe that...)',
+    placeholder: 'Writing task prompt (e.g., WRITING TASK 2: Some people believe that...)',
   },
   {
     id: 'speaking',
     title: 'Speaking Prompt',
     badge: '🎙️ Speaking Prompt',
-    sub: 'Nutq topshirig‘i (Part 1, Part 2 cue card yoki Part 3)',
+    sub: 'Speaking prompt (Part 1, Part 2 cue card or Part 3)',
     baseCategory: 'speaking',
     sectionTypes: ['speaking'],
-    placeholder: 'Speaking savoli yoki cue card mavzusi (masalan: Describe a memorable journey...)',
+    placeholder: 'Speaking topic or cue card prompt (e.g., Describe a memorable journey...)',
   },
 ];
 
@@ -286,7 +286,7 @@ export default function AdminPage() {
   const [showAddSection, setShowAddSection] = useState(false);
   const [sectionType, setSectionType] = useState('reading');
   const [sectionTitle, setSectionTitle] = useState('Reading Comprehension');
-  const [sectionInstructions, setSectionInstructions] = useState('Chap tarafdagi matnni diqqat bilan o‘qing va o‘ng tarafdagi savollarga javob bering.');
+  const [sectionInstructions, setSectionInstructions] = useState('Read the passage on the left carefully and answer the questions on the right.');
   const [passageText, setPassageText] = useState('');
   const [audioUrl, setAudioUrl] = useState('');
   const [isUploadingAudio, setIsUploadingAudio] = useState(false);
@@ -326,7 +326,7 @@ export default function AdminPage() {
     setMounted(true);
     const user = getCurrentStoredUser();
     if (!user || user.role !== 'admin') {
-      alert('Ushbu sahifaga faqat Admin huquqiga ega foydalanuvchilar kira oladi');
+      alert('This page is accessible only to users with Admin privileges.');
       router.push('/login');
       return;
     }
@@ -352,7 +352,7 @@ export default function AdminPage() {
       const data = await apiGetUsers();
       setUsers(Array.isArray(data) ? data : []);
     } catch (e: any) {
-      console.error('Foydalanuvchilarni yuklashda xatolik:', e);
+      console.error('Error loading users:', e);
     } finally {
       setLoadingUsers(false);
     }
@@ -366,7 +366,7 @@ export default function AdminPage() {
       setRoleMessage(`Foydalanuvchi roli muvaffaqiyatli ${newRole.toUpperCase()} ga o'zgartirildi!`);
       setTimeout(() => setRoleMessage(''), 3500);
     } catch (e: any) {
-      alert("Rolni o'zgartirishda xatolik: " + e.message);
+      alert('Error changing user role: ' + e.message);
     } finally {
       setRoleUpdatingId(null);
     }
@@ -397,7 +397,7 @@ export default function AdminPage() {
       list.sort(sortAdminTests);
       setTests(list);
     } catch (e: any) {
-      alert('Testlarni yuklashda xatolik: ' + e.message);
+      alert('Error loading tests: ' + e.message);
     } finally {
       setLoading(false);
     }
@@ -413,7 +413,7 @@ export default function AdminPage() {
         }, 100);
       }
     } catch (e: any) {
-      alert('Test tafsilotlarini yuklashda xatolik: ' + e.message);
+      alert('Error loading test details: ' + e.message);
     }
   };
 
@@ -492,7 +492,7 @@ export default function AdminPage() {
 
       loadTests();
     } catch (e: any) {
-      alert('Test yaratishda xatolik: ' + e.message);
+      alert('Error creating test: ' + e.message);
     }
   };
 
@@ -520,16 +520,16 @@ export default function AdminPage() {
 
       if (mod === 'reading') {
         setSectionTitle(`Reading Passage ${count}`);
-        setSectionInstructions('Chap tarafdagi matnni diqqat bilan o‘qing va o‘ng tarafdagi savollarga javob bering.');
+        setSectionInstructions('Read the passage on the left carefully and answer the questions on the right.');
       } else if (mod === 'listening') {
         setSectionTitle(`Listening Section ${count}`);
-        setSectionInstructions('Audio faylni tinglang va berilgan savollarga javob bering.');
+        setSectionInstructions('Listen to the audio track and answer the given questions.');
       } else if (mod === 'writing') {
         setSectionTitle(`Writing Task ${count}`);
-        setSectionInstructions('Berilgan mavzu bo‘yicha topshiriqni bajaring.');
+        setSectionInstructions('Complete the task according to the given instructions.');
       } else if (mod === 'speaking') {
         setSectionTitle(`Speaking Part ${count}`);
-        setSectionInstructions('Savollarga og‘zaki javob bering va audio yozuvni saqlang.');
+        setSectionInstructions('Answer the questions orally and record your audio.');
       }
     }
     setShowAddSection(true);
@@ -544,7 +544,7 @@ export default function AdminPage() {
       setTests(prev => prev.filter(t => t.id !== testId));
       loadTests();
     } catch (e: any) {
-      alert('O‘chirishda xatolik: ' + e.message);
+      alert('Error deleting: ' + e.message);
     }
   };
 
@@ -570,19 +570,19 @@ export default function AdminPage() {
       await handleSelectTest(selectedTest.id);
       loadTests();
     } catch (e: any) {
-      alert('Bo‘limni saqlashda xatolik: ' + e.message);
+      alert('Error saving section: ' + e.message);
     }
   };
 
   const handleDeleteSection = async (secId: number) => {
     if (!selectedTest) return;
-    if (!confirm('Haqiqatan ham ushbu bo‘lim va unga tegishli barcha savollarni o‘chirmoqchimisiz?')) return;
+    if (!confirm('Are you sure you want to delete this section and all its questions?')) return;
     try {
       await apiDeleteSection(secId);
       await handleSelectTest(selectedTest.id);
       loadTests();
     } catch (e: any) {
-      alert('Bo‘limni o‘chirishda xatolik: ' + e.message);
+      alert('Error deleting section: ' + e.message);
     }
   };
 
@@ -611,18 +611,18 @@ export default function AdminPage() {
       setEditingQuestion(null);
       await handleSelectTest(selectedTest.id);
     } catch (e: any) {
-      alert('Savolni saqlashda xatolik: ' + e.message);
+      alert('Error saving question: ' + e.message);
     }
   };
 
   const handleDeleteQuestion = async (qId: number) => {
     if (!selectedTest) return;
-    if (!confirm('Haqiqatan ham ushbu savolni o‘chirmoqchimisiz?')) return;
+    if (!confirm('Are you sure you want to delete this question?')) return;
     try {
       await apiDeleteQuestion(qId);
       await handleSelectTest(selectedTest.id);
     } catch (e: any) {
-      alert('Savolni o‘chirishda xatolik: ' + e.message);
+      alert('Error deleting question: ' + e.message);
     }
   };
 
@@ -636,7 +636,7 @@ export default function AdminPage() {
       setAudioUrl(res.url);
       alert('Audio muvaffaqiyatli yuklandi!');
     } catch (e: any) {
-      alert('Audio yuklashda xatolik: ' + e.message);
+      alert('Error uploading audio: ' + e.message);
     } finally {
       setIsUploadingAudio(false);
     }
@@ -655,7 +655,7 @@ export default function AdminPage() {
         passage_text: passageText || null,
         order_index: (selectedTest.sections?.length || 0) + 1,
       });
-      alert('Bo‘lim testga muvaffaqiyatli qo‘shildi!');
+      alert('Section added to test successfully!');
       setShowAddSection(false);
       setSectionTitle('');
       setSectionInstructions('');
@@ -664,7 +664,7 @@ export default function AdminPage() {
       handleSelectTest(selectedTest.id);
       loadTests();
     } catch (e: any) {
-      alert('Bo‘lim qo‘shishda xatolik: ' + e.message);
+      alert('Error adding section: ' + e.message);
     }
   };
 
@@ -721,7 +721,7 @@ export default function AdminPage() {
         alert('Iltimos, rasm (PNG, JPG), audio (MP3) yoki video (MP4) formatidagi fayl tanlang.');
       }
     } catch (err: any) {
-      alert('Fayl yuklashda xatolik yuz berdi: ' + err.message);
+      alert('Error uploading file: ' + err.message);
     } finally {
       if (isEditing) setIsUploadingEditExpMedia(false);
       else setIsUploadingExpMedia(false);
@@ -801,7 +801,7 @@ export default function AdminPage() {
         handleSelectTest(selectedTest.id);
       }
     } catch (err: any) {
-      alert('Tushuntirishni saqlashda xatolik: ' + err.message);
+      alert('Error saving explanation: ' + err.message);
     } finally {
       setIsSavingEditExp(false);
     }
@@ -812,11 +812,11 @@ export default function AdminPage() {
     const ans = isEditing ? editingExpQuestion?.correct_answer : correctAnswer;
 
     if (!qText && !ans) {
-      alert('Iltimos, avval savol matni va to‘g‘ri javobni kiriting!');
+      alert('Please enter question text and correct answer first!');
       return;
     }
 
-    const template = `💡 To‘g‘ri javob: "${ans || 'Berilgan variant'}"\n\n📋 Tushuntirish:\nUshbu savolda to‘g‘ri javob "${ans || ''}" bo‘lishining asosiy sababi - matn/audiodagi kalit so‘zlar va kontekst bilan to‘liq mos kelishidir.\n\n🔍 Kalit dalil:\nMatndagi mazmun savol talabiga to‘liq javob beradi va boshqa variantlar chalkashtiruvchi (distractor) hisoblanadi.`;
+    const template = `💡 Correct answer: "${ans || 'Selected option'}"\n\n📋 Explanation:\nThe reason why "${ans || ''}" is the correct answer is its exact alignment with keywords and context in the passage/audio.\n\n🔍 Key evidence:\nThe passage context fully addresses the question prompt, while the other choices serve as distractors.`;
 
     if (isEditing) {
       setEditExpText(template);
@@ -835,7 +835,7 @@ export default function AdminPage() {
       setWritingImageUrl(res.url);
       alert('Rasm muvaffaqiyatli yuklandi!');
     } catch (e: any) {
-      alert('Rasm yuklashda xatolik: ' + e.message);
+      alert('Error uploading image: ' + e.message);
     } finally {
       setIsUploadingWritingImg(false);
     }
@@ -850,7 +850,7 @@ export default function AdminPage() {
       setTableImageUrl(res.url);
       alert('Jadval rasmi muvaffaqiyatli yuklandi!');
     } catch (e: any) {
-      alert('Jadval rasmini yuklashda xatolik: ' + e.message);
+      alert('Error uploading table image: ' + e.message);
     } finally {
       setIsUploadingTableImg(false);
     }
@@ -878,7 +878,7 @@ export default function AdminPage() {
         options = multiOptions.map((o) => o.trim()).filter(Boolean);
         finalCorrectAnswer = multiCorrectAnswers.join(', ');
         if (!finalCorrectAnswer) {
-          alert('Iltimos, kamida bitta to‘g‘ri javob variantini belgilang!');
+          alert('Please select at least one correct option!');
           return;
         }
         break;
@@ -899,7 +899,7 @@ export default function AdminPage() {
         questionType = 'text_input';
         options = tableImageUrl.trim() ? [tableImageUrl.trim()] : [];
         if (!finalCorrectAnswer) {
-          alert('Iltimos, to‘g‘ri javob so‘zini kiriting!');
+          alert('Please enter the correct answer word(s)!');
           return;
         }
         break;
@@ -947,7 +947,7 @@ export default function AdminPage() {
         explanation_image_url: newExpImageUrl.trim(),
       });
 
-      alert('Yangi IELTS savoli muvaffaqiyatli qo‘shildi!');
+      alert('New IELTS question added successfully!');
       setSelectedSectionIdForQuestion(null);
       setNewQuestionText('');
       setMcOptions(['', '', '', '']);
@@ -970,7 +970,7 @@ export default function AdminPage() {
         handleSelectTest(selectedTest.id);
       }
     } catch (e: any) {
-      alert('Savol qo‘shishda xatolik: ' + e.message);
+      alert('Error adding question: ' + e.message);
     }
   };
 
@@ -978,7 +978,7 @@ export default function AdminPage() {
     return (
       <div className="py-24 text-center">
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-600 font-medium">Yuklanmoqda...</p>
+        <p className="text-slate-600 font-medium">Loading...</p>
       </div>
     );
   }
@@ -993,7 +993,7 @@ export default function AdminPage() {
             Tizim Admin Paneli
           </h1>
           <p className="text-slate-300 text-sm mt-1">
-            CEFR testlarini yaratish, Reading matnlarini kiritish va savollarni boshqarish.
+            Create CEFR tests, input Reading passages, and manage test questions.
           </p>
         </div>
 
@@ -1020,7 +1020,7 @@ export default function AdminPage() {
               {/* Module Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Test Moduli (Qaysi bo‘lim uchun?)
+                  Test Module (Select Skill)
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
@@ -1034,7 +1034,7 @@ export default function AdminPage() {
                   >
                     <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     <span className="text-xs font-extrabold">Reading</span>
-                    <span className="text-[10px] text-slate-400">60 daqiqa</span>
+                    <span className="text-[10px] text-slate-400">60 minutes</span>
                   </button>
 
                   <button
@@ -1048,7 +1048,7 @@ export default function AdminPage() {
                   >
                     <Headphones className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     <span className="text-xs font-extrabold">Listening</span>
-                    <span className="text-[10px] text-slate-400">40 daqiqa</span>
+                    <span className="text-[10px] text-slate-400">40 minutes</span>
                   </button>
 
                   <button
@@ -1062,7 +1062,7 @@ export default function AdminPage() {
                   >
                     <Edit3 className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                     <span className="text-xs font-extrabold">Writing</span>
-                    <span className="text-[10px] text-slate-400">60 daqiqa</span>
+                    <span className="text-[10px] text-slate-400">60 minutes</span>
                   </button>
 
                   <button
@@ -1076,7 +1076,7 @@ export default function AdminPage() {
                   >
                     <Mic className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     <span className="text-xs font-extrabold">Speaking</span>
-                    <span className="text-[10px] text-slate-400">15 daqiqa</span>
+                    <span className="text-[10px] text-slate-400">15 minutes</span>
                   </button>
                 </div>
               </div>
@@ -1107,14 +1107,14 @@ export default function AdminPage() {
                   rows={2}
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  placeholder="Test haqida ma'lumot yoki yo'riqnoma..."
+                  placeholder="Test description or instructions..."
                   className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Davomiyligi (daqiqa)</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Duration (minutes)</label>
                   <input
                     type="number"
                     value={newDuration}
@@ -1188,7 +1188,7 @@ export default function AdminPage() {
               className="flex items-center gap-2 cursor-pointer max-w-[260px] sm:max-w-md truncate"
             >
               <Sparkles className="w-4 h-4 shrink-0" />
-              <span className="truncate">Bo‘limlar va Savollar: {selectedTest.title}</span>
+              <span className="truncate">Sections & Questions: {selectedTest.title}</span>
             </button>
             <button
               onClick={(e) => {
@@ -1226,7 +1226,7 @@ export default function AdminPage() {
                 Ro‘yxatdan O‘tgan Foydalanuvchilar
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Barcha yangi foydalanuvchilar 'student' bo‘lib ro‘yxatdan o‘tadi. Administrator bu yerdan ularning rolini 'examiner' yoki 'admin' ga o‘zgartirishi mumkin.
+                All new users register as 'student'. Administrators can promote their role to 'examiner' or 'admin' from here.
               </p>
             </div>
 
@@ -1244,7 +1244,7 @@ export default function AdminPage() {
           </div>
 
           {loadingUsers ? (
-            <div className="py-12 text-center text-slate-500 text-xs">Foydalanuvchilar ro‘yxati yuklanmoqda...</div>
+            <div className="py-12 text-center text-slate-500 text-xs">Loading user accounts...</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
@@ -1312,7 +1312,7 @@ export default function AdminPage() {
           <div>
             <h2 className="text-lg font-bold text-slate-900 dark:text-white">Mavjud Testlar Ro‘yxati</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Testni tanlash (belgilash) uchun to‘g‘ridan-to‘g‘ri ustiga bosing yoki bo‘limlarni boshqarishga o‘ting.
+              Click a test to select it or navigate to manage its sections and questions.
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -1360,7 +1360,7 @@ export default function AdminPage() {
                 onClick={() => handleOpenTestEditor(selectedTest.id)}
                 className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-black shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0"
               >
-                <span>Bo‘lim va savollar kiritish</span>
+                <span>Manage Sections & Questions</span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             )}
@@ -1399,7 +1399,7 @@ export default function AdminPage() {
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
-                  <span>Barchasi</span>
+                  <span>All</span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-extrabold ${
                       filterTab === 'all'
@@ -1537,7 +1537,7 @@ export default function AdminPage() {
                               </span>
                             </div>
                             <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">{test.description}</p>
-                            <span className="text-xs text-slate-400 dark:text-slate-400 font-medium block">Davomiyligi: {test.duration_minutes} daqiqa</span>
+                            <span className="text-xs text-slate-400 dark:text-slate-400 font-medium block">Duration: {test.duration_minutes} minutes</span>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0 self-start sm:self-center" onClick={(e) => e.stopPropagation()}>
@@ -1546,7 +1546,7 @@ export default function AdminPage() {
                               className="px-5 py-3 rounded-xl text-sm font-extrabold whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-md hover:shadow-lg flex items-center gap-2 shrink-0 cursor-pointer"
                             >
                               <BookOpen className="w-4.5 h-4.5" />
-                              <span>Bo‘limlar va Savollar</span>
+                              <span>Sections & Questions</span>
                             </button>
                             <a
                               href={`/admin?testId=${test.id}`}
@@ -1560,7 +1560,7 @@ export default function AdminPage() {
                             <button
                               onClick={() => handleDeleteTest(test.id)}
                               className="p-3 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-xl transition-colors shrink-0 cursor-pointer"
-                              title="Testni o‘chirish"
+                              title="Delete test"
                             >
                               <Trash2 className="w-5 h-5" />
                             </button>
@@ -1587,7 +1587,7 @@ export default function AdminPage() {
               className="text-xs sm:text-sm font-extrabold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1.5 transition-colors cursor-pointer bg-emerald-50 dark:bg-emerald-950/50 px-3.5 py-2 rounded-xl"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>← Barcha Testlar Ro‘yxatiga Qaytish</span>
+              <span>← Back to All Tests</span>
             </button>
 
             <div className="flex items-center gap-2">
@@ -1629,10 +1629,10 @@ export default function AdminPage() {
                   {getTestModule(selectedTest) === 'reading'
                     ? 'Yangi Reading Passage Qo‘shish'
                     : getTestModule(selectedTest) === 'listening'
-                    ? 'Yangi Listening Bo‘lim Qo‘shish'
+                    ? 'Add New Listening Section'
                     : getTestModule(selectedTest) === 'writing'
-                    ? 'Yangi Writing Topshiriq Qo‘shish'
-                    : 'Yangi Speaking Bo‘lim Qo‘shish'}
+                    ? 'Add New Writing Task'
+                    : 'Add New Speaking Section'}
                 </span>
               </button>
               <button
@@ -1654,10 +1654,10 @@ export default function AdminPage() {
                     {getTestModule(selectedTest) === 'reading'
                       ? 'Yangi Reading Passage (Matn) Qo‘shish'
                       : getTestModule(selectedTest) === 'listening'
-                      ? 'Yangi Listening Audio Bo‘limi Qo‘shish'
+                      ? 'Add New Listening Audio Section'
                       : getTestModule(selectedTest) === 'writing'
-                      ? 'Yangi Writing Topshirig‘i Qo‘shish'
-                      : 'Yangi Speaking Bo‘limi Qo‘shish'}
+                      ? 'Add New Writing Task'
+                      : 'Add New Speaking Section'}
                   </span>
                 </h3>
                 <button
@@ -1680,7 +1680,7 @@ export default function AdminPage() {
                         <>
                           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
                           <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                          <span>📖 Reading (Matn va savollar)</span>
+                          <span>📖 Reading (Passage & Questions)</span>
                         </>
                       )}
                       {sectionType === 'listening' && (
@@ -1711,7 +1711,7 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Bo‘lim Sarlavhasi</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Section Title</label>
                     <input
                       type="text"
                       required
@@ -1740,7 +1740,7 @@ export default function AdminPage() {
                       📖 Reading Passage (Talaba chap tomonda o‘qiydigan matn):
                     </label>
                     <p className="text-xs text-emerald-800 dark:text-emerald-300">
-                      Ushbu maydonga kiritilgan matn test topshirishda chap tomonda mustaqil scroll bilan chiqadi.
+                      Passage content entered here will scroll independently on the left side during the test.
                     </p>
                     <textarea
                       rows={8}
@@ -1762,7 +1762,7 @@ export default function AdminPage() {
                       onChange={handleAudioFileUpload}
                       className="text-xs text-slate-600 dark:text-slate-300"
                     />
-                    {isUploadingAudio && <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Audio yuklanmoqda...</p>}
+                    {isUploadingAudio && <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Uploading audio...</p>}
                     {audioUrl && (
                       <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
                         ✓ Audio saqlandi: <span className="font-mono">{audioUrl}</span>
@@ -1775,7 +1775,7 @@ export default function AdminPage() {
                   type="submit"
                   className="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer"
                 >
-                  Bo‘limni Saqlash
+                  Save Section
                 </button>
               </form>
             </div>
@@ -1783,12 +1783,12 @@ export default function AdminPage() {
 
           {/* Sections List in the Test */}
           <div className="space-y-6">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">Ushbu Testdagi Bo‘limlar:</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Sections in This Test:</h3>
 
             {(!selectedTest.sections || selectedTest.sections.length === 0) ? (
               <div className="p-6 text-center bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
                 <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
-                  Ushbu testda hali bo‘limlar mavjud emas.
+                  No sections configured in this test yet.
                 </p>
                 <button
                   type="button"
@@ -1835,7 +1835,7 @@ export default function AdminPage() {
                           className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
-                          <span>O‘chirish</span>
+                          <span>Delete</span>
                         </button>
                         <button
                           onClick={() => {
@@ -1857,7 +1857,7 @@ export default function AdminPage() {
                           className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
                         >
                           <Plus className="w-4 h-4" />
-                          <span>Savol Qo‘shish</span>
+                          <span>Add Question</span>
                         </button>
                       </div>
                     </div>
@@ -1877,11 +1877,11 @@ export default function AdminPage() {
                     {/* Questions in Section */}
                     <div className="space-y-3">
                       <span className="text-sm font-extrabold text-slate-600 dark:text-slate-300 block">
-                        O‘ng tomonda chiqadigan savollar ({questions.length} ta):
+                        Questions displayed on the right ({questions.length}):
                       </span>
 
                       {questions.length === 0 ? (
-                        <p className="text-sm text-slate-400 dark:text-slate-500 italic py-2">Hali savollar qo‘shilmagan.</p>
+                        <p className="text-sm text-slate-400 dark:text-slate-500 italic py-2">No questions added yet.</p>
                       ) : (
                         <div className="space-y-2.5">
                           {questions.map((q, qIdx) => (
@@ -1904,7 +1904,7 @@ export default function AdminPage() {
                               )}
                               {q.correct_answer && (
                                 <div className="text-emerald-800 dark:text-emerald-300 font-bold pl-3 text-xs sm:text-sm">
-                                  To‘g‘ri javob: {q.correct_answer}
+                                  Correct answer: {q.correct_answer}
                                 </div>
                               )}
 
@@ -1944,7 +1944,7 @@ export default function AdminPage() {
                                     className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/60 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
-                                    <span>O‘chirish</span>
+                                    <span>Delete</span>
                                   </button>
                                   <button
                                     type="button"
@@ -1969,10 +1969,10 @@ export default function AdminPage() {
                           <div>
                             <h5 className="text-base sm:text-lg font-black text-slate-900 dark:text-white uppercase flex items-center gap-2">
                               <Sparkles className="w-5 h-5 text-emerald-600" />
-                              <span>Universal IELTS Savol Konstruktori</span>
+                              <span>Universal IELTS Question Builder</span>
                             </h5>
                             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                              Bo‘lim: <span className="font-extrabold text-slate-700 dark:text-slate-200">{sec.title}</span>
+                              Section: <span className="font-extrabold text-slate-700 dark:text-slate-200">{sec.title}</span>
                             </p>
                           </div>
                           <button
@@ -2004,10 +2004,10 @@ export default function AdminPage() {
                                 <div className="flex items-center justify-between">
                                   <label className="block text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                     <Sparkles className="w-4 h-4 text-emerald-600" />
-                                    <span>1. {secLabel} Savol Turini Tanlang:</span>
+                                    <span>1. Select {secLabel} Question Type:</span>
                                   </label>
                                   <span className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-200/70 dark:bg-slate-800 px-3 py-1 rounded-lg">
-                                    {availableTypes.length} ta savol turi
+                                    {availableTypes.length} question types
                                   </span>
                                 </div>
 
@@ -2078,7 +2078,7 @@ export default function AdminPage() {
                           <div>
                             <div className="flex items-center justify-between mb-1.5">
                               <label className="block text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-200">
-                                2. Savol Matni yoki Ko‘rsatma:
+                                2. Question Text or Instructions:
                               </label>
                               <span className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
                                 Tanlangan: {IELTS_CONSTRUCTOR_TYPES.find((c) => c.id === selectedConstructorType)?.title || 'Multiple Choice'}
@@ -2091,7 +2091,7 @@ export default function AdminPage() {
                               onChange={(e) => setNewQuestionText(e.target.value)}
                               placeholder={
                                 IELTS_CONSTRUCTOR_TYPES.find((c) => c.id === selectedConstructorType)?.placeholder ||
-                                'Savol matnini kiriting...'
+                                'Enter question text...'
                               }
                               className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 text-sm sm:text-base focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 leading-relaxed shadow-2xs"
                             />
@@ -2103,7 +2103,7 @@ export default function AdminPage() {
                           {questionCategory === 'multiple_choice' && (
                             <div className="space-y-3 p-5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block">
-                                3. Variantlar va To‘g‘ri Javob (Radio orqali belgilang):
+                                3. Options and Correct Answer (Select via Radio):
                               </span>
                               {['A', 'B', 'C', 'D'].map((letter, idx) => {
                                 const optVal = mcOptions[idx];
@@ -2115,7 +2115,7 @@ export default function AdminPage() {
                                       name="mc_correct_radio"
                                       checked={isCorrect}
                                       onChange={() => setCorrectAnswer(optVal)}
-                                      title="Ushbu variantni to‘g‘ri javob deb belgilash"
+                                      title="Mark this option as correct answer"
                                       className="w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
                                     />
                                     <span className="w-7 text-sm sm:text-base font-black text-slate-600 dark:text-slate-300">{letter}.</span>
@@ -2142,7 +2142,7 @@ export default function AdminPage() {
                           {questionCategory === 'multiple_selection' && (
                             <div className="space-y-3 p-5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block">
-                                3. Variantlar (A–E) va To‘g‘ri Javoblar (Checkbox orqali 2 ta yoki 3 tasini belgilang):
+                                3. Options (A-E) and Correct Answers (Select 2 or 3 via Checkbox):
                               </span>
                               {['A', 'B', 'C', 'D', 'E'].map((letter, idx) => {
                                 const optVal = multiOptions[idx];
@@ -2178,7 +2178,7 @@ export default function AdminPage() {
                                 );
                               })}
                               <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 pt-1 font-semibold">
-                                Belgilangan to‘g‘ri javoblar: <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{multiCorrectAnswers.join(', ') || 'Hali belgilanmadi'}</span>
+                                Selected correct answers: <span className="font-extrabold text-indigo-600 dark:text-indigo-400">{multiCorrectAnswers.join(', ') || 'None selected yet'}</span>
                               </div>
                             </div>
                           )}
@@ -2187,7 +2187,7 @@ export default function AdminPage() {
                           {questionCategory === 'true_false_not_given' && (
                             <div className="space-y-3 p-5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block">
-                                3. To‘g‘ri Javobni Tanlang:
+                                3. Select Correct Answer:
                               </span>
                               <div className="grid grid-cols-3 gap-3">
                                 {['TRUE', 'FALSE', 'NOT GIVEN'].map((ans) => {
@@ -2215,7 +2215,7 @@ export default function AdminPage() {
                           {questionCategory === 'yes_no_not_given' && (
                             <div className="space-y-3 p-5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
                               <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200 block">
-                                3. To‘g‘ri Javobni Tanlang:
+                                3. Select Correct Answer:
                               </span>
                               <div className="grid grid-cols-3 gap-3">
                                 {['YES', 'NO', 'NOT GIVEN'].map((ans) => {
@@ -2258,7 +2258,7 @@ export default function AdminPage() {
                                         );
                                       }}
                                       className="text-xs font-bold text-amber-700 dark:text-amber-300 hover:text-amber-800 px-3 py-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/60 hover:bg-amber-200 transition-colors flex items-center gap-1 cursor-pointer self-start sm:self-auto"
-                                      title="Savol matniga tayyor jadval shablonini joylash"
+                                      title="Insert ready table template into question text"
                                     >
                                       <Table className="w-3.5 h-3.5" />
                                       <span>+ Jadval Shablonini Matnga Joylash</span>
@@ -2268,7 +2268,7 @@ export default function AdminPage() {
                                   <div className="flex flex-col sm:flex-row items-center gap-3">
                                     <label className="px-5 py-3 bg-white dark:bg-slate-800 hover:bg-amber-100/60 dark:hover:bg-amber-900/40 text-slate-800 dark:text-slate-200 border border-amber-300 dark:border-amber-700 rounded-xl text-sm font-extrabold transition-colors cursor-pointer flex items-center gap-2 shrink-0 shadow-2xs">
                                       <Upload className="w-4 h-4 text-amber-600" />
-                                      <span>{isUploadingTableImg ? 'Yuklanmoqda...' : 'Jadval Rasmini Yuklash (.png/.jpg)'}</span>
+                                      <span>{isUploadingTableImg ? 'Uploading...' : 'Upload Table Image (.png/.jpg)'}</span>
                                       <input
                                         type="file"
                                         accept="image/*"
@@ -2306,7 +2306,7 @@ export default function AdminPage() {
 
                               <div>
                                 <label className="block text-sm font-extrabold text-slate-800 dark:text-slate-200 mb-1">
-                                  3. To‘g‘ri javob so‘z(lar)i (Jadvaldagi bo‘sh joy uchun javob):
+                                  3. Correct Answer Word(s) (Answer for table blank):
                                 </label>
                                 <input
                                   type="text"
@@ -2317,7 +2317,7 @@ export default function AdminPage() {
                                   className="w-full px-4 py-3 rounded-xl border border-amber-300 dark:border-amber-700 text-sm sm:text-base focus:ring-2 focus:ring-amber-500 outline-none bg-amber-50/20 dark:bg-amber-950/20 text-slate-900 dark:text-slate-100 font-bold"
                                 />
                                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                                  * Eslatma: Talaba javob yozganda registr (katta-kichik harf) e’tiborga olinmaydi. Agar bir nechta to‘g‘ri variant bo‘lsa, ularni <code className="text-amber-600 font-bold">/</code> belgisi bilan ajrating (masalan: <code className="text-amber-600">centre / center</code>).
+                                  * Note: Answers are case-insensitive. If there are multiple acceptable variations, separate them with <code className="text-amber-600 font-bold">/</code> (e.g. <code className="text-amber-600">centre / center</code>).
                                 </p>
                               </div>
                             </div>
@@ -2369,7 +2369,7 @@ export default function AdminPage() {
 
                               <div className="pt-1">
                                 <label className="block text-sm font-extrabold text-slate-800 dark:text-slate-200 mb-1.5">
-                                  Ushbu savol uchun to‘g‘ri javob (masalan, iii yoki B):
+                                  Correct answer for this question (e.g., iii or B):
                                 </label>
                                 <input
                                   type="text"
@@ -2392,7 +2392,7 @@ export default function AdminPage() {
                               <div className="flex flex-col sm:flex-row items-center gap-3">
                                 <label className="px-5 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-650 text-slate-800 dark:text-slate-200 rounded-xl text-sm font-extrabold transition-colors cursor-pointer flex items-center gap-2 shrink-0">
                                   <Upload className="w-4 h-4" />
-                                  <span>{isUploadingWritingImg ? 'Yuklanmoqda...' : 'Rasm Yuklash (.png/.jpg)'}</span>
+                                  <span>{isUploadingWritingImg ? 'Uploading...' : 'Upload Image (.png/.jpg)'}</span>
                                   <input
                                     type="file"
                                     accept="image/*"
@@ -2423,7 +2423,7 @@ export default function AdminPage() {
                               <div className="flex items-center gap-2">
                                 <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                 <span className="text-sm font-extrabold text-slate-800 dark:text-slate-200">
-                                  💡 Javob Tushuntirishi (Explanation) - Ixtiyoriy:
+                                  💡 Answer Explanation & Rationale (Optional):
                                 </span>
                               </div>
                               <div className="flex items-center gap-2">
@@ -2455,7 +2455,7 @@ export default function AdminPage() {
                                       <span>Tushuntirish matni (Matn):</span>
                                     </span>
                                     <span className="text-xs text-slate-400 font-normal">
-                                      (Matn yozmasdan faqat fayl saqlash ham mumkin)
+                                      (File only without text is allowed)
                                     </span>
                                   </label>
                                   <textarea
@@ -2475,7 +2475,7 @@ export default function AdminPage() {
                                       <span>Komp’yuterdan fayl biriktirish (Rasm, Audio yoki Video):</span>
                                     </span>
                                     <span className="text-xs text-slate-400 font-normal">
-                                      (Faylsiz faqat matnni saqlash ham mumkin)
+                                      (Text only without file is allowed)
                                     </span>
                                   </label>
 
@@ -2495,7 +2495,7 @@ export default function AdminPage() {
                                       <Upload className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors shrink-0" />
                                       <div className="text-left">
                                         <span className="text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
-                                          {isUploadingExpMedia ? 'Fayl yuklanmoqda...' : 'Komp’yuterdan fayl tanlash'}
+                                          {isUploadingExpMedia ? 'Uploading file...' : 'Choose file from computer'}
                                         </span>
                                         <span className="block text-xs text-slate-500 dark:text-slate-400">
                                           Rasm (.png, .jpg), Audio (.mp3) yoki Video (.mp4)
@@ -2531,7 +2531,7 @@ export default function AdminPage() {
                                           className="px-3 py-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-100 dark:hover:bg-rose-950/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
                                         >
                                           <X className="w-4 h-4" />
-                                          <span>O‘chirish</span>
+                                          <span>Delete</span>
                                         </button>
                                       </div>
 
@@ -2579,7 +2579,7 @@ export default function AdminPage() {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-slate-200 dark:border-slate-700">
                             <div className="flex items-center gap-3">
                               <label className="text-sm font-extrabold text-slate-800 dark:text-slate-200 whitespace-nowrap">
-                                Savol Balli:
+                                Question Score / Points:
                               </label>
                               <input
                                 type="number"
@@ -2596,7 +2596,7 @@ export default function AdminPage() {
                               className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm sm:text-base font-extrabold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
                             >
                               <Plus className="w-5 h-5" />
-                              <span>Savolni Saqlash</span>
+                              <span>Save Question</span>
                             </button>
                           </div>
                         </form>
@@ -2616,7 +2616,7 @@ export default function AdminPage() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
               <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                Bo‘limni Tahrirlash ({editingSection.type})
+                Edit Section ({editingSection.type})
               </h4>
               <button
                 type="button"
@@ -2630,7 +2630,7 @@ export default function AdminPage() {
             <form onSubmit={handleSaveSectionEdit} className="p-6 overflow-y-auto space-y-4 text-sm">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Bo‘lim Nomi (Title)
+                  Section Title
                 </label>
                 <input
                   type="text"
@@ -2706,7 +2706,7 @@ export default function AdminPage() {
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
               <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                Savolni Tahrirlash (#{editingQuestion.order_index})
+                Edit Question (#{editingQuestion.order_index})
               </h4>
               <button
                 type="button"
@@ -2720,7 +2720,7 @@ export default function AdminPage() {
             <form onSubmit={handleSaveQuestionEdit} className="p-6 overflow-y-auto space-y-4 text-sm">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Savol Matni (Question Text)
+                  Question Text
                 </label>
                 <textarea
                   rows={3}
@@ -2732,7 +2732,7 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  To‘g‘ri Javob (Alternativalar uchun | bilan ajrating: football | soccer)
+                  Correct Answer (Separate alternatives with |: football | soccer)
                 </label>
                 <input
                   type="text"
@@ -2802,10 +2802,10 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <h4 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
-                    Savol Tushuntirishini Tahrirlash
+                    Edit Answer Explanation
                   </h4>
                   <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                    Savol #{editingExpQuestion.order_index} • <span className="font-bold text-slate-700 dark:text-slate-300">{editingExpQuestion.question_type.replace('_', ' ')}</span>
+                    Question #{editingExpQuestion.order_index} • <span className="font-bold text-slate-700 dark:text-slate-300">{editingExpQuestion.question_type.replace('_', ' ')}</span>
                   </p>
                 </div>
               </div>
@@ -2823,12 +2823,12 @@ export default function AdminPage() {
               {/* Question Context */}
               <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700 text-sm space-y-2">
                 <div className="font-semibold text-slate-800 dark:text-slate-200 leading-relaxed">
-                  <span className="font-extrabold text-slate-500 mr-1.5">Savol:</span>
-                  {editingExpQuestion.question_text || '(Savol matnsiz)'}
+                  <span className="font-extrabold text-slate-500 mr-1.5">Question:</span>
+                  {editingExpQuestion.question_text || '(No question text)'}
                 </div>
                 {editingExpQuestion.correct_answer && (
                   <div className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm sm:text-base">
-                    ✓ To‘g‘ri javob: {editingExpQuestion.correct_answer}
+                    ✓ Correct answer: {editingExpQuestion.correct_answer}
                   </div>
                 )}
               </div>
@@ -2853,11 +2853,11 @@ export default function AdminPage() {
                   rows={4}
                   value={editExpText}
                   onChange={(e) => setEditExpText(e.target.value)}
-                  placeholder="Nega aynan shu javob to‘g‘ri? Matndagi yoki audiodagi kalit dalillar va sinonimlarni tushuntiring..."
+                  placeholder="Explain why this answer is correct with key evidence, synonyms, and rationale from the passage or audio..."
                   className="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
                 />
                 <span className="text-xs text-slate-400 block">
-                  Matn yozmasdan faqat fayl saqlash yoki ikkalasini birga saqlash mumkin.
+                  File only, text only, or both can be saved together.
                 </span>
               </div>
 
@@ -2869,7 +2869,7 @@ export default function AdminPage() {
                     <span>Komp’yuterdan fayl biriktirish (Rasm, Audio yoki Video):</span>
                   </span>
                   <span className="text-xs text-slate-400 font-normal">
-                    (Faylsiz faqat matnni saqlash ham mumkin)
+                    (Text only without file is also supported)
                   </span>
                 </label>
 
@@ -2889,7 +2889,7 @@ export default function AdminPage() {
                     <Upload className="w-6 h-6 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
                     <div className="text-left">
                       <span className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600">
-                        {isUploadingEditExpMedia ? 'Fayl yuklanmoqda...' : 'Komp’yuterdan fayl tanlash'}
+                        {isUploadingEditExpMedia ? 'Uploading file...' : 'Choose file from computer'}
                       </span>
                       <span className="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         Rasm (.png, .jpg), Audio (.mp3) yoki Video (.mp4)
@@ -2925,7 +2925,7 @@ export default function AdminPage() {
                         className="px-3 py-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-100 dark:hover:bg-rose-950/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
                       >
                         <X className="w-4 h-4" />
-                        <span>O‘chirish</span>
+                        <span>Delete</span>
                       </button>
                     </div>
 

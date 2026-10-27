@@ -106,7 +106,7 @@ export const IELTS_QUESTION_CATEGORIES: Record<IeltsQuestionCategory, QuestionCa
 };
 
 /**
- * Aniq IELTS savol turini aniqlash algoritmi
+ * Algorithm to detect precise IELTS / CEFR question category
  */
 export function getQuestionCategory(q: Question): IeltsQuestionCategory {
   if (q.question_type === 'essay') return 'essay';

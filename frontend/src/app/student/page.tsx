@@ -773,7 +773,7 @@ function StudentDashboardContent() {
       const session = await apiStartRandomMock(forceNew);
       router.push(`/student/test/${session.id}`);
     } catch (e: any) {
-      alert('Mock imtihonni boshlashda xatolik: ' + e.message);
+      alert('Error starting mock exam: ' + e.message);
       setStartingMock(false);
     }
   };
@@ -791,20 +791,20 @@ function StudentDashboardContent() {
       const secQuery = targetSectionIndex !== undefined ? `?section=${targetSectionIndex}` : '';
       router.push(`/student/test/${session.id}${secQuery}`);
     } catch (e: any) {
-      alert('Testni boshlashda xatolik: ' + e.message);
+      alert('Error starting test: ' + e.message);
       setStartingTestId(null);
     }
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'Yaqinda';
+    if (!dateStr) return 'Recently';
     try {
       const d = new Date(dateStr);
       return isNaN(d.getTime())
-        ? 'Yaqinda'
-        : d.toLocaleDateString('uz-UZ') + ' ' + d.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+        ? 'Recently'
+        : d.toLocaleDateString('en-US') + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     } catch {
-      return 'Yaqinda';
+      return 'Recently';
     }
   };
 
@@ -1026,7 +1026,7 @@ function StudentDashboardContent() {
     return (
       <div className="py-24 text-center">
         <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-600 dark:text-slate-400 font-semibold text-sm">Imtihonlar bazasi yuklanmoqda...</p>
+        <p className="text-slate-600 dark:text-slate-400 font-semibold text-sm">Loading examination database...</p>
       </div>
     );
   }
@@ -1115,7 +1115,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#0ea5e9] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#0ea5e9] p-5 shadow-xs hover:border-sky-500/60 dark:hover:border-sky-400/60 hover:shadow-xl hover:shadow-sky-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           {/* Top: Passage Title + Status Badge + Start Button */}
           <div className="flex items-center justify-between gap-3">
@@ -1177,7 +1177,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#0ea5e9] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#0ea5e9] p-5 shadow-xs hover:border-sky-500/60 dark:hover:border-sky-400/60 hover:shadow-xl hover:shadow-sky-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -1248,7 +1248,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#0a5c6e] dark:border-l-[#087ea4] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#0a5c6e] dark:border-l-[#087ea4] p-5 shadow-xs hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-xl hover:shadow-cyan-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           {/* Top: Section Title + Status Badge + Start Button */}
           <div className="flex items-center justify-between gap-3">
@@ -1311,7 +1311,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#0a5c6e] dark:border-l-[#087ea4] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#0a5c6e] dark:border-l-[#087ea4] p-5 shadow-xs hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-xl hover:shadow-cyan-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -1382,7 +1382,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#059669] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#059669] p-5 shadow-xs hover:border-emerald-500/60 dark:hover:border-emerald-400/60 hover:shadow-xl hover:shadow-emerald-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -1460,7 +1460,7 @@ function StudentDashboardContent() {
         <div
           key={test.id}
           style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-          className="animate-card-cascade bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 border-l-[4px] border-l-[#7a2259] p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+          className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-2xl border border-slate-200/80 dark:border-white/10 border-l-[4px] border-l-[#7a2259] p-5 shadow-xs hover:border-purple-500/60 dark:hover:border-purple-400/60 hover:shadow-xl hover:shadow-purple-500/5 transition-all flex flex-col justify-between space-y-4 group"
         >
           {/* Top: Title + Status Badge + Start Button */}
           <div className="flex items-center justify-between gap-3">
@@ -1568,7 +1568,7 @@ function StudentDashboardContent() {
       <div
         key={test.id}
         style={{ animationDelay: `${Math.min(index, 15) * 45}ms` }}
-        className="animate-card-cascade bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:shadow-lg transition-all duration-200 group"
+        className="animate-card-cascade bg-white/85 dark:bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-xs hover:border-amber-500/60 dark:hover:border-amber-400/60 hover:shadow-xl hover:shadow-amber-500/5 transition-all duration-300 group"
       >
         <div>
           {/* Top Header Row: Title on Left, Status + Start Button on Right */}
@@ -1772,12 +1772,12 @@ function StudentDashboardContent() {
               Online Speaking Partner
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Haqiqiy nomzodlar bilan jonli audio yoki video orqali IELTS Speaking mashq qiling. Part 1, 2 va 3 bo‘yicha navbatma-navbat savol bering va javob bering.
+              Practice IELTS Speaking with real candidates via live audio or video. Take turns asking and answering questions across Parts 1, 2, and 3.
             </p>
 
             <div className="pt-2 space-y-3">
               <label className="text-xs font-black uppercase tracking-wider text-slate-400">
-                Maqsadli Band (Target Band) tanlang:
+                Select Target Band:
               </label>
               <div className="flex flex-wrap gap-2.5">
                 {['Band 6.0 – 6.5', 'Band 7.0 – 7.5', 'Band 8.0+'].map((b, i) => (
@@ -1797,15 +1797,15 @@ function StudentDashboardContent() {
 
             <div className="pt-4 flex items-center gap-3">
               <button
-                onClick={() => alert('Online Speaking Partner xizmati test rejimida!')}
+                onClick={() => alert('Online Speaking Partner feature is currently in beta!')}
                 className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Suhbatdosh qidirishni boshlash</span>
+                <span>Start Partner Search</span>
               </button>
               <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Hozirda 14 ta nomzod onlayn
+                14 candidates online now
               </span>
             </div>
           </div>
@@ -1827,10 +1827,10 @@ function StudentDashboardContent() {
 
           <div className="space-y-3">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-              Mening Audio Yozuvlarim (My Recordings)
+              My Audio Recordings
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Speaking bo‘limi bo‘yicha topshirgan barcha audio yozuvlaringiz va AI tahlillari.
+              All your submitted Speaking audio recordings and AI evaluation feedback.
             </p>
           </div>
 
@@ -1840,8 +1840,8 @@ function StudentDashboardContent() {
           }).length === 0 ? (
             <div className="p-12 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
               <Mic className="w-10 h-10 text-slate-400 mx-auto mb-2 opacity-50" />
-              <p className="font-bold text-slate-700 dark:text-slate-300">Hozircha audio yozuvlar mavjud emas</p>
-              <p className="text-xs text-slate-400 mt-1">Speaking Part 1, 2 yoki 3 bo‘yicha mashq qilib birinchi yozuvingizni yarating.</p>
+              <p className="font-bold text-slate-700 dark:text-slate-300">No audio recordings yet</p>
+              <p className="text-xs text-slate-400 mt-1">Practice Speaking Part 1, 2, or 3 to create your first recording.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -1869,7 +1869,7 @@ function StudentDashboardContent() {
                         href={`/student/results/${sess.id}`}
                         className="px-4 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-2xs"
                       >
-                        Natijani ko‘rish
+                        View Results
                       </Link>
                     </div>
                   );
@@ -1902,10 +1902,10 @@ function StudentDashboardContent() {
 
           <div className="space-y-3">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-              Mening Insholarim va Band Baholari (Writing Feedback)
+              My Essays & Band Scores
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Writing bo‘limi bo‘yicha topshirgan Task 1 va Task 2 insholaringiz, AI tahlili va 4 ta mezon (Task Achievement, Coherence, Lexical, Grammar) bo‘yicha natijalar.
+              Submitted Task 1 and Task 2 essays, AI evaluation, and scores across the 4 criteria (Task Achievement, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy).
             </p>
           </div>
 
@@ -1915,8 +1915,8 @@ function StudentDashboardContent() {
           }).length === 0 ? (
             <div className="p-12 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
               <PenTool className="w-10 h-10 text-slate-400 mx-auto mb-2 opacity-50" />
-              <p className="font-bold text-slate-700 dark:text-slate-300">Hozircha insholar yozilmagan</p>
-              <p className="text-xs text-slate-400 mt-1">Writing testlaridan birini boshlab birinchi inshongizni topshiring.</p>
+              <p className="font-bold text-slate-700 dark:text-slate-300">No essays submitted yet</p>
+              <p className="text-xs text-slate-400 mt-1">Start one of the Writing tests above to submit your first essay.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -1944,7 +1944,7 @@ function StudentDashboardContent() {
                         href={`/student/results/${sess.id}`}
                         className="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#7a2259] text-white hover:bg-[#641a47] transition-colors shadow-2xs"
                       >
-                        Natijani ko‘rish
+                        View Results
                       </Link>
                     </div>
                   );
@@ -1975,10 +1975,10 @@ function StudentDashboardContent() {
 
           <div className="space-y-3">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white">
-              To‘liq Mock Imtihon Natijalarim (Mock Results)
+              My Full Mock Exam Results
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Topshirilgan barcha to‘liq Mock imtihonlari, modullar bo‘yicha to‘plangan ballar va umumiy CEFR / IELTS darajangiz.
+              All completed Full Mock exams, sectional scores, and your overall CEFR / IELTS band level.
             </p>
           </div>
 
@@ -1996,9 +1996,9 @@ function StudentDashboardContent() {
             <div className="p-12 text-center bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500 space-y-4">
               <Award className="w-12 h-12 text-amber-500 mx-auto opacity-70" />
               <div>
-                <p className="font-bold text-slate-700 dark:text-slate-300 text-base">Hozircha to‘liq mock topshirilmagan</p>
+                <p className="font-bold text-slate-700 dark:text-slate-300 text-base">No full mock exams completed yet</p>
                 <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
-                  Listening, Reading, Writing va Speaking modullarini birlashtirgan 4 modulli to‘liq imtihon topshiring va umumiy CEFR / Band ballingizni biling.
+                  Take a complete 4-skill examination combining Listening, Reading, Writing, and Speaking to determine your overall CEFR level and band score.
                 </p>
               </div>
               <button
@@ -2007,7 +2007,7 @@ function StudentDashboardContent() {
                 className="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black text-sm transition-all shadow-md active:scale-95 disabled:opacity-50 cursor-pointer inline-flex items-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Tasodifiy Mock Boshlash</span>
+                <span>Start Random Mock</span>
               </button>
             </div>
           ) : (
@@ -2043,25 +2043,25 @@ function StudentDashboardContent() {
                           </h4>
                           {sess.result && (
                             <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-500 text-white shadow-xs">
-                              {sess.result.cefr_level ? `CEFR ${sess.result.cefr_level}` : 'Baholandi'}
+                              {sess.result.cefr_level ? `CEFR ${sess.result.cefr_level}` : 'Graded'}
                             </span>
                           )}
                         </div>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                          Boshlangan sana: {formatDate(sess.started_at)} • Holati:{' '}
+                          Date started: {formatDate(sess.started_at)} • Status:{' '}
                           <span className="font-bold">
                             {sess.status === 'in_progress'
                               ? isExpired
-                                ? 'Vaqti tugagan'
-                                : 'Jarayonda'
+                                ? 'Expired'
+                                : 'In Progress'
                               : sess.status === 'submitted'
-                              ? 'Tekshirilmoqda'
-                              : 'Baholandi'}
+                              ? 'Under Review'
+                              : 'Graded'}
                           </span>
                         </p>
                         {sess.result && (
                           <div className="text-xs font-semibold text-slate-600 dark:text-slate-300 pt-1">
-                            To‘plangan ball: <b className="text-slate-900 dark:text-white">{sess.result.total_score}</b> / {sess.result.max_score} ({sess.result.percentage}%)
+                            Score: <b className="text-slate-900 dark:text-white">{sess.result.total_score}</b> / {sess.result.max_score} ({sess.result.percentage}%)
                           </div>
                         )}
                       </div>
@@ -2072,14 +2072,14 @@ function StudentDashboardContent() {
                             href={`/student/test/${sess.id}`}
                             className="px-5 py-2 rounded-xl text-xs font-black bg-amber-600 hover:bg-amber-700 text-white transition-colors shadow-2xs"
                           >
-                            Davom ettirish
+                            Continue
                           </Link>
                         ) : (
                           <Link
                             href={`/student/results/${sess.id}`}
                             className="px-5 py-2 rounded-xl text-xs font-black bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 transition-colors shadow-2xs"
                           >
-                            Natijani to‘liq ko‘rish
+                            View Full Results
                           </Link>
                         )}
                       </div>
@@ -2166,34 +2166,70 @@ function StudentDashboardContent() {
                   </div>
                 )}
 
-                {/* Row 4: Progress Bar & Pick One Button */}
-                <div className="space-y-2 pt-1">
-                  <div className="w-56 sm:w-64 h-1.5 bg-white/25 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-white rounded-full transition-all duration-500"
-                      style={{
-                        width: `${Math.min(
-                          100,
-                          Math.round((completedCount / Math.max(1, totalCount)) * 100)
-                        )}%`,
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-4 flex-wrap pt-0.5">
-                    <span className="text-xs sm:text-sm font-bold text-white/90">
-                      {completedCount} / {activeTab === 'writing' ? 100 : totalCount} tests completed
-                    </span>
+                {/* Row 4: Action Buttons for Mock OR Progress Bar & Pick One Button */}
+                {activeTab === 'mock' ? (
+                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={() => handleStartRandomMock(false)}
+                      disabled={startingMock}
+                      className="px-6 py-3 bg-white text-rose-900 hover:bg-slate-100 font-black rounded-xl text-xs sm:text-sm shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer active:scale-95"
+                    >
+                      {startingMock ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-rose-900 border-t-transparent rounded-full animate-spin" />
+                          <span>Preparing Mock Exam...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Zap className="w-4 h-4 fill-rose-900 text-rose-900" />
+                          <span>Start Full Mock Exam</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
 
                     <button
-                      onClick={handlePickRandomTest}
-                      className={`bg-white hover:bg-slate-100 ${theme.stepBg} font-extrabold text-xs px-4 py-2 rounded-full shadow-md flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer`}
+                      onClick={() => handleStartRandomMock(true)}
+                      disabled={startingMock}
+                      className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs sm:text-sm transition-all border border-white/20 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer active:scale-95"
                     >
-                      <Shuffle className={`w-3.5 h-3.5 ${theme.stepBg}`} />
-                      <span>Pick one for me</span>
+                      <RefreshCw className="w-4 h-4" />
+                      <span>New Variant</span>
                     </button>
+
+                    <span className="text-xs text-white/80 font-medium ml-1">
+                      180 minutes • 4 modules (Listening, Reading, Writing, Speaking)
+                    </span>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-2 pt-1">
+                    <div className="w-56 sm:w-64 h-1.5 bg-white/25 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-white rounded-full transition-all duration-500"
+                        style={{
+                          width: `${Math.min(
+                            100,
+                            Math.round((completedCount / Math.max(1, totalCount)) * 100)
+                          )}%`,
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-4 flex-wrap pt-0.5">
+                      <span className="text-xs sm:text-sm font-bold text-white/90">
+                        {completedCount} / {activeTab === 'writing' ? 100 : totalCount} tests completed
+                      </span>
+
+                      <button
+                        onClick={handlePickRandomTest}
+                        className={`bg-white hover:bg-slate-100 ${theme.stepBg} font-extrabold text-xs px-4 py-2 rounded-full shadow-md flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer`}
+                      >
+                        <Shuffle className={`w-3.5 h-3.5 ${theme.stepBg}`} />
+                        <span>Pick one for me</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Row 5: FILTER BY SECTION (For Listening, hidden when Full Listening is selected) */}
                 {activeTab === 'listening' && listeningSectionFilter !== 'full' && (
@@ -2386,103 +2422,105 @@ function StudentDashboardContent() {
             )}
 
             {/* Subheader: CHOOSE TEST + Cambridge Book Pills + Search Input */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-2">
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none flex-wrap sm:flex-nowrap">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 shrink-0 mr-1">
-                  {activeTab === 'reading'
-                    ? 'CHOOSE ANY READING TEST'
-                    : activeTab === 'listening'
-                    ? 'CHOOSE ANY LISTENING TEST'
-                    : activeTab === 'speaking'
-                    ? 'CHOOSE ANY SPEAKING TEST'
-                    : 'CHOOSE TEST'}
-                </span>
-                <button
-                  onClick={() => setSelectedBook('all')}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                    selectedBook === 'all'
-                      ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
-                  }`}
-                >
-                  All ({currentCategoryTests.length})
-                </button>
-                {activeTab === 'writing' && (
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {[
-                      { id: 'all', label: 'All Tasks' },
-                      { id: '1', label: 'Task 1 Reports' },
-                      { id: '2', label: 'Task 2 Essays' },
-                    ].map((tf) => (
-                      <button
-                        key={tf.id}
-                        onClick={() => {
-                          setWritingTaskFilter(tf.id as any);
-                          const url = new URL(window.location.href);
-                          url.searchParams.set('tab', 'writing');
-                          if (tf.id !== 'all') {
-                            url.searchParams.set('task', tf.id);
-                          } else {
-                            url.searchParams.delete('task');
-                          }
-                          window.history.replaceState({}, '', url.toString());
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                          writingTaskFilter === tf.id
-                            ? 'bg-[#7a2259] text-white shadow-xs'
-                            : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100'
-                        }`}
-                      >
-                        {tf.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {availableBooks.map((b) => (
+            {activeTab !== 'mock' && (
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-2">
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none flex-wrap sm:flex-nowrap">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 shrink-0 mr-1">
+                    {activeTab === 'reading'
+                      ? 'CHOOSE ANY READING TEST'
+                      : activeTab === 'listening'
+                      ? 'CHOOSE ANY LISTENING TEST'
+                      : activeTab === 'speaking'
+                      ? 'CHOOSE ANY SPEAKING TEST'
+                      : 'CHOOSE TEST'}
+                  </span>
                   <button
-                    key={b}
-                    onClick={() => setSelectedBook(b)}
+                    onClick={() => setSelectedBook('all')}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                      selectedBook === b
-                        ? `${theme.buttonBg} ring-1 ${theme.ringColor}`
+                      selectedBook === 'all'
+                        ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-xs'
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
                     }`}
                   >
-                    Book {b}
+                    All ({currentCategoryTests.length})
                   </button>
-                ))}
-              </div>
+                  {activeTab === 'writing' && (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {[
+                        { id: 'all', label: 'All Tasks' },
+                        { id: '1', label: 'Task 1 Reports' },
+                        { id: '2', label: 'Task 2 Essays' },
+                      ].map((tf) => (
+                        <button
+                          key={tf.id}
+                          onClick={() => {
+                            setWritingTaskFilter(tf.id as any);
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('tab', 'writing');
+                            if (tf.id !== 'all') {
+                              url.searchParams.set('task', tf.id);
+                            } else {
+                              url.searchParams.delete('task');
+                            }
+                            window.history.replaceState({}, '', url.toString());
+                          }}
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                            writingTaskFilter === tf.id
+                              ? 'bg-[#7a2259] text-white shadow-xs'
+                              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                          }`}
+                        >
+                          {tf.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {availableBooks.map((b) => (
+                    <button
+                      key={b}
+                      onClick={() => setSelectedBook(b)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                        selectedBook === b
+                          ? `${theme.buttonBg} ring-1 ${theme.ringColor}`
+                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
+                      }`}
+                    >
+                      Book {b}
+                    </button>
+                  ))}
+                </div>
 
-              {/* Search by test name or topic... */}
-              <div className="relative w-full md:w-80">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by test name or topic..."
-                  className="w-full pl-9 pr-9 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-400/20 shadow-xs"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
+                {/* Search by test name or topic... */}
+                <div className="relative w-full md:w-80">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by test name or topic..."
+                    className="w-full pl-9 pr-9 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-400/20 shadow-xs"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Row of Question Type Filters (Before starting test) */}
-            {(activeTab === 'reading' || activeTab === 'listening') && (
+            {activeTab !== 'mock' && (activeTab === 'reading' || activeTab === 'listening') && (
               <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-none flex-wrap border-t border-slate-100 dark:border-slate-800">
                 <span className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0 mr-1 flex items-center gap-1.5">
                   <Filter className="w-3.5 h-3.5" />
-                  <span>SAVOL TURI:</span>
+                  <span>QUESTION TYPE:</span>
                 </span>
                 {[
-                  { id: 'all', label: 'Barchasi' },
+                  { id: 'all', label: 'All' },
                   { id: 'true_false_not_given', label: 'True / False / NG' },
                   { id: 'yes_no_not_given', label: 'Yes / No / NG' },
                   { id: 'multiple_choice', label: 'Multiple Choice' },
@@ -2510,117 +2548,68 @@ function StudentDashboardContent() {
 
           {/* 2. Test Grid (3 columns on desktop matching screenshot) */}
           <section className="space-y-6">
-        {activeTab === 'mock' && (
-          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-slate-700 mb-6">
-            <div className="max-w-2xl space-y-3 relative z-10">
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 uppercase tracking-wider">
-                  Full Mock
-                </span>
-                <span className="text-xs text-slate-300">180 daqiqa • 4 ta modul</span>
-              </div>
-
-              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-                Tasodifiy To‘liq Mock Imtihon
-              </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Barcha modullar bo‘yicha tasodifiy Listening (40 savol), Reading (40 savol), Writing (Task 1 & 2) va Speaking (3 qism) bitta to‘liq imtihonga jamlanadi.
-              </p>
-
-              <div className="pt-3 flex flex-wrap items-center gap-3">
-                <button
-                  onClick={() => handleStartRandomMock(false)}
-                  disabled={startingMock}
-                  className="px-6 py-3 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-bold rounded-xl text-xs sm:text-sm shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
-                >
-                  {startingMock ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Mock Tayyorlanmoqda...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-4 h-4 fill-white" />
-                      <span>Tasodifiy Mock Boshlash</span>
-                      <ChevronRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={() => handleStartRandomMock(true)}
-                  disabled={startingMock}
-                  className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl text-xs sm:text-sm transition-all border border-white/20 flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  <span>Yangi Variant</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {activeTab === 'mock' ? (
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xs space-y-5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
+          <div className="relative overflow-hidden bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-slate-200/80 dark:border-white/10 p-6 sm:p-8 shadow-xl shadow-slate-900/5 dark:shadow-black/20 space-y-6 group">
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-gradient-to-br from-amber-500/10 to-rose-500/10 rounded-full blur-3xl pointer-events-none group-hover:from-amber-500/20 group-hover:to-rose-500/20 transition-all duration-700" />
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-amber-500/10 dark:bg-amber-400/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-                  Mock Imtihon qanday shakllantiriladi?
+                <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                  How is the Full Mock Exam Structured?
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Tizimdagi mavjud testlardan quyidagi modullar avtomatik tasodifiy tanlanadi:
+                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                  The following 4 modules are dynamically assembled from our official examination question bank:
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 rounded-2xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/40 space-y-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+              <div className="p-4.5 rounded-2xl bg-cyan-50/50 dark:bg-cyan-950/20 backdrop-blur-md border border-cyan-200/50 dark:border-cyan-800/30 hover:border-cyan-400/70 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 group/module">
                 <div className="flex items-center justify-between text-cyan-800 dark:text-cyan-300 font-extrabold text-sm">
                   <span className="flex items-center gap-1.5"><Headphones className="w-4 h-4" /> 1. Listening</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/60 font-black">{listeningTests.length} ta test</span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-cyan-100/80 dark:bg-cyan-900/60 font-black">{listeningTests.length} tests</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">40 ta savol, 4 ta qism audio topshiriqlari.</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-1.5">40 questions across 4 audio sections (30 mins + 2 mins review).</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 space-y-1">
+              <div className="p-4.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 backdrop-blur-md border border-emerald-200/50 dark:border-emerald-800/30 hover:border-emerald-400/70 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 group/module">
                 <div className="flex items-center justify-between text-emerald-800 dark:text-emerald-300 font-extrabold text-sm">
                   <span className="flex items-center gap-1.5"><BookOpen className="w-4 h-4" /> 2. Reading</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 font-black">{readingTests.length} ta test</span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100/80 dark:bg-emerald-900/60 font-black">{readingTests.length} tests</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">40 ta savol, 3 ta akademik murakkab matn.</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-1.5">40 questions across 3 academic passages (60 mins).</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 space-y-1">
+              <div className="p-4.5 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 backdrop-blur-md border border-purple-200/50 dark:border-purple-800/30 hover:border-purple-400/70 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300 group/module">
                 <div className="flex items-center justify-between text-purple-800 dark:text-purple-300 font-extrabold text-sm">
                   <span className="flex items-center gap-1.5"><PenTool className="w-4 h-4" /> 3. Writing</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/60 font-black">{writingTests.length} ta test</span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-100/80 dark:bg-purple-900/60 font-black">{writingTests.length} tests</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Task 1 (Hisobot) & Task 2 (Kengaytirilgan Insho).</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-1.5">Task 1 (Visual Report) & Task 2 (Discursive Essay) (60 mins).</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40 space-y-1">
+              <div className="p-4.5 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 backdrop-blur-md border border-rose-200/50 dark:border-rose-800/30 hover:border-rose-400/70 hover:shadow-lg hover:shadow-rose-500/10 transition-all duration-300 group/module">
                 <div className="flex items-center justify-between text-rose-800 dark:text-rose-300 font-extrabold text-sm">
                   <span className="flex items-center gap-1.5"><Mic className="w-4 h-4" /> 4. Speaking</span>
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/60 font-black">{speakingTests.length} ta test</span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-100/80 dark:bg-rose-900/60 font-black">{speakingTests.length} tests</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">Part 1, 2 va 3 bo‘yicha to‘liq ovozli suhbat.</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-1.5">Full interactive interview covering Parts 1, 2, and 3 (11–14 mins).</p>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-300">
-              <span className="flex items-center gap-2">
+            <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200/70 dark:border-white/5 flex items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-300">
+              <span className="flex items-center gap-2 font-medium">
                 <Shuffle className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Yuqoridagi <b>"Tasodifiy Mock Boshlash"</b> tugmasi orqali to‘liq 180 daqiqalik sinov imtihonini boshlashingiz mumkin.</span>
+                <span>Click the <b className="text-slate-900 dark:text-white">"Start Full Mock Exam"</b> button above to begin your complete 180-minute practice test.</span>
               </span>
             </div>
           </div>
         ) : displayedTests.length === 0 ? (
           <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
-            <p className="font-bold text-slate-700 dark:text-slate-300">Testlar topilmadi</p>
-            <p className="text-xs text-slate-400 mt-1">Filtr yoki qidiruv parametrlarini o‘zgartirib ko‘ring.</p>
+            <p className="font-bold text-slate-700 dark:text-slate-300">No tests found</p>
+            <p className="text-xs text-slate-400 mt-1">Try adjusting your filter or search query.</p>
           </div>
         ) : (
           <div
@@ -2638,12 +2627,12 @@ function StudentDashboardContent() {
       <section className="space-y-4 pt-6 border-t border-slate-200/80 dark:border-slate-800">
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5 text-indigo-600" />
-          Testlar Tarixi va Natijalarim
+          Test History & Results
         </h2>
 
         {safeHistory.length === 0 ? (
           <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm shadow-xs">
-            Siz hali birorta ham test topshirmagansiz. Yuqoridagi testlardan birini boshlang!
+            You haven&apos;t taken any tests yet. Choose one from above to get started!
           </div>
         ) : (
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
@@ -2651,12 +2640,12 @@ function StudentDashboardContent() {
               <table className="w-full text-left text-sm">
                 <thead className="bg-slate-100/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 text-xs uppercase font-bold border-b border-slate-200 dark:border-slate-800">
                   <tr>
-                    <th className="py-3.5 px-4">Test Nomi</th>
-                    <th className="py-3.5 px-4">Boshlangan Sana</th>
-                    <th className="py-3.5 px-4">Holati</th>
-                    <th className="py-3.5 px-4">To‘plangan Ball / Foiz</th>
-                    <th className="py-3.5 px-4">CEFR Daraja</th>
-                    <th className="py-3.5 px-4 text-right">Amal</th>
+                    <th className="py-3.5 px-4">Test Title</th>
+                    <th className="py-3.5 px-4">Date Started</th>
+                    <th className="py-3.5 px-4">Status</th>
+                    <th className="py-3.5 px-4">Score / Percentage</th>
+                    <th className="py-3.5 px-4">CEFR Level</th>
+                    <th className="py-3.5 px-4 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -2678,20 +2667,20 @@ function StudentDashboardContent() {
                           {s.status === 'in_progress' ? (
                             isExpired ? (
                               <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300">
-                                Vaqti tugagan
+                                Expired
                               </span>
                             ) : (
                               <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
-                                Jarayonda
+                                In Progress
                               </span>
                             )
                           ) : s.status === 'submitted' ? (
                             <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300">
-                              Tekshirilmoqda
+                              Under Review
                             </span>
                           ) : (
                             <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
-                              Baholandi
+                              Graded
                             </span>
                           )}
                         </td>
@@ -2730,24 +2719,24 @@ function StudentDashboardContent() {
                                 href={`/student/test/${s.id}`}
                                 className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 px-3 py-1.5 rounded-xl transition-all"
                               >
-                                Davom ettirish
+                                Continue
                               </Link>
                             ) : (
                               <Link
                                 href={`/student/results/${s.id}`}
                                 className="text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 px-3 py-1.5 rounded-xl transition-all"
                               >
-                                Natijani ko‘rish
+                                View Results
                               </Link>
                             )}
                             <button
                               onClick={() => handleStartTest(s.test_id, true)}
                               disabled={startingTestId === s.test_id}
                               className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 px-2.5 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0 cursor-pointer"
-                              title="Ushbu testni qaytadan boshlash"
+                              title="Retake this test"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
-                              <span className="hidden sm:inline">Qayta</span>
+                              <span className="hidden sm:inline">Retake</span>
                             </button>
                           </div>
                         </td>
@@ -2770,7 +2759,7 @@ export default function StudentDashboard() {
       fallback={
         <div className="py-24 text-center">
           <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400 font-semibold text-sm">Yuklanmoqda...</p>
+          <p className="text-slate-600 dark:text-slate-400 font-semibold text-sm">Loading...</p>
         </div>
       }
     >

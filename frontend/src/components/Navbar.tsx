@@ -145,7 +145,7 @@ function NavbarContent() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-[#182235]/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800/80 transition-colors">
+    <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-white/10 shadow-xs transition-colors">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 h-20 flex items-center justify-between gap-4">
         {/* Left: Brand Logo & Title */}
         <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
@@ -468,7 +468,7 @@ function NavbarContent() {
                   <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 space-y-3 z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="pb-3 border-b border-slate-200/80 dark:border-slate-800">
                       <div className="font-extrabold text-sm text-slate-900 dark:text-white truncate">
-                        {user.full_name || 'Foydalanuvchi'}
+                        {user.full_name || 'User'}
                       </div>
                       <div className="text-xs text-slate-500 truncate">{user.email}</div>
                       <div className="mt-2">
@@ -485,7 +485,7 @@ function NavbarContent() {
                         className="p-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 text-[#8b2323] dark:text-rose-400 flex items-center gap-2 transition-colors font-extrabold"
                       >
                         <UserIcon className="w-4 h-4 shrink-0" />
-                        <span>Mening Profilim (Account)</span>
+                        <span>My Profile (Account)</span>
                       </Link>
 
                       <Link
@@ -493,7 +493,7 @@ function NavbarContent() {
                         onClick={() => setAccountMenuOpen(false)}
                         className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2 transition-colors"
                       >
-                        <span>Mening Imtihonlarim</span>
+                        <span>My Exams</span>
                       </Link>
 
                       {user.role === 'admin' && (
@@ -503,7 +503,7 @@ function NavbarContent() {
                           className="p-2 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/40 flex items-center gap-2 text-purple-700 dark:text-purple-300 transition-colors"
                         >
                           <Settings className="w-4 h-4" />
-                          <span>Admin Boshqaruv</span>
+                          <span>Admin Panel</span>
                         </Link>
                       )}
 
@@ -512,7 +512,7 @@ function NavbarContent() {
                         className="w-full p-2 rounded-xl text-left hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center gap-2 transition-colors pt-2 border-t border-slate-200 dark:border-slate-800 cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
-                        <span>Tizimdan Chiqish</span>
+                        <span>Sign Out</span>
                       </button>
                     </div>
                   </div>
@@ -566,7 +566,7 @@ function NavbarContent() {
           {/* Quick Listening Sections for Mobile */}
           {currentTab === 'listening' && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Listening Bo‘limlari:</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Listening Sections:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { label: 'Section 1', href: '/student?tab=listening&section=1' },
@@ -591,7 +591,7 @@ function NavbarContent() {
           {/* Quick Reading Passages for Mobile */}
           {currentTab === 'reading' && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Reading Bo‘limlari:</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Reading Passages:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { label: 'Passage 1', href: '/student?tab=reading&passage=1' },
@@ -615,7 +615,7 @@ function NavbarContent() {
           {/* Quick Speaking Parts for Mobile */}
           {currentTab === 'speaking' && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Speaking Bo‘limlari:</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Speaking Sections:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { label: 'Speaking partner', href: '/student?tab=speaking&mode=partner' },
@@ -640,7 +640,7 @@ function NavbarContent() {
           {/* Quick Writing Tasks for Mobile */}
           {currentTab === 'writing' && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Writing Bo‘limlari:</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Writing Tasks:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { label: 'Task 1 Reports', href: '/student?tab=writing&task=1' },
@@ -663,7 +663,7 @@ function NavbarContent() {
           {/* Quick Mock Links for Mobile */}
           {currentTab === 'mock' && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Mock Bo‘limlari:</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Mock Sections:</span>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { label: 'Full Mock', href: '/student?tab=mock' },
@@ -690,14 +690,14 @@ function NavbarContent() {
                 className="flex-1 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-center text-[#8b2323] dark:text-rose-400 border border-rose-200/80 dark:border-rose-800 flex items-center justify-center gap-1.5"
               >
                 <UserIcon className="w-4 h-4" />
-                <span>Mening Profilim</span>
+                <span>My Profile</span>
               </Link>
               <button
                 onClick={handleLogout}
                 className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5"
               >
                 <LogOut className="w-4 h-4" />
-                <span>Chiqish</span>
+                <span>Sign Out</span>
               </button>
             </div>
           )}

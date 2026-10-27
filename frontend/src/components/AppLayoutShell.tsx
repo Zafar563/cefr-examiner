@@ -22,8 +22,8 @@ export default function AppLayoutShell({ children }: { children: React.ReactNode
       <main className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6">
         {children}
       </main>
-      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#182235] py-8 text-center text-sm font-semibold text-slate-500 dark:text-slate-400 transition-colors duration-200">
-        <p>© 2026 CEFR MATERIALS. Barcha huquqlar himoyalangan.</p>
+      <footer className="border-t border-slate-200/60 dark:border-white/10 bg-white/70 dark:bg-[#0b1120]/80 backdrop-blur-xl py-8 text-center text-sm font-semibold text-slate-500 dark:text-slate-400 transition-colors duration-200">
+        <p>© 2026 CEFR MATERIALS. All rights reserved.</p>
       </footer>
     </>
   );

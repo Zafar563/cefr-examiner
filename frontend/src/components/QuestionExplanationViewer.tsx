@@ -50,7 +50,7 @@ export default function QuestionExplanationViewer({
   videoUrl,
   imageUrl,
   defaultExpanded = false,
-  title = 'Javob Tushuntirishi / Izoh',
+  title = 'Answer Explanation & Rationale',
   isIncorrect = false,
 }: QuestionExplanationViewerProps) {
   const hasText = Boolean(text && text.trim());

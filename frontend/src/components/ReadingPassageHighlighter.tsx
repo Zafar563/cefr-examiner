@@ -218,7 +218,7 @@ export default function ReadingPassageHighlighter({
     mark.style.borderRadius = '4px';
     mark.style.cursor = 'pointer';
     mark.style.transition = 'filter 0.15s ease';
-    mark.title = 'Metkani o‘chirish yoki rangini o‘zgartirish uchun bosing';
+    mark.title = 'Click to remove or edit this highlight';
 
     try {
       activeRange.surroundContents(mark);
@@ -254,7 +254,7 @@ export default function ReadingPassageHighlighter({
 
   // Clear all highlights in current passage
   const clearAllHighlights = () => {
-    if (!confirm('Ushbu matndagi barcha belgilangan metkalarni o‘chirmoqchimisiz?')) return;
+    if (!confirm('Are you sure you want to clear all highlights in this passage?')) return;
     if (!containerRef.current) return;
     const marks = containerRef.current.querySelectorAll('.cefr-highlight');
     marks.forEach((m) => m.replaceWith(...Array.from(m.childNodes)));
@@ -270,7 +270,7 @@ export default function ReadingPassageHighlighter({
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-            Reading Passage (Matn)
+            Reading Passage
           </h3>
         </div>
 
@@ -279,7 +279,7 @@ export default function ReadingPassageHighlighter({
           {/* Active Highlight Color Selector */}
           <div className="flex items-center gap-1 bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 px-2 py-1 rounded-xl shadow-xs">
             <Highlighter className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400 mr-0.5" />
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hidden sm:inline mr-1">Rang:</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hidden sm:inline mr-1">Color:</span>
             {(Object.keys(HIGHLIGHT_COLORS) as HighlightColorKey[]).map((key) => {
               const c = HIGHLIGHT_COLORS[key];
               const isSelected = activeColor === key;
@@ -288,7 +288,7 @@ export default function ReadingPassageHighlighter({
                   key={key}
                   type="button"
                   onClick={() => setActiveColor(key)}
-                  title={`Faol rang: ${c.name} (Matndan so‘zni belgilang)`}
+                  title={`Active color: ${c.name} (Select text in passage)`}
                   className={`w-4 h-4 rounded-full transition-transform flex items-center justify-center ${
                     isSelected ? 'ring-2 ring-slate-700 dark:ring-white scale-110' : 'hover:scale-110 opacity-80 hover:opacity-100'
                   }`}
@@ -303,11 +303,11 @@ export default function ReadingPassageHighlighter({
           {/* Highlight Count & Clear All */}
           {highlightCount > 0 && (
             <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-900 dark:text-amber-300 shadow-xs">
-              <span>{highlightCount} ta metka</span>
+              <span>{highlightCount} highlight{highlightCount > 1 ? 's' : ''}</span>
               <button
                 type="button"
                 onClick={clearAllHighlights}
-                title="Barcha metkalarni tozalash"
+                title="Clear all highlights"
                 className="text-amber-700 dark:text-amber-400 hover:text-rose-600 dark:hover:text-rose-400 ml-1 p-0.5 rounded transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -319,7 +319,7 @@ export default function ReadingPassageHighlighter({
 
       {/* Quick Helper Badge */}
       <div className="mb-3 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
-        <span>💡 <strong>Eslatma:</strong> Matndan istalgan so‘zni sichqoncha bilan belgilang — fon rangi avtomatik o‘zgaradi. O‘chirish uchun belgilangan so‘z ustiga bosing.</span>
+        <span>💡 <strong>Tip:</strong> Select any text in the passage with your cursor to highlight it. Click an existing highlight to change its color or remove it.</span>
       </div>
 
       {/* Scrollable Passage Body */}
@@ -352,7 +352,7 @@ export default function ReadingPassageHighlighter({
         >
           <span className="text-[11px] font-semibold text-slate-300 mr-1 flex items-center gap-1">
             <Highlighter className="w-3 h-3 text-emerald-400" />
-            {floatingMenu.mode === 'existing' ? 'O‘zgartirish:' : 'Metka:'}
+            {floatingMenu.mode === 'existing' ? 'Change:' : 'Highlight:'}
           </span>
 
           {(Object.keys(HIGHLIGHT_COLORS) as HighlightColorKey[]).map((key) => {
@@ -379,11 +379,11 @@ export default function ReadingPassageHighlighter({
             <button
               type="button"
               onClick={removeSelectedMark}
-              title="Metkani o‘chirish"
+              title="Remove highlight"
               className="ml-1 pl-1.5 border-l border-slate-700 text-rose-400 hover:text-rose-300 transition-colors p-1 flex items-center gap-1 text-[11px] font-bold"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>O‘chirish</span>
+              <span>Remove</span>
             </button>
           )}
 
@@ -394,7 +394,7 @@ export default function ReadingPassageHighlighter({
               setSelectedMark(null);
               window.getSelection()?.removeAllRanges();
             }}
-            title="Yopish"
+            title="Close"
             className="ml-0.5 text-slate-400 hover:text-white p-0.5"
           >
             <X className="w-3.5 h-3.5" />

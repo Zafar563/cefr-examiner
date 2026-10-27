@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { apiGetSession, apiStartSession, apiStartRandomMock, TestSession } from '@/lib/api';
-import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, Sparkles, Headphones, BookOpen, Mic, RotateCcw } from 'lucide-react';
+import { apiGetSession, apiGetTestDetails, apiStartSession, apiStartRandomMock, TestSession, Test } from '@/lib/api';
+import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, Sparkles, Headphones, BookOpen, Mic, RotateCcw, ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import QuestionExplanationViewer from '@/components/QuestionExplanationViewer';
 
 export default function TestResultPage() {
@@ -15,6 +15,8 @@ export default function TestResultPage() {
 
   const [mounted, setMounted] = useState(false);
   const [session, setSession] = useState<TestSession | null>(null);
+  const [testDetails, setTestDetails] = useState<Test | null>(null);
+  const [showAudioscript, setShowAudioscript] = useState<Record<number, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -23,7 +25,7 @@ export default function TestResultPage() {
     if (!isNaN(sessionId) && sessionId > 0) {
       loadSessionResult(sessionId);
     } else {
-      setErrorMessage('Yaroqsiz natija identifikatori.');
+      setErrorMessage('Invalid result identifier.');
       setLoading(false);
     }
   }, [sessionId]);
@@ -34,21 +36,27 @@ export default function TestResultPage() {
     try {
       const data = await apiGetSession(sId);
       if (!data || !data.id) {
-        throw new Error('Natija topilmadi');
+        throw new Error('Result not found');
       }
       setSession(data);
+      if (data.test_id) {
+        try {
+          const t = await apiGetTestDetails(data.test_id);
+          setTestDetails(t);
+        } catch {}
+      }
     } catch (e: any) {
-      setErrorMessage(e.message || 'Natijalarni yuklab bo‘lmadi.');
+      setErrorMessage(e.message || 'Failed to load results.');
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'Yaqinda';
+    if (!dateStr) return 'Recently';
     try {
       const d = new Date(dateStr);
-      return isNaN(d.getTime()) ? 'Yaqinda' : d.toLocaleDateString('uz-UZ') + ' ' + d.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+      return isNaN(d.getTime()) ? 'Yaqinda' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     } catch {
       return 'Yaqinda';
     }
@@ -70,7 +78,7 @@ export default function TestResultPage() {
       const secQuery = session.target_section_index !== undefined && session.target_section_index !== null ? `?section=${session.target_section_index}` : '';
       router.push(`/student/test/${newSession.id}${secQuery}`);
     } catch (e: any) {
-      alert('Testni qayta boshlashda xatolik: ' + e.message);
+      alert('Error retaking test: ' + e.message);
       setRetaking(false);
     }
   };
@@ -79,7 +87,7 @@ export default function TestResultPage() {
     return (
       <div className="py-24 text-center">
         <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-600 font-medium">Natijalar tahlil qilinmoqda...</p>
+        <p className="text-slate-600 font-medium">Analyzing test results...</p>
       </div>
     );
   }
@@ -87,13 +95,13 @@ export default function TestResultPage() {
   if (errorMessage || !session) {
     return (
       <div className="max-w-md mx-auto my-16 p-6 bg-white rounded-2xl border border-slate-200 text-center space-y-4 shadow-sm">
-        <h3 className="text-base font-bold text-slate-900">Xatolik</h3>
-        <p className="text-xs text-slate-600">{errorMessage || 'Natijalar topilmadi.'}</p>
+        <h3 className="text-base font-bold text-slate-900">Error</h3>
+        <p className="text-xs text-slate-600">{errorMessage || 'Results not found.'}</p>
         <Link
           href="/student"
           className="inline-block px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors"
         >
-          Kabinetga qaytish
+          Back to Dashboard
         </Link>
       </div>
     );
@@ -126,7 +134,7 @@ export default function TestResultPage() {
           href="/student"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> Barcha testlarga qaytish
+          <ArrowLeft className="w-4 h-4" /> Back to All Tests
         </Link>
 
         {session && session.test_id && (
@@ -138,12 +146,12 @@ export default function TestResultPage() {
             {retaking ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Yangi test ochilmoqda...</span>
+                <span>Opening new test...</span>
               </>
             ) : (
               <>
                 <RotateCcw className="w-4 h-4" />
-                <span>Testni Qayta Topshirish (Retake)</span>
+                <span>Retake Test</span>
               </>
             )}
           </button>
@@ -160,21 +168,21 @@ export default function TestResultPage() {
           <div className="text-center sm:text-left space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              {isFinal ? 'Rasmiy Baholangan CEFR Natijasi' : 'Dastlabki Hisoblangan Natija'}
+              {isFinal ? 'Official Graded CEFR Result' : 'Preliminary Calculated Result'}
             </span>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight">{session.test_title || 'CEFR Test'}</h1>
             <p className="text-xs sm:text-sm text-white/80">
-              Talaba: <span className="font-semibold text-white">{session.student_name || 'Talaba'}</span> | Sana:{' '}
+              Candidate: <span className="font-semibold text-white">{session.student_name || 'Student'}</span> | Date:{' '}
               {formatDate(session.submitted_at || session.started_at)}
             </p>
           </div>
 
           {result && (
             <div className="flex flex-col items-center justify-center p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 min-w-[160px]">
-              <span className="text-xs font-bold uppercase tracking-wider text-white/80">CEFR DARAJASI</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-white/80">CEFR LEVEL</span>
               <span className="text-5xl sm:text-6xl font-black tracking-tighter my-1">{result.cefr_level || 'A1'}</span>
               <span className="text-sm font-bold text-white/90">
-                {result.percentage}% ({result.total_score} / {result.max_score} ball)
+                {result.percentage}% ({result.total_score} / {result.max_score} pts)
               </span>
             </div>
           )}
@@ -194,7 +202,7 @@ export default function TestResultPage() {
             {!isFinal && !isListeningTest && !isReadingTest && (
               <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200 text-xs sm:text-sm flex items-center gap-2.5 font-bold">
                 <AlertCircle className="w-4.5 h-4.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
-                <span>Tekshirilmoqda</span>
+                <span>Under Review</span>
               </div>
             )}
 
@@ -202,18 +210,18 @@ export default function TestResultPage() {
               <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-blue-200 dark:border-blue-900/60 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="space-y-2 text-center sm:text-left">
                   <span className="text-xs font-bold uppercase text-blue-600 dark:text-blue-400 tracking-wider flex items-center gap-1.5 justify-center sm:justify-start">
-                    <Headphones className="w-4 h-4" /> 🎧 Listening Comprehension Natijasi
+                    <Headphones className="w-4 h-4" /> 🎧 Listening Comprehension Result
                   </span>
                   <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-                    {result.listening_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} ball</span>
+                    {result.listening_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} pts</span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    To‘g‘ri javoblar foizi: <strong>{result.percentage}%</strong>
+                    Correct answers percentage: <strong>{result.percentage}%</strong>
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="px-6 py-3 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/50 text-center">
-                    <span className="text-xs font-bold uppercase text-blue-700 dark:text-blue-300 block">CEFR DARAJASI</span>
+                    <span className="text-xs font-bold uppercase text-blue-700 dark:text-blue-300 block">CEFR LEVEL</span>
                     <span className="text-3xl font-black text-blue-900 dark:text-blue-100">{result.cefr_level || 'A1'}</span>
                   </div>
                 </div>
@@ -222,18 +230,18 @@ export default function TestResultPage() {
               <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-emerald-200 dark:border-emerald-900/60 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="space-y-2 text-center sm:text-left">
                   <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider flex items-center gap-1.5 justify-center sm:justify-start">
-                    <BookOpen className="w-4 h-4" /> 📖 Reading Comprehension Natijasi
+                    <BookOpen className="w-4 h-4" /> 📖 Reading Comprehension Result
                   </span>
                   <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-                    {result.reading_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} ball</span>
+                    {result.reading_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} pts</span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    To‘g‘ri javoblar foizi: <strong>{result.percentage}%</strong>
+                    Correct answers percentage: <strong>{result.percentage}%</strong>
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="px-6 py-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-900/50 text-center">
-                    <span className="text-xs font-bold uppercase text-emerald-700 dark:text-emerald-300 block">CEFR DARAJASI</span>
+                    <span className="text-xs font-bold uppercase text-emerald-700 dark:text-emerald-300 block">CEFR LEVEL</span>
                     <span className="text-3xl font-black text-emerald-900 dark:text-emerald-100">{result.cefr_level || 'A1'}</span>
                   </div>
                 </div>
@@ -242,18 +250,18 @@ export default function TestResultPage() {
               <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border-2 border-purple-200 dark:border-purple-900/60 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="space-y-2 text-center sm:text-left">
                   <span className="text-xs font-bold uppercase text-purple-600 dark:text-purple-400 tracking-wider flex items-center gap-1.5 justify-center sm:justify-start">
-                    <Mic className="w-4 h-4" /> 🎙️ Speaking Assessment Natijasi
+                    <Mic className="w-4 h-4" /> 🎙️ Speaking Assessment Result
                   </span>
                   <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-                    {result.speaking_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} ball</span>
+                    {result.speaking_score} <span className="text-xl font-semibold text-slate-400">/ {result.max_score || 40} pts</span>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    To‘plangan ball foizi: <strong>{result.percentage}%</strong>
+                    Score percentage: <strong>{result.percentage}%</strong>
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="px-6 py-3 rounded-2xl bg-purple-50 dark:bg-purple-950/60 border border-purple-100 dark:border-purple-900/50 text-center">
-                    <span className="text-xs font-bold uppercase text-purple-700 dark:text-purple-300 block">CEFR DARAJASI</span>
+                    <span className="text-xs font-bold uppercase text-purple-700 dark:text-purple-300 block">CEFR LEVEL</span>
                     <span className="text-3xl font-black text-purple-900 dark:text-purple-100">{result.cefr_level || 'A1'}</span>
                   </div>
                 </div>
@@ -264,9 +272,9 @@ export default function TestResultPage() {
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase text-blue-600 dark:text-blue-400 block">🎧 Listening</span>
-                    <span className="text-xs font-semibold text-slate-400">maks 40 ball</span>
+                    <span className="text-xs font-semibold text-slate-400">max 40 pts</span>
                   </div>
-                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.listening_score} ball</div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.listening_score} pts</div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
                     <div
                       className="bg-blue-600 h-2 rounded-full"
@@ -278,9 +286,9 @@ export default function TestResultPage() {
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400 block">📖 Reading</span>
-                    <span className="text-xs font-semibold text-slate-400">maks 40 ball</span>
+                    <span className="text-xs font-semibold text-slate-400">max 40 pts</span>
                   </div>
-                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.reading_score} ball</div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.reading_score} pts</div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
                     <div
                       className="bg-emerald-600 h-2 rounded-full"
@@ -293,9 +301,9 @@ export default function TestResultPage() {
                   <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase text-amber-600 dark:text-amber-400 block">✍️ Writing</span>
-                      <span className="text-xs font-semibold text-slate-400">maks 40 ball</span>
+                      <span className="text-xs font-semibold text-slate-400">max 40 pts</span>
                     </div>
-                    <div className="text-2xl font-black text-slate-900 dark:text-white">{result.writing_score} ball</div>
+                    <div className="text-2xl font-black text-slate-900 dark:text-white">{result.writing_score} pts</div>
                     <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
                       <div
                         className="bg-amber-600 h-2 rounded-full"
@@ -308,9 +316,9 @@ export default function TestResultPage() {
                 <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase text-purple-600 dark:text-purple-400 block">🎙️ Speaking</span>
-                    <span className="text-xs font-semibold text-slate-400">maks 40 ball</span>
+                    <span className="text-xs font-semibold text-slate-400">max 40 pts</span>
                   </div>
-                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.speaking_score} ball</div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">{result.speaking_score} pts</div>
                   <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
                     <div
                       className="bg-purple-600 h-2 rounded-full"
@@ -324,15 +332,71 @@ export default function TestResultPage() {
         );
       })()}
 
+      {/* Listening Audio Transcripts (Audioscript for review) */}
+      {(() => {
+        const listeningSections = (testDetails?.sections || []).filter(
+          (s) => s.type === 'listening' && s.passage_text && s.passage_text.trim()
+        );
+        if (listeningSections.length === 0) return null;
+
+        return (
+          <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Headphones className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                Listening Audio Transcripts (Audioscript)
+              </h3>
+              <span className="text-xs text-slate-500 font-medium">Review where answers appeared in the audio</span>
+            </div>
+
+            <div className="space-y-3">
+              {listeningSections.map((sec) => {
+                const isOpen = showAudioscript[sec.id];
+                return (
+                  <div
+                    key={sec.id}
+                    className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden"
+                  >
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowAudioscript((prev) => ({ ...prev, [sec.id]: !prev[sec.id] }))
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-left font-semibold text-xs sm:text-sm flex items-center justify-between cursor-pointer transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-blue-500" />
+                        <span>{sec.title} — Official Audioscript</span>
+                      </span>
+                      {isOpen ? (
+                        <ChevronUp className="w-4 h-4 text-slate-400" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-slate-400" />
+                      )}
+                    </button>
+
+                    {isOpen && (
+                      <div className="p-4 bg-white dark:bg-slate-900 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap border-t border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-mono">
+                        {sec.passage_text}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
+
       {/* Answers & Error Analysis (Xatolar ustida ishlash) */}
       <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          Savollar va Xatolar Tahlili (Review)
+          Questions & Error Analysis (Review)
         </h2>
 
         {answers.length === 0 ? (
-          <p className="text-xs text-slate-500 dark:text-slate-400 py-4">Javoblar ro‘yxati mavjud emas.</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 py-4">No answer list available.</p>
         ) : (
           <div className="divide-y divide-slate-100 dark:divide-slate-800 space-y-4">
             {answers.map((ans, idx) => {
@@ -344,7 +408,7 @@ export default function TestResultPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
                       <span className="text-xs font-bold uppercase text-slate-400 dark:text-slate-500">
-                        {ans.section_type} • Savol #{idx + 1}
+                        {ans.section_type} • Question #{idx + 1}
                       </span>
                       <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{ans.question_text}</h4>
                     </div>
@@ -352,20 +416,20 @@ export default function TestResultPage() {
                       {isAutoGraded ? (
                         isCorrect ? (
                           <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> To‘g‘ri (+{ans.score})
+                            <CheckCircle2 className="w-3.5 h-3.5" /> Correct (+{ans.score})
                           </span>
                         ) : (
                           <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 flex items-center gap-1">
-                            <XCircle className="w-3.5 h-3.5" /> Noto‘g‘ri (0)
+                            <XCircle className="w-3.5 h-3.5" /> Incorrect (0)
                           </span>
                         )
                       ) : ans.is_graded ? (
                         <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300">
-                          Baholandi: {ans.score} ball
+                          Graded: {ans.score} pts
                         </span>
                       ) : (
                         <span className="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                          Kutilmoqda
+                          Pending
                         </span>
                       )}
                     </div>
@@ -374,20 +438,20 @@ export default function TestResultPage() {
                   {/* Details */}
                   <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs space-y-1.5 border border-slate-100 dark:border-slate-700">
                     <div>
-                      <span className="font-semibold text-slate-500 dark:text-slate-400">Sizning javobingiz: </span>
-                      <span className="font-bold text-slate-800 dark:text-slate-200">{ans.user_answer_text || 'Javob berilmagan'}</span>
+                      <span className="font-semibold text-slate-500 dark:text-slate-400">Your answer: </span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">{ans.user_answer_text || 'No answer submitted'}</span>
                     </div>
 
                     {ans.correct_answer && (
                       <div>
-                        <span className="font-semibold text-emerald-700 dark:text-emerald-400">To‘g‘ri javob: </span>
+                        <span className="font-semibold text-emerald-700 dark:text-emerald-400">Correct answer: </span>
                         <span className="font-bold text-emerald-900 dark:text-emerald-200">{ans.correct_answer}</span>
                       </div>
                     )}
 
                     {ans.examiner_feedback && (
                       <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Tekshiruv tahlili: </span>
+                        <span className="font-semibold text-indigo-700 dark:text-indigo-400">Examiner feedback: </span>
                         <span className="text-slate-700 dark:text-slate-300">{ans.examiner_feedback}</span>
                       </div>
                     )}
@@ -414,10 +478,10 @@ export default function TestResultPage() {
           <div>
             <h3 className="text-base font-bold flex items-center gap-2">
               <RotateCcw className="w-5 h-5 text-emerald-400" />
-              Natijani yaxshilashni xohlaysizmi?
+              Want to improve your score?
             </h3>
             <p className="text-xs text-slate-400 mt-1 max-w-xl">
-              Xatolaringizni ko‘rib chiqqan bo‘lsangiz, testni yangidan boshlab o‘z bilimingizni yana bir bor sinab ko‘rishingiz mumkin. Har bir urinishingiz natijasi alohida saqlanadi.
+              Once you have reviewed your answers, retake the test to challenge yourself again. Each attempt is recorded independently.
             </p>
           </div>
           <button
@@ -428,12 +492,12 @@ export default function TestResultPage() {
             {retaking ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Yuklanmoqda...</span>
+                <span>Loading...</span>
               </>
             ) : (
               <>
                 <RotateCcw className="w-4 h-4" />
-                <span>Testni Qayta Ishlash</span>
+                <span>Retake Test Now</span>
               </>
             )}
           </button>

@@ -26,7 +26,7 @@ export default function ExaminerPage() {
   useEffect(() => {
     const user = getCurrentStoredUser();
     if (!user || (user.role !== 'examiner' && user.role !== 'admin')) {
-      alert('Ushbu sahifaga faqat Examiner yoki Admin kira oladi');
+      alert('This page is accessible only to Examiners or Admins.');
       router.push('/login');
       return;
     }
@@ -39,7 +39,7 @@ export default function ExaminerPage() {
       const data = await apiGetExaminerSubmissions();
       setSubmissions(data);
     } catch (e: any) {
-      alert('Ma\'lumotlarni yuklashda xatolik: ' + e.message);
+      alert('Error loading data: ' + e.message);
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ export default function ExaminerPage() {
       setGradingScores(scores);
       setGradingFeedback(feedback);
     } catch (e: any) {
-      alert('Sessiya ma\'lumotlarini ochishda xatolik: ' + e.message);
+      alert('Error opening session details: ' + e.message);
     }
   };
 
@@ -73,13 +73,13 @@ export default function ExaminerPage() {
     setSavingGradeId(answerId);
     try {
       await apiGradeAnswer(answerId, score, feedback);
-      alert('Baho va izoh muvaffaqiyatli saqlandi!');
+      alert('Grade and feedback saved successfully!');
       if (selectedSession) {
         handleSelectSession(selectedSession);
       }
       loadSubmissions();
     } catch (e: any) {
-      alert('Baholashda xatolik: ' + e.message);
+      alert('Error submitting grade: ' + e.message);
     } finally {
       setSavingGradeId(null);
     }
@@ -89,7 +89,7 @@ export default function ExaminerPage() {
     return (
       <div className="py-24 text-center">
         <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-600 font-medium">Tekshirish uchun ishlar yuklanmoqda...</p>
+        <p className="text-slate-600 font-medium">Loading submissions for evaluation...</p>
       </div>
     );
   }
@@ -101,25 +101,25 @@ export default function ExaminerPage() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2.5">
             <CheckSquare className="w-7 h-7 text-indigo-300" />
-            Examiner Baholash Paneli
+            Examiner Evaluation Panel
           </h1>
           <p className="text-indigo-100 text-sm mt-1">
-            Talabalar yuborgan Writing insholari va Speaking audio yozuvlarini baholash.
+            Evaluate submitted candidate essays and Speaking audio recordings.
           </p>
         </div>
         <div className="bg-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold">
-          Kutilayotgan ishlar: <span className="font-bold text-amber-300">{submissions.length}</span> ta
+          Pending submissions: <span className="font-bold text-amber-300">{submissions.length}</span> ta
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left column: Submissions list */}
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
-          <h2 className="text-base font-bold text-slate-900">Tekshirilishi kerak bo‘lgan ishlar</h2>
+          <h2 className="text-base font-bold text-slate-900">Submissions Pending Evaluation</h2>
 
           {submissions.length === 0 ? (
             <p className="text-xs text-slate-500 py-6 text-center">
-              Hozircha tekshirilishi kerak bo‘lgan topshiriqlar mavjud emas.
+              No pending submissions to evaluate at this time.
             </p>
           ) : (
             <div className="space-y-2">
@@ -172,14 +172,14 @@ export default function ExaminerPage() {
                               isWriting ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'
                             }`}
                           >
-                            {isWriting ? '✍️ Writing Insho' : '🎙️ Speaking Audio'}
+                            {isWriting ? '✍️ Writing Essay' : '🎙️ Speaking Recording'}
                           </span>
 
                           <span className="text-xs font-semibold text-slate-500">
                             {ans.is_graded ? (
-                              <span className="text-emerald-600 font-bold">✓ Baholangan ({ans.score} ball)</span>
+                              <span className="text-emerald-600 font-bold">✓ Graded ({ans.score} pts)</span>
                             ) : (
-                              <span className="text-amber-600 font-bold">Kutilmoqda</span>
+                              <span className="text-amber-600 font-bold">Pending</span>
                             )}
                           </span>
                         </div>
@@ -192,17 +192,17 @@ export default function ExaminerPage() {
                         {/* Student Response */}
                         {isWriting ? (
                           <div className="p-4 bg-slate-50/80 rounded-xl border border-slate-200 text-xs text-slate-800 font-normal whitespace-pre-line leading-relaxed">
-                            {ans.user_answer_text || 'Javob berilmagan'}
+                            {ans.user_answer_text || 'No answer submitted'}
                           </div>
                         ) : (
                           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-200 space-y-2">
                             <span className="text-xs font-semibold text-purple-900 block">
-                              Talabaning yozib yuborgan audio yozuvi:
+                              Candidate's audio recording:
                             </span>
                             {ans.audio_file_url ? (
                               <audio controls src={ans.audio_file_url} className="w-full h-10" />
                             ) : (
-                              <span className="text-xs text-slate-500">Audio fayl yuklanmagan</span>
+                              <span className="text-xs text-slate-500">No audio file uploaded</span>
                             )}
                           </div>
                         )}
@@ -214,7 +214,7 @@ export default function ExaminerPage() {
                             return (
                               <div>
                                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                                  Qo‘yiladigan Ball (maks {maxScore}):
+                                  Score to Assign (max {maxScore}):
                                 </label>
                                 <input
                                   type="number"
@@ -234,7 +234,7 @@ export default function ExaminerPage() {
 
                           <div className="sm:col-span-2">
                             <label className="block text-xs font-bold text-slate-700 mb-1">
-                              Examiner Izohi (Feedback):
+                              Examiner Feedback:
                             </label>
                             <input
                               type="text"
@@ -254,7 +254,7 @@ export default function ExaminerPage() {
                             disabled={savingGradeId === ans.id}
                             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm disabled:opacity-50"
                           >
-                            {savingGradeId === ans.id ? 'Saqlanmoqda...' : 'Bahoni Saqlash'}
+                            {savingGradeId === ans.id ? 'Saving...' : 'Save Grade'}
                           </button>
                         </div>
                       </div>
@@ -264,7 +264,7 @@ export default function ExaminerPage() {
             </div>
           ) : (
             <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center text-slate-500 text-sm">
-              Chap tomondan tekshirish uchun topshiriqni tanlang.
+              Select a submission from the left panel to review and grade.
             </div>
           )}
         </div>

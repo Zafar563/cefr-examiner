@@ -3,8 +3,8 @@ import './globals.css';
 import AppLayoutShell from '@/components/AppLayoutShell';
 
 export const metadata: Metadata = {
-  title: 'CEFR MATERIALS — Imtihon va Mock Test Platformasi',
-  description: 'CEFR Listening, Reading, Writing va Speaking bo‘yicha to‘liq tayyorgarlik va baholash platformasi.',
+  title: 'CEFR MATERIALS — Examination & Mock Test Platform',
+  description: 'Comprehensive preparation and assessment platform for CEFR / IELTS Listening, Reading, Writing, and Speaking.',
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="uz" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

@@ -13,6 +13,7 @@ import {
   Mic,
   PenTool,
   Sparkles,
+  Users,
   Home as HomeIcon,
   User as UserIcon,
 } from 'lucide-react';
@@ -141,6 +142,15 @@ function NavbarContent() {
       isActive: currentTab === 'mock',
       activeClass: 'bg-amber-50 dark:bg-amber-950/70 text-amber-600 dark:text-amber-400 font-extrabold ring-1 ring-amber-500/20 shadow-xs',
       hoverClass: 'hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-950/30',
+    },
+    {
+      id: 'live',
+      label: 'Live Exam',
+      href: '/student/live',
+      icon: Users,
+      isActive: pathname === '/student/live',
+      activeClass: 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 font-extrabold ring-1 ring-rose-500/20 shadow-xs',
+      hoverClass: 'hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50/50 dark:hover:bg-rose-950/30',
     },
   ];
 
@@ -415,6 +425,26 @@ function NavbarContent() {
               );
             }
 
+            if (item.id === 'live') {
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`px-3.5 py-2 rounded-xl text-sm font-extrabold transition-all flex items-center gap-1.5 cursor-pointer border ${
+                    item.isActive
+                      ? 'bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 border-rose-300 dark:border-rose-800 ring-1 ring-rose-500/20'
+                      : 'bg-rose-50/60 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 border-rose-200/80 dark:border-rose-900/50 hover:bg-rose-100/70 dark:hover:bg-rose-900/50 shadow-xs'
+                  }`}
+                >
+                  <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+                  <span>{item.label}</span>
+                  <span className="px-1.5 py-0.5 rounded-md bg-rose-500 text-white text-[9px] font-black uppercase">
+                    PIN
+                  </span>
+                </Link>
+              );
+            }
+
             return (
               <Link
                 key={item.id}
@@ -430,6 +460,21 @@ function NavbarContent() {
               </Link>
             );
           })}
+
+          {/* Examiner quick links */}
+          {(user?.role === 'examiner' || user?.role === 'admin') && (
+            <Link
+              href="/examiner"
+              className={`px-3.5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 ${
+                pathname === '/examiner'
+                  ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 ring-1 ring-amber-500/20'
+                  : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50/50'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>Examiner</span>
+            </Link>
+          )}
 
           {/* Admin quick links */}
           {user?.role === 'admin' && (
@@ -479,22 +524,26 @@ function NavbarContent() {
                     </div>
 
                     <div className="space-y-1 text-xs font-bold text-slate-700 dark:text-slate-200">
-                      <Link
-                        href="/profile"
-                        onClick={() => setAccountMenuOpen(false)}
-                        className="p-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 text-[#8b2323] dark:text-rose-400 flex items-center gap-2 transition-colors font-extrabold"
-                      >
-                        <UserIcon className="w-4 h-4 shrink-0" />
-                        <span>My Profile (Account)</span>
-                      </Link>
+                      {user.role !== 'admin' && (
+                        <>
+                          <Link
+                            href="/profile"
+                            onClick={() => setAccountMenuOpen(false)}
+                            className="p-2 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 text-[#8b2323] dark:text-rose-400 flex items-center gap-2 transition-colors font-extrabold"
+                          >
+                            <UserIcon className="w-4 h-4 shrink-0" />
+                            <span>My Profile (Account)</span>
+                          </Link>
 
-                      <Link
-                        href="/student"
-                        onClick={() => setAccountMenuOpen(false)}
-                        className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2 transition-colors"
-                      >
-                        <span>My Exams</span>
-                      </Link>
+                          <Link
+                            href="/student"
+                            onClick={() => setAccountMenuOpen(false)}
+                            className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2 transition-colors"
+                          >
+                            <span>My Exams</span>
+                          </Link>
+                        </>
+                      )}
 
                       {user.role === 'admin' && (
                         <Link
@@ -523,7 +572,7 @@ function NavbarContent() {
                 href="/login"
                 className="bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 active:scale-95 text-white font-black text-xs sm:text-sm uppercase tracking-wider px-6 py-2.5 rounded-full shadow-md shadow-slate-900/10 transition-all inline-block"
               >
-                ACCOUNT
+                Sign In
               </Link>
             )}
           </div>
@@ -684,21 +733,36 @@ function NavbarContent() {
 
           {user && (
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-xs font-bold">
-              <Link
-                href="/profile"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex-1 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-center text-[#8b2323] dark:text-rose-400 border border-rose-200/80 dark:border-rose-800 flex items-center justify-center gap-1.5"
-              >
-                <UserIcon className="w-4 h-4" />
-                <span>My Profile</span>
-              </Link>
+              {user.role !== 'admin' && (
+                <Link
+                  href="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-center text-[#8b2323] dark:text-rose-400 border border-rose-200/80 dark:border-rose-800 flex items-center justify-center gap-1.5"
+                >
+                  <UserIcon className="w-4 h-4" />
+                  <span>My Profile</span>
+                </Link>
+              )}
               <button
                 onClick={handleLogout}
-                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5"
+                className={`${user.role === 'admin' ? 'w-full' : 'p-2.5'} rounded-xl bg-slate-100 dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-1.5 py-2.5`}
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>
               </button>
+            </div>
+          )}
+
+          {user && (user.role === 'examiner' || user.role === 'admin') && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 gap-2 text-xs font-bold">
+              <Link
+                href="/examiner"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-center text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 flex items-center justify-center gap-1.5"
+              >
+                <Users className="w-4 h-4" />
+                <span>Examiner Portal</span>
+              </Link>
             </div>
           )}
 

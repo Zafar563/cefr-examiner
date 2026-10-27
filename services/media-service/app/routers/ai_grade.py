@@ -38,7 +38,7 @@ def fallback_grade_writing(prompt: str, essay: str, max_points: float) -> GradeR
         return GradeResponse(
             score=0.0,
             cefr_level="A1",
-            feedback="Insho taqdim etilmagan (0 so‘z).",
+            feedback="No essay submitted (0 words).",
             details={"words": 0}
         )
     
@@ -46,19 +46,19 @@ def fallback_grade_writing(prompt: str, essay: str, max_points: float) -> GradeR
     if words >= 250:
         pct = 0.85
         level = "C1" if words >= 350 else "B2"
-        feedback = f"Insho hajmi juda yaxshi ({words} so‘z). Fikrlar to‘liq bayon qilingan. Akademik so‘z birikmalariga e’tibor bering."
+        feedback = f"Good essay length ({words} words). Ideas are well developed. Continue focusing on academic collocations and coherence."
     elif words >= 150:
         pct = 0.70
         level = "B1"
-        feedback = f"Insho qabul qilindi ({words} so‘z). Mavzuni kengroq dalillar bilan yoritish va paragraflar ulanishini kuchaytirish tavsiya etiladi."
+        feedback = f"Essay received ({words} words). Recommended to elaborate more on supporting points and improve paragraph transitions."
     elif words >= 80:
         pct = 0.50
         level = "A2"
-        feedback = f"Insho hajmi normadan kamroq ({words} so‘z). Minimal hajm kamida 150-250 so‘z bo‘lishi lozim."
+        feedback = f"Essay length is below standard ({words} words). A minimum of 150–250 words is expected."
     else:
         pct = 0.30
         level = "A1"
-        feedback = f"Matn hajmi yetarli emas ({words} so‘z)."
+        feedback = f"Insufficient word count ({words} words)."
         
     final_score = round(max_points * pct, 1)
     return GradeResponse(
@@ -78,21 +78,21 @@ def fallback_grade_speaking(prompt: str, audio_url: str, user_text: str, max_poi
         return GradeResponse(
             score=round(max_points * 0.80, 1),
             cefr_level="B2",
-            feedback="Audio yozuv qabul qilindi va nutq mezonlari bo‘yicha muvaffaqiyatli baholandi.",
+            feedback="Audio response received and successfully evaluated against speaking criteria.",
             details={"has_audio": True, "fallback": True}
         )
     elif has_text:
         return GradeResponse(
             score=round(max_points * 0.55, 1),
             cefr_level="B1",
-            feedback="Matnli javob qabul qilindi.",
+            feedback="Text response received.",
             details={"has_text": True, "fallback": True}
         )
     else:
         return GradeResponse(
             score=0.0,
             cefr_level="A1",
-            feedback="Audio yoki og‘zaki javob taqdim etilmagan.",
+            feedback="No audio or spoken response provided.",
             details={"fallback": True}
         )
 

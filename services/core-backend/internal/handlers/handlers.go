@@ -297,8 +297,13 @@ func (h *Handler) GradeAnswer(c *gin.Context) {
 		return
 	}
 
-	if err := h.repo.GradeAnswer(req.AnswerID, req.Score, req.Feedback); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to grade answer"})
+	if req.AnswerID <= 0 && (req.SessionID <= 0 || req.QuestionID <= 0) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Either answer_id or (session_id and question_id) must be provided"})
+		return
+	}
+
+	if err := h.repo.GradeAnswerOrUpsert(req.AnswerID, req.SessionID, req.QuestionID, req.Score, req.Feedback); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to grade answer: " + err.Error()})
 		return
 	}
 
@@ -622,3 +627,124 @@ func (h *Handler) DeleteQuestion(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Savol muvaffaqiyatli o'chirildi"})
 }
+
+// ==========================================
+// EXAM ROOM & GROUP TESTING HANDLERS
+// ==========================================
+
+func (h *Handler) CreateExamRoom(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	userRole := c.GetString("user_role")
+	if userRole != "examiner" && userRole != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Only examiners and admins can create exam rooms"})
+		return
+	}
+
+	var req models.CreateRoomRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	room, err := h.repo.CreateExamRoom(userID, req.Title, req.ModuleType, req.TestID, req.TargetSectionIndex, req.DurationMinutes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create exam room: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, room)
+}
+
+func (h *Handler) GetExamRoom(c *gin.Context) {
+	pin := c.Param("pin")
+	if pin == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "PIN code required"})
+		return
+	}
+
+	room, err := h.repo.GetExamRoomByPin(pin)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Exam room not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, room)
+}
+
+func (h *Handler) ListExaminerRooms(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	rooms, err := h.repo.ListExaminerRooms(userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list rooms: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, rooms)
+}
+
+func (h *Handler) JoinExamRoom(c *gin.Context) {
+	userID := c.GetInt("user_id")
+
+	var req models.JoinRoomRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "PIN code required"})
+		return
+	}
+
+	room, participant, err := h.repo.JoinExamRoom(req.PinCode, userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"room":        room,
+		"participant": participant,
+	})
+}
+
+func (h *Handler) StartExamRoom(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	userRole := c.GetString("user_role")
+	if userRole != "examiner" && userRole != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	roomID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid room ID"})
+		return
+	}
+
+	room, err := h.repo.StartExamRoom(roomID, userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to start room: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, room)
+}
+
+func (h *Handler) CompleteExamRoom(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	userRole := c.GetString("user_role")
+	if userRole != "examiner" && userRole != "admin" {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	roomID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid room ID"})
+		return
+	}
+
+	room, err := h.repo.CompleteExamRoom(roomID, userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to complete room: " + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, room)
+}
+

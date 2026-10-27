@@ -101,10 +101,10 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     id: 'tf_ng',
     title: 'Identifying Information (True/False/Not Given)',
     badge: '⚖️ True / False / Not Given',
-    sub: 'Matndagi faktik ma’lumot bilan solishtirish',
+    sub: 'Verify against factual information in the passage',
     baseCategory: 'true_false_not_given',
     sectionTypes: ['reading'],
-    placeholder: 'Mulohaza matnini kiriting (masalan: The trees were originally planted to prevent soil erosion.)',
+    placeholder: 'Enter statement text (e.g. The trees were originally planted to prevent soil erosion.)',
   },
   {
     id: 'yn_ng',
@@ -122,7 +122,7 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     sub: 'Qaydlar bo‘sh joylarini to‘ldirish (1–3 so‘z)',
     baseCategory: 'completion',
     sectionTypes: ['reading', 'listening'],
-    placeholder: 'Qaydlar matni (masalan: Primary cause of soil degradation: ________)',
+    placeholder: 'Notes text (e.g. Primary cause of soil degradation: ________)',
   },
   {
     id: 'table_completion',
@@ -147,19 +147,19 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     id: 'summary_completion_text',
     title: 'Summary Completion (selecting words from the text)',
     badge: '📄 Summary (From Text)',
-    sub: 'Matndan so‘z tanlab xulosani to‘ldirish',
+    sub: 'Complete summary by selecting words directly from passage',
     baseCategory: 'completion',
     sectionTypes: ['reading', 'listening'],
-    placeholder: 'Xulosa matni (masalan: Overall, the new approach proved to be exceptionally ________.)',
+    placeholder: 'Summary text (e.g. Overall, the new approach proved to be exceptionally ________.)',
   },
   {
     id: 'summary_completion_list',
     title: 'Summary Completion (selecting from a list of words or phrases)',
     badge: '📦 Summary (From List)',
-    sub: 'So‘zlar / variantlar qutisidan tanlash (A–G)',
+    sub: 'Choose answers from options box (A–G)',
     baseCategory: 'matching',
     sectionTypes: ['reading'],
-    placeholder: 'Xulosa matni (masalan: The resulting alloy was unusually [A/B/C/D] under extreme heat.)',
+    placeholder: 'Summary text (e.g. The resulting alloy was unusually [A/B/C/D] under extreme heat.)',
     defaultOptions: ['A. flexible', 'B. resistant', 'C. fragile', 'D. lightweight', 'E. conductive'],
   },
   {
@@ -175,7 +175,7 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     id: 'matching_sentence_endings',
     title: 'Matching Sentence Endings',
     badge: '🔗 Sentence Endings',
-    sub: 'Gap boshlanishiga mos yakunni tanlash (A–F)',
+    sub: 'Match sentence beginnings with correct endings (A–F)',
     baseCategory: 'matching',
     sectionTypes: ['reading'],
     placeholder: 'Gap boshi (masalan: The initial research into solar cells...)',
@@ -189,7 +189,7 @@ const IELTS_CONSTRUCTOR_TYPES: ConstructorQuestionTypeMeta[] = [
     id: 'matching_headings',
     title: 'Matching Headings',
     badge: '📑 Matching Headings',
-    sub: 'Paragraflarga mos sarlavha tanlash (i, ii, iii...)',
+    sub: 'Match paragraphs with appropriate headings (i, ii, iii...)',
     baseCategory: 'matching',
     sectionTypes: ['reading', 'listening'],
     placeholder: 'Paragraf ko‘rsatkichi (masalan: Paragraph A, Paragraph B...)',
@@ -363,7 +363,7 @@ export default function AdminPage() {
     try {
       await apiUpdateUserRole(userId, newRole);
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
-      setRoleMessage(`Foydalanuvchi roli muvaffaqiyatli ${newRole.toUpperCase()} ga o'zgartirildi!`);
+      setRoleMessage(`User role successfully changed to ${newRole.toUpperCase()}!`);
       setTimeout(() => setRoleMessage(''), 3500);
     } catch (e: any) {
       alert('Error changing user role: ' + e.message);
@@ -477,7 +477,7 @@ export default function AdminPage() {
       setTests(prev => [created, ...prev.filter(t => t.id !== created.id)]);
       setSelectedTest(created);
       setActiveTab('tests');
-      setNewTestSuccessBanner(`"${created.title}" testi muvaffaqiyatli yaratildi va ro‘yxatning 1-o‘rniga joylashtirildi!`);
+      setNewTestSuccessBanner(`Test "${created.title}" was successfully created!`);
       setTimeout(() => setNewTestSuccessBanner(null), 8000);
 
       // Sahifani eng yuqoriga ravon ko'taramiz
@@ -536,7 +536,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteTest = async (testId: number) => {
-    if (!confirm('Rostdan ham ushbu testni o‘chirmoqchimisiz?')) return;
+    if (!confirm('Are you sure you want to delete this test?')) return;
     try {
       await apiDeleteTest(testId);
       if (selectedTest?.id === testId) setSelectedTest(null);
@@ -634,7 +634,7 @@ export default function AdminPage() {
     try {
       const res = await apiUploadAudio(file, file.name);
       setAudioUrl(res.url);
-      alert('Audio muvaffaqiyatli yuklandi!');
+      alert('Audio successfully uploaded!');
     } catch (e: any) {
       alert('Error uploading audio: ' + e.message);
     } finally {
@@ -718,7 +718,7 @@ export default function AdminPage() {
           setNewExpFileName(file.name);
         }
       } else {
-        alert('Iltimos, rasm (PNG, JPG), audio (MP3) yoki video (MP4) formatidagi fayl tanlang.');
+        alert('Please select an image (PNG, JPG), audio (MP3), or video (MP4) file.');
       }
     } catch (err: any) {
       alert('Error uploading file: ' + err.message);
@@ -795,7 +795,7 @@ export default function AdminPage() {
         explanation_video_url: editExpVideoUrl.trim(),
         explanation_image_url: editExpImageUrl.trim(),
       });
-      alert('Tushuntirish muvaffaqiyatli saqlandi!');
+      alert('Explanation successfully saved!');
       setEditingExpQuestion(null);
       if (selectedTest) {
         handleSelectTest(selectedTest.id);
@@ -833,7 +833,7 @@ export default function AdminPage() {
     try {
       const res = await apiUploadAudio(file, file.name);
       setWritingImageUrl(res.url);
-      alert('Rasm muvaffaqiyatli yuklandi!');
+      alert('Image successfully uploaded!');
     } catch (e: any) {
       alert('Error uploading image: ' + e.message);
     } finally {
@@ -848,7 +848,7 @@ export default function AdminPage() {
     try {
       const res = await apiUploadAudio(file, file.name);
       setTableImageUrl(res.url);
-      alert('Jadval rasmi muvaffaqiyatli yuklandi!');
+      alert('Table/Diagram image successfully uploaded!');
     } catch (e: any) {
       alert('Error uploading table image: ' + e.message);
     } finally {
@@ -990,7 +990,7 @@ export default function AdminPage() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight flex items-center gap-2.5">
             <Settings className="w-7 h-7 text-emerald-400" />
-            Tizim Admin Paneli
+            Admin Control Panel
           </h1>
           <p className="text-slate-300 text-sm mt-1">
             Create CEFR tests, input Reading passages, and manage test questions.
@@ -1001,7 +1001,7 @@ export default function AdminPage() {
           onClick={handleOpenNewTestModal}
           className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all flex items-center gap-2 cursor-pointer"
         >
-          <Plus className="w-4 h-4" /> Yangi Test Yaratish
+          <Plus className="w-4 h-4" /> Create New Test
         </button>
       </div>
 
@@ -1010,9 +1010,9 @@ export default function AdminPage() {
         <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-100 dark:border-slate-800 my-auto">
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Yangi Test Yaratish</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Create New Test</h3>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Avval test modulini tanlang, so‘ng nom va parametrlarini kiriting.
+                First select test module, then enter title and settings.
               </p>
             </div>
 
@@ -1082,7 +1082,7 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Test Nomi</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Test Title</label>
                 <input
                   type="text"
                   required
@@ -1123,7 +1123,7 @@ export default function AdminPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Daraja</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">CEFR Level</label>
                   <input
                     type="text"
                     value={newLevel}
@@ -1139,13 +1139,13 @@ export default function AdminPage() {
                   onClick={() => setShowNewTest(false)}
                   className="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
                 >
-                  Bekor qilish
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
                 >
-                  Saqlash
+                  Save Test
                 </button>
               </div>
             </form>
@@ -1172,7 +1172,7 @@ export default function AdminPage() {
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>Testlar Boshqaruvi ({tests.length})</span>
+          <span>Test Management</span>
         </button>
 
         {selectedTest && (
@@ -1197,7 +1197,7 @@ export default function AdminPage() {
                 setActiveTab('tests');
               }}
               className="p-1 hover:bg-black/20 rounded-lg transition-colors ml-1 cursor-pointer shrink-0"
-              title="Yopish"
+              title="Close"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -1213,7 +1213,7 @@ export default function AdminPage() {
           }`}
         >
           <Users className="w-4 h-4" />
-          <span>Foydalanuvchilar va Rollar ({users.length})</span>
+          <span>Users & Roles</span>
         </button>
       </div>
 
@@ -1223,7 +1223,7 @@ export default function AdminPage() {
             <div>
               <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                Ro‘yxatdan O‘tgan Foydalanuvchilar
+                Registered Platform Users
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 All new users register as 'student'. Administrators can promote their role to 'examiner' or 'admin' from here.
@@ -1253,7 +1253,7 @@ export default function AdminPage() {
                     <th className="py-3 px-3">ID</th>
                     <th className="py-3 px-3">To‘liq Ism</th>
                     <th className="py-3 px-3">Email</th>
-                    <th className="py-3 px-3">Ro‘yxatdan O‘tgan</th>
+                    <th className="py-3 px-3">Registered At</th>
                     <th className="py-3 px-3">Joriy Rol</th>
                     <th className="py-3 px-3 text-right">Rolni O‘zgartirish</th>
                   </tr>
@@ -1294,7 +1294,7 @@ export default function AdminPage() {
                           >
                             <option value="student">Student (O‘quvchi)</option>
                             <option value="examiner">Examiner (O‘qituvchi)</option>
-                            <option value="admin">Admin (Boshqaruvchi)</option>
+                            <option value="admin">Admin (Administrator)</option>
                           </select>
                         </td>
                       </tr>
@@ -1310,7 +1310,7 @@ export default function AdminPage() {
         <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Mavjud Testlar Ro‘yxati</h2>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Available Tests</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Click a test to select it or navigate to manage its sections and questions.
             </p>
@@ -1328,7 +1328,7 @@ export default function AdminPage() {
                 }`}
               >
                 <ArrowDownUp className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Eng yangilari birinchi</span>
+                <span>Latest First</span>
               </button>
               <button
                 type="button"
@@ -1339,11 +1339,11 @@ export default function AdminPage() {
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <span>Kitob tartibida (13–21)</span>
+                <span>Book Order (13–21)</span>
               </button>
             </div>
             <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">
-              Jami: {tests.length} ta test
+              Test Catalog
             </span>
           </div>
         </div>
@@ -1475,7 +1475,7 @@ export default function AdminPage() {
               <div className="space-y-3">
                 {filteredTests.length === 0 ? (
                   <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">
-                    Ushbu toifada testlar mavjud emas.
+                    No tests found in this category.
                   </div>
                 ) : (
                   filteredTests.map((test) => {
@@ -1502,12 +1502,12 @@ export default function AdminPage() {
                             <div className="flex items-center gap-2.5 flex-wrap">
                               {isNewlyCreated && (
                                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs animate-pulse flex items-center gap-1">
-                                  <Sparkles className="w-3 h-3" /> YANGI QO‘SHILGAN
+                                  <Sparkles className="w-3 h-3" /> NEWLY CREATED
                                 </span>
                               )}
                               {isSelected && (
                                 <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-600 text-white shadow-xs flex items-center gap-1">
-                                  <CheckCircle2 className="w-3 h-3" /> TANLANGAN
+                                  <CheckCircle2 className="w-3 h-3" /> SELECTED
                                 </span>
                               )}
                               {isReading ? (
@@ -1553,7 +1553,7 @@ export default function AdminPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-3 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 rounded-xl transition-colors shrink-0 cursor-pointer"
-                              title="Yangi brauzer tabida ochish"
+                              title="Open in new browser tab"
                             >
                               <ExternalLink className="w-5 h-5" />
                             </a>
@@ -1596,10 +1596,10 @@ export default function AdminPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 transition-colors cursor-pointer"
-                title="Ushbu testni yangi brauzer tabida ochish"
+                title="Open test in new tab"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Yangi Brauzer Tabida</span>
+                <span className="hidden sm:inline">Open in New Tab</span>
               </a>
               <button
                 onClick={() => {
@@ -1608,14 +1608,14 @@ export default function AdminPage() {
                 }}
                 className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold transition-colors cursor-pointer"
               >
-                Yopish
+                Close
               </button>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Tanlangan Test:</span>
+              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Selected Test:</span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-0.5">{selectedTest.title}</h2>
             </div>
 
@@ -1627,7 +1627,7 @@ export default function AdminPage() {
                 <Plus className="w-5 h-5" />
                 <span>
                   {getTestModule(selectedTest) === 'reading'
-                    ? 'Yangi Reading Passage Qo‘shish'
+                    ? 'Add Reading Passage'
                     : getTestModule(selectedTest) === 'listening'
                     ? 'Add New Listening Section'
                     : getTestModule(selectedTest) === 'writing'
@@ -1639,7 +1639,7 @@ export default function AdminPage() {
                 onClick={() => setSelectedTest(null)}
                 className="px-4 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-sm font-bold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
-                Yopish
+                Close
               </button>
             </div>
           </div>
@@ -1652,7 +1652,7 @@ export default function AdminPage() {
                   <Plus className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>
                     {getTestModule(selectedTest) === 'reading'
-                      ? 'Yangi Reading Passage (Matn) Qo‘shish'
+                      ? 'Add Reading Passage'
                       : getTestModule(selectedTest) === 'listening'
                       ? 'Add New Listening Audio Section'
                       : getTestModule(selectedTest) === 'writing'
@@ -1665,7 +1665,7 @@ export default function AdminPage() {
                   onClick={() => setShowAddSection(false)}
                   className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-bold px-2 py-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                 >
-                  Bekor qilish
+                  Cancel
                 </button>
               </div>
 
@@ -1694,7 +1694,7 @@ export default function AdminPage() {
                         <>
                           <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
                           <Edit3 className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                          <span>✍️ Writing (Insho matn muharriri)</span>
+                          <span>✍️ Writing (Essay Prompt Editor)</span>
                         </>
                       )}
                       {sectionType === 'speaking' && (
@@ -1737,7 +1737,7 @@ export default function AdminPage() {
                 {sectionType === 'reading' && (
                   <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-2">
                     <label className="block text-xs font-bold text-emerald-950 dark:text-emerald-200">
-                      📖 Reading Passage (Talaba chap tomonda o‘qiydigan matn):
+                      📖 Reading Passage (Passage shown on student reading pane):
                     </label>
                     <p className="text-xs text-emerald-800 dark:text-emerald-300">
                       Passage content entered here will scroll independently on the left side during the test.
@@ -1747,7 +1747,7 @@ export default function AdminPage() {
                       required
                       value={passageText}
                       onChange={(e) => setPassageText(e.target.value)}
-                      placeholder="Reading matnini (maqola, insho yoki hikoyani) shu yerga to‘liq joylashtiring..."
+                      placeholder="Paste full passage text (article, essay, or story) here..."
                       className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs focus:ring-2 focus:ring-emerald-500 outline-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 leading-relaxed font-sans placeholder:text-slate-400"
                     />
                   </div>
@@ -1765,7 +1765,7 @@ export default function AdminPage() {
                     {isUploadingAudio && <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Uploading audio...</p>}
                     {audioUrl && (
                       <p className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">
-                        ✓ Audio saqlandi: <span className="font-mono">{audioUrl}</span>
+                        ✓ Audio saved: <span className="font-mono">{audioUrl}</span>
                       </p>
                     )}
                   </div>
@@ -1797,11 +1797,11 @@ export default function AdminPage() {
                 >
                   <Plus className="w-4 h-4" />
                   <span>
-                    Birinchi {
+                    Add First {
                       getTestModule(selectedTest) === 'reading' ? 'Reading Passage' :
                       getTestModule(selectedTest) === 'listening' ? 'Listening Section' :
                       getTestModule(selectedTest) === 'writing' ? 'Writing Task' : 'Speaking Part'
-                    }ni Qo‘shish
+                    }
                   </span>
                 </button>
               </div>
@@ -1827,7 +1827,7 @@ export default function AdminPage() {
                           className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                         >
                           <Edit3 className="w-4 h-4" />
-                          <span>Tahrirlash</span>
+                          <span>Edit</span>
                         </button>
                         <button
                           type="button"
@@ -1866,10 +1866,10 @@ export default function AdminPage() {
                     {isReading && (
                       <div className="bg-emerald-50/50 dark:bg-emerald-950/30 p-4 sm:p-5 rounded-xl border border-emerald-100 dark:border-emerald-900/50 space-y-2">
                         <span className="text-sm font-extrabold text-emerald-900 dark:text-emerald-200 block">
-                          📖 Chap tomonda chiqadigan matn (Reading Passage):
+                          📖 Left-Side Reading Passage:
                         </span>
                         <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-3 leading-relaxed">
-                          {sec.passage_text || 'Matn kiritilmagan'}
+                          {sec.passage_text || 'No passage text provided'}
                         </p>
                       </div>
                     )}
@@ -1911,9 +1911,9 @@ export default function AdminPage() {
                               {/* Explanation Status & Edit Button */}
                               <div className="mt-2 pt-2.5 border-t border-slate-200/80 dark:border-slate-700/80 flex flex-wrap items-center justify-between gap-2.5">
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400">💡 Izoh:</span>
+                                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400">💡 Explanation:</span>
                                   {q.explanation_text ? (
-                                    <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">📝 Matn</span>
+                                    <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">📝 Text</span>
                                   ) : null}
                                   {q.explanation_audio_url ? (
                                     <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300">🎙️ Audio</span>
@@ -1925,7 +1925,7 @@ export default function AdminPage() {
                                     <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">🖼️ Rasm</span>
                                   ) : null}
                                   {!q.explanation_text && !q.explanation_audio_url && !q.explanation_video_url && !q.explanation_image_url ? (
-                                    <span className="text-xs text-slate-400 dark:text-slate-500 italic">Mavjud emas</span>
+                                    <span className="text-xs text-slate-400 dark:text-slate-500 italic">None</span>
                                   ) : null}
                                 </div>
 
@@ -1936,7 +1936,7 @@ export default function AdminPage() {
                                     className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
                                   >
                                     <Edit3 className="w-3.5 h-3.5" />
-                                    <span>Tahrirlash</span>
+                                    <span>Edit</span>
                                   </button>
                                   <button
                                     type="button"
@@ -1952,7 +1952,7 @@ export default function AdminPage() {
                                     className="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
                                   >
                                     <Sparkles className="w-3.5 h-3.5" />
-                                    <span>{q.explanation_text || q.explanation_audio_url || q.explanation_video_url || q.explanation_image_url ? 'Izoh' : '+ Izoh'}</span>
+                                    <span>{q.explanation_text || q.explanation_audio_url || q.explanation_video_url || q.explanation_image_url ? 'Explanation' : '+ Explanation'}</span>
                                   </button>
                                 </div>
                               </div>
@@ -1980,7 +1980,7 @@ export default function AdminPage() {
                             onClick={() => setSelectedSectionIdForQuestion(null)}
                             className="text-xs sm:text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold px-3 py-1.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                           >
-                            Bekor qilish
+                            Cancel
                           </button>
                         </div>
 
@@ -2081,7 +2081,7 @@ export default function AdminPage() {
                                 2. Question Text or Instructions:
                               </label>
                               <span className="text-xs sm:text-sm font-extrabold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                                Tanlangan: {IELTS_CONSTRUCTOR_TYPES.find((c) => c.id === selectedConstructorType)?.title || 'Multiple Choice'}
+                                Selected: {IELTS_CONSTRUCTOR_TYPES.find((c) => c.id === selectedConstructorType)?.title || 'Multiple Choice'}
                               </span>
                             </div>
                             <textarea
@@ -2129,7 +2129,7 @@ export default function AdminPage() {
                                         setMcOptions(next);
                                         if (isCorrect) setCorrectAnswer(e.target.value);
                                       }}
-                                      placeholder={`${letter} varianti matni`}
+                                      placeholder={`Option ${letter} text`}
                                       className="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm sm:text-base bg-slate-50/50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500"
                                     />
                                   </div>
@@ -2261,7 +2261,7 @@ export default function AdminPage() {
                                       title="Insert ready table template into question text"
                                     >
                                       <Table className="w-3.5 h-3.5" />
-                                      <span>+ Jadval Shablonini Matnga Joylash</span>
+                                      <span>+ Insert Table Template into Text</span>
                                     </button>
                                   </div>
 
@@ -2281,7 +2281,7 @@ export default function AdminPage() {
                                       type="text"
                                       value={tableImageUrl}
                                       onChange={(e) => setTableImageUrl(e.target.value)}
-                                      placeholder="Yoki to‘g‘ridan-to‘g‘ri jadval rasmi URL manzilini kiriting..."
+                                      placeholder="Or enter direct table/diagram image URL..."
                                       className="flex-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                                     />
                                   </div>
@@ -2295,7 +2295,7 @@ export default function AdminPage() {
                                           onClick={() => setTableImageUrl('')}
                                           className="text-xs text-rose-600 hover:underline font-bold cursor-pointer"
                                         >
-                                          O‘chirish
+                                          Delete
                                         </button>
                                       </div>
                                       <img src={tableImageUrl} alt="Table preview" className="w-full h-auto rounded-lg object-contain max-h-48 border border-slate-200 dark:border-slate-700" />
@@ -2335,7 +2335,7 @@ export default function AdminPage() {
                                   onClick={() => setMatchingOptions([...matchingOptions, ''])}
                                   className="text-xs sm:text-sm font-extrabold text-purple-600 hover:text-purple-700 dark:text-purple-400 flex items-center gap-1.5 cursor-pointer px-3 py-1.5 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-950/50"
                                 >
-                                  <Plus className="w-4 h-4" /> Variant qo‘shish
+                                  <Plus className="w-4 h-4" /> Add Option
                                 </button>
                               </div>
 
@@ -2358,7 +2358,7 @@ export default function AdminPage() {
                                         type="button"
                                         onClick={() => setMatchingOptions(matchingOptions.filter((_, i) => i !== idx))}
                                         className="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40"
-                                        title="O‘chirish"
+                                        title="Delete"
                                       >
                                         <Trash2 className="w-4 h-4" />
                                       </button>
@@ -2405,7 +2405,7 @@ export default function AdminPage() {
                                   type="text"
                                   value={writingImageUrl}
                                   onChange={(e) => setWritingImageUrl(e.target.value)}
-                                  placeholder="Yoki to‘g‘ridan-to‘g‘ri rasm URL manzilini kiriting..."
+                                  placeholder="Or enter direct image URL..."
                                   className="flex-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                                 />
                               </div>
@@ -2452,7 +2452,7 @@ export default function AdminPage() {
                                   <label className="block text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between">
                                     <span className="flex items-center gap-2">
                                       <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                                      <span>Tushuntirish matni (Matn):</span>
+                                      <span>Explanation Text:</span>
                                     </span>
                                     <span className="text-xs text-slate-400 font-normal">
                                       (File only without text is allowed)
@@ -2462,7 +2462,7 @@ export default function AdminPage() {
                                     rows={4}
                                     value={newExpText}
                                     onChange={(e) => setNewExpText(e.target.value)}
-                                    placeholder="Nega aynan shu variant to‘g‘ri? Matndagi yoki audiodagi kalit dalillar va sinonimlarni tushuntiring..."
+                                    placeholder="Explain why this answer is correct. Include key evidence and synonyms from the passage or audio..."
                                     className="w-full px-4 py-3 text-sm sm:text-base rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500"
                                   />
                                 </div>
@@ -2655,7 +2655,7 @@ export default function AdminPage() {
               {editingSection.type === 'reading' && (
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Reading Passage Matni
+                    Reading Passage Text
                   </label>
                   <textarea
                     rows={8}
@@ -2686,13 +2686,13 @@ export default function AdminPage() {
                   onClick={() => setEditingSection(null)}
                   className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold text-xs"
                 >
-                  Bekor qilish
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"
                 >
-                  O‘zgarishlarni Saqlash
+                  O‘zgarishlarni Save Test
                 </button>
               </div>
             </form>
@@ -2776,13 +2776,13 @@ export default function AdminPage() {
                   onClick={() => setEditingQuestion(null)}
                   className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold text-xs"
                 >
-                  Bekor qilish
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md"
                 >
-                  O‘zgarishlarni Saqlash
+                  O‘zgarishlarni Save Test
                 </button>
               </div>
             </form>
@@ -2838,7 +2838,7 @@ export default function AdminPage() {
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-extrabold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                     <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                    <span>Tushuntirish matni (Matn):</span>
+                    <span>Explanation Text:</span>
                   </label>
                   <button
                     type="button"
@@ -2970,7 +2970,7 @@ export default function AdminPage() {
                 onClick={() => setEditingExpQuestion(null)}
                 className="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors cursor-pointer"
               >
-                Bekor qilish
+                Cancel
               </button>
               <button
                 type="button"
@@ -2979,11 +2979,11 @@ export default function AdminPage() {
                 className="px-6 py-2.5 text-sm sm:text-base font-extrabold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
               >
                 {isSavingEditExp ? (
-                  <span>Saqlanmoqda...</span>
+                  <span>Saving...</span>
                 ) : (
                   <>
                     <CheckCircle2 className="w-5 h-5" />
-                    <span>Tushuntirishni Saqlash</span>
+                    <span>Save Explanation</span>
                   </>
                 )}
               </button>

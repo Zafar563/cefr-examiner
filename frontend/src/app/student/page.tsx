@@ -918,7 +918,7 @@ function StudentDashboardContent() {
     if (speakingTest) {
       handleStartTest(speakingTest.id, false, topic.part - 1);
     } else {
-      alert('Speaking test bazada topilmadi. Mock orqali foydalanishingiz mumkin.');
+      alert('Speaking test not found in database. You can practice via Mock exam.');
     }
   };
 
@@ -1795,17 +1795,23 @@ function StudentDashboardContent() {
               </div>
             </div>
 
-            <div className="pt-4 flex items-center gap-3">
+            <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <button
-                onClick={() => alert('Online Speaking Partner feature is currently in beta!')}
+                onClick={() => {
+                  const speakingTest =
+                    speakingTests[0] || tests.find((t) => t.title.toLowerCase().includes('speaking')) || tests[0];
+                  if (speakingTest) {
+                    handleStartTest(speakingTest.id, false);
+                  }
+                }}
                 className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Start Partner Search</span>
+                <span>Start Guided Speaking Practice</span>
               </button>
-              <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                14 candidates online now
+                <span>Active IELTS & CEFR Speaking Module</span>
               </span>
             </div>
           </div>
@@ -2091,6 +2097,37 @@ function StudentDashboardContent() {
         </section>
       ) : (
         <>
+          {/* Quick Live Exam PIN banner */}
+          <div className="rounded-2xl border border-rose-200/80 dark:border-rose-900/50 bg-gradient-to-r from-rose-50/90 via-orange-50/60 to-amber-50/80 dark:from-rose-950/30 dark:via-orange-950/20 dark:to-amber-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shadow-md shadow-rose-500/20 shrink-0">
+                <Users className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-ping" />
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                    Live Group Examination
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+                  Taking a test with your teacher or examiner?
+                </h4>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Enter the 6-digit PIN code to connect to your live exam session.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/student/live"
+              className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-black text-xs uppercase tracking-wider shadow-md shadow-rose-600/20 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+            >
+              <span>Enter PIN Code</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
           {/* 1. Main Hero Banner Container (Unified matching ieltsmaterials layout) */}
           <section className="space-y-5">
             <div className={`animate-banner-in relative overflow-hidden rounded-3xl bg-gradient-to-r ${theme.gradient} p-6 sm:p-8 lg:p-9 text-white shadow-xl border ${theme.borderColor}`}>
@@ -2442,7 +2479,7 @@ function StudentDashboardContent() {
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750'
                     }`}
                   >
-                    All ({currentCategoryTests.length})
+                    All
                   </button>
                   {activeTab === 'writing' && (
                     <div className="flex items-center gap-1.5 shrink-0">

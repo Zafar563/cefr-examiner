@@ -106,6 +106,34 @@ CREATE TABLE IF NOT EXISTS test_results (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Examiner Live Group Exam Rooms
+CREATE TABLE IF NOT EXISTS exam_rooms (
+    id SERIAL PRIMARY KEY,
+    examiner_id INT REFERENCES users(id) ON DELETE CASCADE,
+    pin_code VARCHAR(10) UNIQUE NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    module_type VARCHAR(50) NOT NULL,
+    test_id INT REFERENCES tests(id) ON DELETE SET NULL,
+    target_section_index INT,
+    status VARCHAR(50) DEFAULT 'waiting' CHECK (status IN ('waiting', 'in_progress', 'completed')),
+    duration_minutes INT DEFAULT 60,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    started_at TIMESTAMP WITH TIME ZONE,
+    completed_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE IF NOT EXISTS exam_room_participants (
+    id SERIAL PRIMARY KEY,
+    room_id INT REFERENCES exam_rooms(id) ON DELETE CASCADE,
+    student_id INT REFERENCES users(id) ON DELETE CASCADE,
+    session_id INT REFERENCES test_sessions(id) ON DELETE SET NULL,
+    status VARCHAR(50) DEFAULT 'joined' CHECK (status IN ('joined', 'in_progress', 'submitted', 'graded')),
+    joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    score FLOAT DEFAULT 0,
+    cefr_level VARCHAR(20) DEFAULT '',
+    CONSTRAINT unique_room_student UNIQUE (room_id, student_id)
+);
+
 -- Indexing for performance
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_sections_test_id ON sections(test_id);

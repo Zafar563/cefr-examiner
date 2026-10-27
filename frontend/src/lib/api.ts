@@ -313,11 +313,19 @@ export const apiGetExaminerSubmissions = async (): Promise<TestSession[]> => {
   }
 };
 
-export const apiGradeAnswer = async (answerId: number, score: number, feedback: string) => {
+export const apiGradeAnswer = async (
+  answerId: number,
+  score: number,
+  feedback: string,
+  sessionId?: number,
+  questionId?: number
+) => {
   return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/grade`, {
     method: 'POST',
     body: JSON.stringify({
       answer_id: answerId,
+      session_id: sessionId,
+      question_id: questionId,
       score,
       feedback,
     }),
@@ -536,4 +544,88 @@ export const sortCambridgeTests = (a: Test, b: Test): number => {
   const testDiff = getTestNum(a.title) - getTestNum(b.title);
   if (testDiff !== 0) return testDiff;
   return b.id - a.id;
+};
+
+// ==========================================
+// EXAMINER LIVE GROUP EXAM ROOMS API
+// ==========================================
+
+export interface RoomParticipantInfo {
+  id: number;
+  room_id: number;
+  student_id: number;
+  student_name: string;
+  student_email: string;
+  session_id?: number;
+  status: 'joined' | 'in_progress' | 'submitted' | 'graded';
+  joined_at: string;
+  score: number;
+  cefr_level: string;
+  answers_count: number;
+  total_questions: number;
+}
+
+export interface ExamRoom {
+  id: number;
+  examiner_id: number;
+  examiner_name?: string;
+  pin_code: string;
+  title: string;
+  module_type: 'mock' | 'listening' | 'reading' | 'writing' | 'speaking';
+  test_id?: number;
+  test_title?: string;
+  target_section_index?: number;
+  status: 'waiting' | 'in_progress' | 'completed';
+  duration_minutes: number;
+  created_at: string;
+  started_at?: string;
+  completed_at?: string;
+  participants?: RoomParticipantInfo[];
+}
+
+export interface CreateRoomRequest {
+  title: string;
+  module_type: string;
+  test_id?: number;
+  target_section_index?: number;
+  duration_minutes: number;
+}
+
+export const apiCreateExamRoom = async (data: CreateRoomRequest): Promise<ExamRoom> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/rooms`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+};
+
+export const apiGetExamRoom = async (pinCode: string): Promise<ExamRoom> => {
+  const res = await fetch(`${getCoreApiUrl()}/api/v1/rooms/${pinCode}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Room not found' }));
+    throw new Error(err.error || 'Room not found');
+  }
+  return res.json();
+};
+
+export const apiListExaminerRooms = async (): Promise<ExamRoom[]> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/rooms`);
+};
+
+export const apiJoinExamRoom = async (pinCode: string): Promise<{ room: ExamRoom; participant: RoomParticipantInfo }> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/rooms/join`, {
+    method: 'POST',
+    body: JSON.stringify({ pin_code: pinCode }),
+  });
+};
+
+export const apiStartExamRoom = async (roomId: number): Promise<ExamRoom> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/rooms/${roomId}/start`, {
+    method: 'POST',
+  });
+};
+
+export const apiCompleteExamRoom = async (roomId: number): Promise<ExamRoom> => {
+  return fetchWithAuth(`${getCoreApiUrl()}/api/v1/examiner/rooms/${roomId}/complete`, {
+    method: 'POST',
+  });
 };

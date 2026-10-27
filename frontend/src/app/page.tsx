@@ -96,7 +96,7 @@ export default function HomePage() {
             href="/student"
             className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-white/70 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-black text-sm uppercase tracking-wider border border-slate-200 dark:border-white/10 shadow-lg backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
           >
-            <span>Explore All 144 Tests</span>
+            <span>Explore All Modules</span>
             <Layers className="w-4 h-4 text-slate-400" />
           </Link>
         </motion.div>
@@ -109,10 +109,10 @@ export default function HomePage() {
           className="mt-12 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full max-w-4xl"
         >
           {[
-            { label: 'Academic Tests', value: '144+', sub: 'Cambridge Books 13–21' },
+            { label: 'Exam Standards', value: 'CEFR', sub: 'A1 to C2 Band Scale' },
             { label: 'Full Mock Time', value: '180m', sub: '4 Integrated Skills' },
             { label: 'Evaluation', value: 'Instant', sub: 'Band & CEFR Levels' },
-            { label: 'Question Bank', value: '1,400+', sub: 'Verbatim Official Items' },
+            { label: 'Question Format', value: 'Official', sub: 'Authentic Exam Formats' },
           ].map((stat, idx) => (
             <div
               key={idx}
@@ -157,109 +157,91 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Bento Grid with Asymmetrical High-Impact Cards */}
+        {/* Uniform Grid - Equal Dimensions for All Cards */}
         <BentoGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {/* Card 1: Full Mock Exam Simulator (Hero Bento Card - spans 2 columns) */}
+          {/* Card 1: Full Mock Exam Simulator */}
           <BentoCard
-            size="large"
             title="Full Mock Exam Simulator"
-            description="Experience an authentic, uninterrupted 180-minute examination simulating all 4 modules (Listening, Reading, Writing, Speaking) under strict exam timing and official CEFR / IELTS scoring criteria."
+            description="Complete 180-minute practice exam covering all 4 modules under official timing."
             badge="180 MINS · FULL EXAM"
-            badgeColor="from-amber-500 via-orange-500 to-amber-600"
-            icon={<Award className="w-8 h-8 text-amber-500" />}
+            badgeColor="from-amber-500 to-orange-600"
+            icon={<Award className="w-5 h-5 text-amber-500" />}
             href="/student?tab=mock"
-            cta="Launch Full Mock Exam"
-            glowColor="rgba(245, 158, 11, 0.3)"
-            className="md:col-span-2 bg-gradient-to-br from-amber-50/50 via-white/85 to-orange-50/40 dark:from-amber-950/25 dark:via-slate-900/70 dark:to-orange-950/15 border-amber-200/90 dark:border-amber-500/30 hover:border-amber-400/80 dark:hover:border-amber-400/60 shadow-xl"
+            cta="Launch Full Mock"
+            ctaColor="text-amber-600 dark:text-amber-400"
+            glowColor="rgba(245, 158, 11, 0.2)"
+            className="hover:border-amber-400/60 dark:hover:border-amber-400/40"
           />
 
           {/* Card 2: Listening Laboratory */}
           <BentoCard
             title="Listening Laboratory"
-            description="36 complete listening tests. Train with official exam pacing, 4 audio parts, max 2 plays rule, and detailed post-exam audioscript reviews."
+            description="Train with authentic exam audio pacing, 4 parts, and complete audioscripts."
             badge="AUDIO · 30 MINS"
             badgeColor="from-blue-600 to-cyan-500"
-            icon={<Headphones className="w-6 h-6 text-blue-500" />}
+            icon={<Headphones className="w-5 h-5 text-blue-500" />}
             href="/student?tab=listening"
             cta="Open Listening"
-            glowColor="rgba(59, 130, 246, 0.25)"
-          >
-            <div className="mt-2 flex items-center justify-between p-3 rounded-2xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40 text-xs font-bold text-blue-700 dark:text-blue-300">
-              <span className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-500" />
-                <span>36 Official Tests</span>
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase">
-                40 Questions
-              </span>
-            </div>
-          </BentoCard>
+            ctaColor="text-blue-600 dark:text-sky-400"
+            glowColor="rgba(59, 130, 246, 0.2)"
+            className="hover:border-sky-400/60 dark:hover:border-sky-400/40"
+          />
 
-          {/* Card 3: Reading Passage Comprehension */}
+          {/* Card 3: Reading Comprehension */}
           <BentoCard
             title="Reading Comprehension"
-            description="37 academic tests across 3 passages each. Includes Drag & Drop matching headings, split-screen reading, and instant answer validation."
+            description="Master academic reading texts with split-screen view and drag & drop questions."
             badge="TEXTS · 60 MINS"
             badgeColor="from-emerald-500 to-teal-600"
-            icon={<BookOpen className="w-6 h-6 text-emerald-500" />}
+            icon={<BookOpen className="w-5 h-5 text-emerald-500" />}
             href="/student?tab=reading"
             cta="Open Reading"
-            glowColor="rgba(16, 185, 129, 0.25)"
-          >
-            <div className="mt-2 flex items-center justify-between p-3 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/40 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-              <span className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span>37 Full Tests (111 Passages)</span>
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase">
-                Passages 1–3
-              </span>
-            </div>
-          </BentoCard>
+            ctaColor="text-emerald-600 dark:text-emerald-400"
+            glowColor="rgba(16, 185, 129, 0.2)"
+            className="hover:border-emerald-400/60 dark:hover:border-emerald-400/40"
+          />
 
           {/* Card 4: Writing Essay Studio */}
           <BentoCard
             title="Writing Essay Studio"
-            description="Task 1 visual data reports and Task 2 discursive essays. Features real-time word counting, visual chart prompts, and 4-criteria rubric evaluation."
+            description="Write Task 1 visual reports and Task 2 discursive essays with live word count."
             badge="ESSAY · 60 MINS"
-            badgeColor="from-rose-500 via-pink-600 to-purple-600"
-            icon={<Edit3 className="w-6 h-6 text-rose-500" />}
+            badgeColor="from-rose-500 to-pink-600"
+            icon={<Edit3 className="w-5 h-5 text-rose-500" />}
             href="/student?tab=writing"
             cta="Open Writing"
-            glowColor="rgba(244, 63, 94, 0.25)"
-          >
-            <div className="mt-2 flex items-center justify-between p-3 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/40 text-xs font-bold text-rose-700 dark:text-rose-300">
-              <span className="flex items-center gap-2">
-                <FileCheck2 className="w-4 h-4 text-rose-500" />
-                <span>Task 1 (150w) & Task 2 (250w)</span>
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black uppercase">
-                Band Graded
-              </span>
-            </div>
-          </BentoCard>
+            ctaColor="text-rose-600 dark:text-rose-400"
+            glowColor="rgba(244, 63, 94, 0.2)"
+            className="hover:border-rose-400/60 dark:hover:border-rose-400/40"
+          />
 
-          {/* Card 5: Speaking Practice & AI Audio */}
+          {/* Card 5: Speaking Voice Studio */}
           <BentoCard
             title="Speaking Voice Studio"
-            description="Practice Parts 1, 2, and 3 with real examiner cue cards, in-browser audio recording, playback analysis, and speaking partner mode."
+            description="Interactive interview practice covering Parts 1, 2, and 3 with audio recording."
             badge="VOICE · 15 MINS"
             badgeColor="from-purple-500 to-violet-600"
-            icon={<Mic className="w-6 h-6 text-purple-500" />}
+            icon={<Mic className="w-5 h-5 text-purple-500" />}
             href="/student?tab=speaking"
             cta="Open Speaking"
-            glowColor="rgba(168, 85, 247, 0.25)"
-          >
-            <div className="mt-2 flex items-center justify-between p-3 rounded-2xl bg-purple-50/60 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/40 text-xs font-bold text-purple-700 dark:text-purple-300">
-              <span className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-purple-500" />
-                <span>3 Parts · Voice Recording</span>
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-purple-600 text-white text-[10px] font-black uppercase">
-                Partner Mode
-              </span>
-            </div>
-          </BentoCard>
+            ctaColor="text-purple-600 dark:text-purple-400"
+            glowColor="rgba(168, 85, 247, 0.2)"
+            className="hover:border-purple-400/60 dark:hover:border-purple-400/40"
+          />
+
+          {/* Card 6: Results & Band Scoring */}
+          <BentoCard
+            title="Results & Analytics"
+            description="Instant CEFR level score, band calculation, and detailed answer explanations."
+            badge="CEFR · INSTANT"
+            badgeColor="from-amber-500 to-emerald-600"
+            icon={<Sparkles className="w-5 h-5 text-amber-500" />}
+            href="/student?tab=mock&mode=results"
+            cta="View My Results"
+            ctaColor="text-emerald-600 dark:text-emerald-400"
+            glowColor="rgba(16, 185, 129, 0.2)"
+            className="hover:border-amber-400/60 dark:hover:border-emerald-400/40"
+          />
         </BentoGrid>
       </section>
 

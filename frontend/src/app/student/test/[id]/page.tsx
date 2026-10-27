@@ -1088,11 +1088,30 @@ export default function TestTakingPage() {
   // Timer state
   const [secondsRemaining, setSecondsRemaining] = useState<number>(7200);
 
-  // Listening state: audio play limiter (max 2 plays)
+  // Listening state: audio play limiter (max 2 plays, persisted per session)
   const [audioPlaysLeft, setAudioPlaysLeft] = useState<Record<number, number>>({});
   const [hasStartedCurrentPlay, setHasStartedCurrentPlay] = useState<Record<number, boolean>>({});
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !isNaN(sessionId)) {
+      try {
+        const saved = sessionStorage.getItem(`cefr_audio_plays_${sessionId}`);
+        if (saved) {
+          setAudioPlaysLeft(JSON.parse(saved));
+        }
+      } catch {}
+    }
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !isNaN(sessionId) && Object.keys(audioPlaysLeft).length > 0) {
+      try {
+        sessionStorage.setItem(`cefr_audio_plays_${sessionId}`, JSON.stringify(audioPlaysLeft));
+      } catch {}
+    }
+  }, [audioPlaysLeft, sessionId]);
 
   // Speaking state: Web Audio / MediaRecorder
   const [recordingQuestionId, setRecordingQuestionId] = useState<number | null>(null);

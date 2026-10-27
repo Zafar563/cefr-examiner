@@ -108,6 +108,9 @@ func main() {
 		// Public Tests listing
 		api.GET("/tests", h.ListTests)
 
+		// Public Exam Room lookup by PIN (for lobby polling)
+		api.GET("/rooms/:pin", h.GetExamRoom)
+
 		// Authenticated Routes
 		authRequired := api.Group("")
 		authRequired.Use(auth.AuthMiddleware(jwtSecret))
@@ -122,6 +125,9 @@ func main() {
 			authRequired.POST("/sessions/:id/submit", h.SubmitSession)
 			authRequired.GET("/student/history", h.GetStudentResults)
 
+			// Live Room routes for Students
+			authRequired.POST("/rooms/join", h.JoinExamRoom)
+
 			// User profile & security
 			authRequired.GET("/user/profile", h.GetUserProfile)
 			authRequired.PUT("/user/profile", h.UpdateUserProfile)
@@ -133,6 +139,12 @@ func main() {
 			{
 				examinerOnly.GET("/submissions", h.GetPendingSubmissions)
 				examinerOnly.POST("/grade", h.GradeAnswer)
+
+				// Live Group Exam Room Management
+				examinerOnly.POST("/rooms", h.CreateExamRoom)
+				examinerOnly.GET("/rooms", h.ListExaminerRooms)
+				examinerOnly.POST("/rooms/:id/start", h.StartExamRoom)
+				examinerOnly.POST("/rooms/:id/complete", h.CompleteExamRoom)
 			}
 
 			// Admin Only Routes

@@ -956,10 +956,7 @@ func (r *Repository) GetPendingSubmissions() ([]models.TestSession, error) {
 		FROM test_sessions ts
 		JOIN tests t ON ts.test_id = t.id
 		JOIN users u ON ts.user_id = u.id
-		JOIN answers a ON a.session_id = ts.id
-		JOIN questions q ON a.question_id = q.id
-		JOIN sections s ON q.section_id = s.id
-		WHERE (ts.status = 'submitted' OR ts.status = 'graded') AND s.type IN ('writing', 'speaking')
+		WHERE (ts.status = 'submitted' OR ts.status = 'graded')
 		ORDER BY ts.submitted_at DESC
 	`
 	rows, err := r.db.Query(query)
@@ -982,19 +979,39 @@ func (r *Repository) GetPendingSubmissions() ([]models.TestSession, error) {
 }
 
 func (r *Repository) GradeAnswer(answerID int, score float64, feedback string) error {
-	query := `
-		UPDATE answers
-		SET score = $1, examiner_feedback = $2, is_graded = true
-		WHERE id = $3
-		RETURNING session_id
-	`
-	var sessionID int
-	err := r.db.QueryRow(query, score, feedback, answerID).Scan(&sessionID)
-	if err != nil {
-		return err
+	return r.GradeAnswerOrUpsert(answerID, 0, 0, score, feedback)
+}
+
+func (r *Repository) GradeAnswerOrUpsert(answerID int, sessionID int, questionID int, score float64, feedback string) error {
+	var sid int
+	if answerID > 0 {
+		query := `
+			UPDATE answers
+			SET score = $1, examiner_feedback = $2, is_graded = true
+			WHERE id = $3
+			RETURNING session_id
+		`
+		err := r.db.QueryRow(query, score, feedback, answerID).Scan(&sid)
+		if err != nil {
+			return err
+		}
+	} else if sessionID > 0 && questionID > 0 {
+		query := `
+			INSERT INTO answers (session_id, question_id, score, examiner_feedback, is_graded, user_answer_text)
+			VALUES ($1, $2, $3, $4, true, '')
+			ON CONFLICT (session_id, question_id)
+			DO UPDATE SET score = $3, examiner_feedback = $4, is_graded = true
+			RETURNING session_id
+		`
+		err := r.db.QueryRow(query, sessionID, questionID, score, feedback).Scan(&sid)
+		if err != nil {
+			return err
+		}
+	} else {
+		return fmt.Errorf("invalid answer identification")
 	}
 
-	return r.RecalculateSessionResults(sessionID)
+	return r.RecalculateSessionResults(sid)
 }
 
 func (r *Repository) GetStudentResults(userID int) ([]models.TestSession, error) {
@@ -1176,3 +1193,286 @@ func (r *Repository) DeleteQuestion(id int) error {
 	_, err := r.db.Exec(`DELETE FROM questions WHERE id = $1`, id)
 	return err
 }
+
+// ==========================================
+// EXAM ROOM & GROUP TESTING METHODS
+// ==========================================
+
+func (r *Repository) generateUniquePin() (string, error) {
+	for i := 0; i < 10; i++ {
+		pin := fmt.Sprintf("%06d", (time.Now().UnixNano()%900000)+100000)
+		var exists bool
+		err := r.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM exam_rooms WHERE pin_code = $1 AND status != 'completed')`, pin).Scan(&exists)
+		if err != nil {
+			return "", err
+		}
+		if !exists {
+			return pin, nil
+		}
+	}
+	return fmt.Sprintf("%06d", (time.Now().UnixNano()%900000)+100000), nil
+}
+
+func (r *Repository) CreateExamRoom(examinerID int, title, moduleType string, testID *int, targetSectionIndex *int, durationMinutes int) (*models.ExamRoom, error) {
+	if durationMinutes <= 0 {
+		durationMinutes = 60
+	}
+	pin, err := r.generateUniquePin()
+	if err != nil {
+		return nil, err
+	}
+
+	query := `
+		INSERT INTO exam_rooms (examiner_id, pin_code, title, module_type, test_id, target_section_index, status, duration_minutes)
+		VALUES ($1, $2, $3, $4, $5, $6, 'waiting', $7)
+		RETURNING id, examiner_id, pin_code, title, module_type, test_id, target_section_index, status, duration_minutes, created_at
+	`
+	var room models.ExamRoom
+	err = r.db.QueryRow(query, examinerID, pin, title, moduleType, testID, targetSectionIndex, durationMinutes).Scan(
+		&room.ID, &room.ExaminerID, &room.PinCode, &room.Title, &room.ModuleType, &room.TestID, &room.TargetSectionIndex, &room.Status, &room.DurationMinutes, &room.CreatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = r.db.QueryRow(`SELECT full_name FROM users WHERE id = $1`, examinerID).Scan(&room.ExaminerName)
+	if testID != nil {
+		_ = r.db.QueryRow(`SELECT title FROM tests WHERE id = $1`, *testID).Scan(&room.TestTitle)
+	}
+
+	room.Participants = []models.RoomParticipantInfo{}
+	return &room, nil
+}
+
+func (r *Repository) GetExamRoomByPin(pinCode string) (*models.ExamRoom, error) {
+	query := `
+		SELECT er.id, er.examiner_id, u.full_name, er.pin_code, er.title, er.module_type, er.test_id, COALESCE(t.title, ''),
+		       er.target_section_index, er.status, er.duration_minutes, er.created_at, er.started_at, er.completed_at
+		FROM exam_rooms er
+		JOIN users u ON er.examiner_id = u.id
+		LEFT JOIN tests t ON er.test_id = t.id
+		WHERE er.pin_code = $1
+	`
+	var room models.ExamRoom
+	err := r.db.QueryRow(query, pinCode).Scan(
+		&room.ID, &room.ExaminerID, &room.ExaminerName, &room.PinCode, &room.Title, &room.ModuleType,
+		&room.TestID, &room.TestTitle, &room.TargetSectionIndex, &room.Status, &room.DurationMinutes,
+		&room.CreatedAt, &room.StartedAt, &room.CompletedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	partsQuery := `
+		SELECT p.id, p.room_id, p.student_id, u.full_name, u.email, p.session_id, p.status, p.joined_at, p.score, p.cefr_level,
+		       COALESCE((SELECT COUNT(*) FROM answers a WHERE a.session_id = p.session_id), 0) as ans_count,
+		       COALESCE((SELECT COUNT(*) FROM questions q JOIN sections s ON q.section_id = s.id WHERE s.test_id = er.test_id), 0) as total_qs
+		FROM exam_room_participants p
+		JOIN users u ON p.student_id = u.id
+		JOIN exam_rooms er ON p.room_id = er.id
+		WHERE p.room_id = $1
+		ORDER BY p.joined_at ASC
+	`
+	rows, err := r.db.Query(partsQuery, room.ID)
+	if err == nil {
+		defer rows.Close()
+		room.Participants = make([]models.RoomParticipantInfo, 0)
+		for rows.Next() {
+			var pi models.RoomParticipantInfo
+			if scanErr := rows.Scan(
+				&pi.ID, &pi.RoomID, &pi.StudentID, &pi.StudentName, &pi.StudentEmail,
+				&pi.SessionID, &pi.Status, &pi.JoinedAt, &pi.Score, &pi.CefrLevel,
+				&pi.AnswersCount, &pi.TotalQuestions,
+			); scanErr == nil {
+				room.Participants = append(room.Participants, pi)
+			}
+		}
+	}
+
+	return &room, nil
+}
+
+func (r *Repository) GetExamRoomByID(roomID int) (*models.ExamRoom, error) {
+	var pin string
+	err := r.db.QueryRow(`SELECT pin_code FROM exam_rooms WHERE id = $1`, roomID).Scan(&pin)
+	if err != nil {
+		return nil, err
+	}
+	return r.GetExamRoomByPin(pin)
+}
+
+func (r *Repository) ListExaminerRooms(examinerID int) ([]models.ExamRoom, error) {
+	query := `
+		SELECT er.id, er.examiner_id, u.full_name, er.pin_code, er.title, er.module_type, er.test_id, COALESCE(t.title, ''),
+		       er.target_section_index, er.status, er.duration_minutes, er.created_at, er.started_at, er.completed_at
+		FROM exam_rooms er
+		JOIN users u ON er.examiner_id = u.id
+		LEFT JOIN tests t ON er.test_id = t.id
+		WHERE er.examiner_id = $1
+		ORDER BY er.id DESC
+		LIMIT 30
+	`
+	rows, err := r.db.Query(query, examinerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	rooms := make([]models.ExamRoom, 0)
+	for rows.Next() {
+		var room models.ExamRoom
+		if err := rows.Scan(
+			&room.ID, &room.ExaminerID, &room.ExaminerName, &room.PinCode, &room.Title, &room.ModuleType,
+			&room.TestID, &room.TestTitle, &room.TargetSectionIndex, &room.Status, &room.DurationMinutes,
+			&room.CreatedAt, &room.StartedAt, &room.CompletedAt,
+		); err == nil {
+			// Query participants count for room
+			partsQuery := `
+				SELECT p.id, p.room_id, p.student_id, u.full_name, u.email, p.session_id, p.status, p.joined_at, p.score, p.cefr_level,
+				       0 as ans_count, 0 as total_qs
+				FROM exam_room_participants p
+				JOIN users u ON p.student_id = u.id
+				WHERE p.room_id = $1
+				ORDER BY p.joined_at ASC
+			`
+			pRows, pErr := r.db.Query(partsQuery, room.ID)
+			if pErr == nil {
+				room.Participants = make([]models.RoomParticipantInfo, 0)
+				for pRows.Next() {
+					var pi models.RoomParticipantInfo
+					if sErr := pRows.Scan(&pi.ID, &pi.RoomID, &pi.StudentID, &pi.StudentName, &pi.StudentEmail, &pi.SessionID, &pi.Status, &pi.JoinedAt, &pi.Score, &pi.CefrLevel, &pi.AnswersCount, &pi.TotalQuestions); sErr == nil {
+						room.Participants = append(room.Participants, pi)
+					}
+				}
+				pRows.Close()
+			}
+			rooms = append(rooms, room)
+		}
+	}
+	return rooms, nil
+}
+
+func (r *Repository) JoinExamRoom(pinCode string, studentID int) (*models.ExamRoom, *models.RoomParticipantInfo, error) {
+	room, err := r.GetExamRoomByPin(pinCode)
+	if err != nil {
+		return nil, nil, fmt.Errorf("room with PIN %s not found", pinCode)
+	}
+
+	if room.Status == "completed" {
+		return nil, nil, fmt.Errorf("this exam room has already completed")
+	}
+
+	var partID int
+	var sessID *int
+	var status string
+	err = r.db.QueryRow(`
+		INSERT INTO exam_room_participants (room_id, student_id, status)
+		VALUES ($1, $2, 'joined')
+		ON CONFLICT (room_id, student_id) DO UPDATE SET room_id = EXCLUDED.room_id
+		RETURNING id, session_id, status
+	`, room.ID, studentID).Scan(&partID, &sessID, &status)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if room.Status == "in_progress" && sessID == nil {
+		var newSess *models.TestSession
+		if room.TestID != nil {
+			newSess, err = r.StartSession(studentID, *room.TestID, true, room.TargetSectionIndex)
+		} else {
+			newSess, err = r.StartRandomMockSession(studentID, true)
+		}
+		if err == nil && newSess != nil {
+			sID := newSess.ID
+			sessID = &sID
+			status = "in_progress"
+			_, _ = r.db.Exec(`UPDATE exam_room_participants SET session_id = $1, status = 'in_progress' WHERE id = $2`, sID, partID)
+		}
+	}
+
+	updatedRoom, _ := r.GetExamRoomByPin(pinCode)
+	var pInfo *models.RoomParticipantInfo
+	if updatedRoom != nil {
+		for i := range updatedRoom.Participants {
+			if updatedRoom.Participants[i].StudentID == studentID {
+				pInfo = &updatedRoom.Participants[i]
+				break
+			}
+		}
+	}
+
+	return updatedRoom, pInfo, nil
+}
+
+func (r *Repository) StartExamRoom(roomID, examinerID int) (*models.ExamRoom, error) {
+	var currentStatus string
+	var testID *int
+	var targetSec *int
+	err := r.db.QueryRow(`SELECT status, test_id, target_section_index FROM exam_rooms WHERE id = $1 AND examiner_id = $2`, roomID, examinerID).Scan(&currentStatus, &testID, &targetSec)
+	if err != nil {
+		return nil, fmt.Errorf("room not found or unauthorized")
+	}
+
+	now := time.Now()
+	_, err = r.db.Exec(`UPDATE exam_rooms SET status = 'in_progress', started_at = $1 WHERE id = $2`, now, roomID)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := r.db.Query(`SELECT id, student_id, session_id FROM exam_room_participants WHERE room_id = $1`, roomID)
+	if err == nil {
+		defer rows.Close()
+		type partItem struct {
+			id        int
+			studentID int
+			sessID    *int
+		}
+		var parts []partItem
+		for rows.Next() {
+			var pi partItem
+			if scanErr := rows.Scan(&pi.id, &pi.studentID, &pi.sessID); scanErr == nil {
+				parts = append(parts, pi)
+			}
+		}
+		rows.Close()
+
+		for _, p := range parts {
+			if p.sessID == nil {
+				var newSess *models.TestSession
+				var sessErr error
+				if testID != nil {
+					newSess, sessErr = r.StartSession(p.studentID, *testID, true, targetSec)
+				} else {
+					newSess, sessErr = r.StartRandomMockSession(p.studentID, true)
+				}
+				if sessErr == nil && newSess != nil {
+					_, _ = r.db.Exec(`UPDATE exam_room_participants SET session_id = $1, status = 'in_progress' WHERE id = $2`, newSess.ID, p.id)
+				}
+			} else {
+				_, _ = r.db.Exec(`UPDATE exam_room_participants SET status = 'in_progress' WHERE id = $1`, p.id)
+			}
+		}
+	}
+
+	return r.GetExamRoomByID(roomID)
+}
+
+func (r *Repository) CompleteExamRoom(roomID, examinerID int) (*models.ExamRoom, error) {
+	now := time.Now()
+	_, err := r.db.Exec(`UPDATE exam_rooms SET status = 'completed', completed_at = $1 WHERE id = $2 AND examiner_id = $3`, now, roomID, examinerID)
+	if err != nil {
+		return nil, err
+	}
+
+	_, _ = r.db.Exec(`
+		UPDATE exam_room_participants erp
+		SET score = COALESCE(tr.total_score, 0),
+		    cefr_level = COALESCE(tr.cefr_level, ''),
+		    status = 'submitted'
+		FROM test_results tr
+		WHERE erp.session_id = tr.session_id AND erp.room_id = $1
+	`, roomID)
+
+	return r.GetExamRoomByID(roomID)
+}
+

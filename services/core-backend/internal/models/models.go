@@ -132,9 +132,11 @@ type SubmitAnswerRequest struct {
 }
 
 type GradeAnswerRequest struct {
-	AnswerID int     `json:"answer_id" binding:"required"`
-	Score    float64 `json:"score"`
-	Feedback string  `json:"feedback"`
+	AnswerID   int     `json:"answer_id"`
+	SessionID  int     `json:"session_id"`
+	QuestionID int     `json:"question_id"`
+	Score      float64 `json:"score"`
+	Feedback   string  `json:"feedback"`
 }
 
 type CreateTestRequest struct {
@@ -180,4 +182,50 @@ type UpdateQuestionRequest struct {
 	ExplanationAudioURL string   `json:"explanation_audio_url"`
 	ExplanationVideoURL string   `json:"explanation_video_url"`
 	ExplanationImageURL string   `json:"explanation_image_url"`
+}
+
+// Examiner Live Group Exam Rooms
+type ExamRoom struct {
+	ID                 int                   `json:"id"`
+	ExaminerID         int                   `json:"examiner_id"`
+	ExaminerName       string                `json:"examiner_name,omitempty"`
+	PinCode            string                `json:"pin_code"`
+	Title              string                `json:"title"`
+	ModuleType         string                `json:"module_type"`
+	TestID             *int                  `json:"test_id,omitempty"`
+	TestTitle          string                `json:"test_title,omitempty"`
+	TargetSectionIndex *int                  `json:"target_section_index,omitempty"`
+	Status             string                `json:"status"`
+	DurationMinutes    int                   `json:"duration_minutes"`
+	CreatedAt          time.Time             `json:"created_at"`
+	StartedAt          *time.Time            `json:"started_at,omitempty"`
+	CompletedAt        *time.Time            `json:"completed_at,omitempty"`
+	Participants       []RoomParticipantInfo `json:"participants,omitempty"`
+}
+
+type RoomParticipantInfo struct {
+	ID             int       `json:"id"`
+	RoomID         int       `json:"room_id"`
+	StudentID      int       `json:"student_id"`
+	StudentName    string    `json:"student_name"`
+	StudentEmail   string    `json:"student_email"`
+	SessionID      *int      `json:"session_id,omitempty"`
+	Status         string    `json:"status"`
+	JoinedAt       time.Time `json:"joined_at"`
+	Score          float64   `json:"score"`
+	CefrLevel      string    `json:"cefr_level"`
+	AnswersCount   int       `json:"answers_count"`
+	TotalQuestions int       `json:"total_questions"`
+}
+
+type CreateRoomRequest struct {
+	Title              string `json:"title" binding:"required"`
+	ModuleType         string `json:"module_type" binding:"required"`
+	TestID             *int   `json:"test_id"`
+	TargetSectionIndex *int   `json:"target_section_index"`
+	DurationMinutes    int    `json:"duration_minutes"`
+}
+
+type JoinRoomRequest struct {
+	PinCode string `json:"pin_code" binding:"required"`
 }
